@@ -2,9 +2,12 @@ package big.manopoly.models;
 
 import java.util.*;
 
+import org.hibernate.annotations.EmbeddableInstantiator;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,13 +19,14 @@ public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Embedded
     private Position position;
-    // TODO create relationship with board once board is created
-    private Board board;
-    private Integer money;
-    // TODO relationship + collection element + polymorphism stuff
-    private Set<Property> properties;
-    private Boolean free;
+    // // TODO create relationship with board once board is created
+    // private Board board;
+    // private Integer money;
+    // // TODO relationship + collection element + polymorphism stuff
+    // private Set<Property> properties;
+    // private Boolean free;
 
     @JsonCreator
     public Player(@JsonProperty("position") Position position) {
@@ -39,36 +43,36 @@ public class Player {
         return position;
     }
 
-    public Board getBoard() {
-        return board;
-    }
+    // public Board getBoard() {
+    //     return board;
+    // }
 
-    public Integer getMoney() {
-        return money;
-    }
+    // public Integer getMoney() {
+    //     return money;
+    // }
 
-    public Set<Property> getProperties() {
-        return properties;
-    }
+    // public Set<Property> getProperties() {
+    //     return properties;
+    // }
 
-    public Boolean isFree() {
-        return free;
-    }
+    // public Boolean isFree() {
+    //     return free;
+    // }
 
-    public void setBoard(Board board) {
-        this.board = board;
-    }
+    // public void setBoard(Board board) {
+    //     this.board = board;
+    // }
 
-    public void setMoney(Integer money) {
-        this.money = money;
-    }
+    // public void setMoney(Integer money) {
+    //     this.money = money;
+    // }
 
-    public void setProperties(Set<Property> properties) {
-        this.properties = properties;
-    }
+    // public void setProperties(Set<Property> properties) {
+    //     this.properties = properties;
+    // }
 
-    public void setFree(Boolean free) {
-        this.free = free;
-    }
+    // public void setFree(Boolean free) {
+    //     this.free = free;
+    // }
 
 }
