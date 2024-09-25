@@ -1,22 +1,30 @@
 package big.manopoly.models;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public abstract class Property extends BoardSquare {
-
     @Id
-    // this should be the name of the property hyphen board id with the board being the board that the property belongs to (e.g. "name-board.id").
-    // this is because if there are multiple games there will be duplicate properties.
+    // this should be the name of the property hyphen board id with the board being
+    // the board that the property belongs to (e.g. "name-board.id").
+    // this is because if there are multiple boards there will be duplicate
+    // properties.
     private String name;
     private int price;
 
     // null if owned by the bank.
+    // TODO make relationship
+    @ManyToOne
     private Player owner;
 
     // TODO check if not needed once functionality done
-    private Board board;
+    // TODO make relationship
+    // private Board board;
 
     // number of houses built on the property (5 if property has hotel).
     private int houses;
@@ -28,9 +36,17 @@ public abstract class Property extends BoardSquare {
     private int mortgageCost;
     private boolean mortgaged;
 
-    public Property(int position) {
+    @JsonCreator
+    public Property(@JsonProperty("position") int position, @JsonProperty("name") String name,
+            @JsonProperty("price") int price, //@JsonProperty("board") Board board,
+            @JsonProperty("mortgagePayout") int mortgagePayout, @JsonProperty("mortgageCost") int mortgageCost) {
         super(position);
-    } 
+        this.name = name;
+        this.price = price;
+        // this.board = board;
+        this.mortgagePayout = mortgagePayout;
+        this.mortgageCost = mortgageCost;
+    }
 
     // getters with no setters.
     public String getName() {
@@ -41,9 +57,9 @@ public abstract class Property extends BoardSquare {
         return price;
     }
 
-    public Board getBoard() {
-        return board;
-    }
+    // public Board getBoard() {
+    //     return board;
+    // }
 
     public int getMortgagePayout() {
         return mortgagePayout;
@@ -71,7 +87,6 @@ public abstract class Property extends BoardSquare {
 
     public abstract int getRent();
 
-
     // setters
     public void setHouses(int houses) {
         this.houses = houses;
@@ -84,5 +99,5 @@ public abstract class Property extends BoardSquare {
     public void setOwner(Player owner) {
         this.owner = owner;
     }
-    
+
 }

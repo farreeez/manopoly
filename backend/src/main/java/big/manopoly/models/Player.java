@@ -5,11 +5,13 @@ import java.util.*;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Player {
@@ -17,13 +19,19 @@ public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Embedded
     private Position position;
+
     // TODO create relationship with board once board is created
-    private Board board;
+    // private Board board;
+
     private Integer money;
+
     // TODO relationship + collection element + polymorphism stuff
+    @OneToMany(cascade = CascadeType.PERSIST)
     private Set<Property> properties;
+    
     private Boolean free;
 
     @JsonCreator
@@ -41,9 +49,9 @@ public class Player {
         return position;
     }
 
-    public Board getBoard() {
-        return board;
-    }
+    // public Board getBoard() {
+    //     return board;
+    // }
 
     public Integer getMoney() {
         return money;
@@ -57,9 +65,9 @@ public class Player {
         return free;
     }
 
-    public void setBoard(Board board) {
-        this.board = board;
-    }
+    // public void setBoard(Board board) {
+    //     this.board = board;
+    // }
 
     public void setMoney(Integer money) {
         this.money = money;

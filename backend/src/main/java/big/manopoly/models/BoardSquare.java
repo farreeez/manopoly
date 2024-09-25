@@ -1,6 +1,9 @@
 package big.manopoly.models;
 
+import jakarta.persistence.MappedSuperclass;
+
 // class to be extended by all the positions on the board.
+@MappedSuperclass
 public class BoardSquare {
     private final int position;
 
