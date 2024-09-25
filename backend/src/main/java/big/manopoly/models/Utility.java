@@ -1,5 +1,5 @@
 package big.manopoly.models;
 
-public class Hotel {
+public class Utility {
     
 }
