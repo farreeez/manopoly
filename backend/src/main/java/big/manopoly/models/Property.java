@@ -3,76 +3,51 @@ package big.manopoly.models;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import big.manopoly.utilities.PropertyName;
+import jakarta.persistence.*;;
 
 @Entity
+// all entity types are put into a single table and dtype is used to see the
+// type
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "dtype", discriminatorType = DiscriminatorType.STRING)
 public abstract class Property extends BoardSquare {
     @Id
     // this should be the name of the property hyphen board id with the board being
     // the board that the property belongs to (e.g. "name-board.id").
     // this is because if there are multiple boards there will be duplicate
     // properties.
-    private String name;
-    private int price;
+    @Enumerated(EnumType.STRING)
+    protected PropertyName name;
 
     // null if owned by the bank.
-    // TODO make relationship
     @ManyToOne
-    private Player owner;
+    protected Player owner;
 
     // TODO check if not needed once functionality done
     // TODO make relationship
-    // private Board board;
+    // protected Board board;
 
-    // number of houses built on the property (5 if property has hotel).
-    private int houses;
-
-    // money given to the player when property is mortgaged.
-    private int mortgagePayout;
-
-    // money player has to pay to demortgage.
-    private int mortgageCost;
-    private boolean mortgaged;
+    protected boolean mortgaged;
 
     @JsonCreator
-    public Property(@JsonProperty("position") int position, @JsonProperty("name") String name,
-            @JsonProperty("price") int price, //@JsonProperty("board") Board board,
-            @JsonProperty("mortgagePayout") int mortgagePayout, @JsonProperty("mortgageCost") int mortgageCost) {
+    //TODO include @JsonProperty("board") Board board,
+    public Property(@JsonProperty("position") int position, @JsonProperty("name") PropertyName name) {
         super(position);
         this.name = name;
-        this.price = price;
         // this.board = board;
-        this.mortgagePayout = mortgagePayout;
-        this.mortgageCost = mortgageCost;
     }
 
     // getters with no setters.
-    public String getName() {
+    public PropertyName getName() {
         return name;
     }
 
-    public int getPrice() {
-        return price;
-    }
-
     // public Board getBoard() {
-    //     return board;
+    // return board;
     // }
 
-    public int getMortgagePayout() {
-        return mortgagePayout;
-    }
-
-    public int getMortgageCost() {
-        return mortgageCost;
-    }
-
     // getters with setters.
-    public int getHouses() {
-        return houses;
-    }
 
     public boolean isMortgaged() {
         return mortgaged;
@@ -85,13 +60,9 @@ public abstract class Property extends BoardSquare {
     // getters that calculate a variable output
     public abstract int getHouseCost();
 
-    public abstract int getRent();
+    public abstract int getRent() throws Exception;
 
     // setters
-    public void setHouses(int houses) {
-        this.houses = houses;
-    }
-
     public void setMortgaged(boolean mortgaged) {
         this.mortgaged = mortgaged;
     }

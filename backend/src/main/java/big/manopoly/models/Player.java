@@ -5,6 +5,7 @@ import java.util.*;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import big.manopoly.utilities.Colour;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -28,10 +29,10 @@ public class Player {
 
     private Integer money;
 
-    // TODO relationship + collection element + polymorphism stuff
+    // TODO polymorphism stuff
     @OneToMany(cascade = CascadeType.PERSIST)
-    private Set<Property> properties;
-    
+    private Set<Property> properties = new HashSet<>();
+
     private Boolean free;
 
     @JsonCreator
@@ -39,7 +40,22 @@ public class Player {
         this.position = position;
     }
 
-    public Player () {}
+    public Player() {
+    }
+
+    public boolean doesOwnSet(Colour colour) {
+        // TODO Test
+        List<Property> citySetCount = properties.stream().filter(p -> {
+            if (p.getClass() == City.class) {
+                City city = (City) p;
+                return city.getColour() == colour;
+            }
+
+            return false;
+        }).toList();
+
+        return citySetCount.size() == colour.propertyCount;
+    }
 
     public Long getId() {
         return id;
@@ -50,7 +66,7 @@ public class Player {
     }
 
     // public Board getBoard() {
-    //     return board;
+    // return board;
     // }
 
     public Integer getMoney() {
@@ -66,15 +82,26 @@ public class Player {
     }
 
     // public void setBoard(Board board) {
-    //     this.board = board;
+    // this.board = board;
     // }
 
     public void setMoney(Integer money) {
         this.money = money;
     }
 
-    public void setProperties(Set<Property> properties) {
-        this.properties = properties;
+    public void addProperty(Property property) {
+        if (property.getOwner() != null) {
+            property.getOwner().removeProperty(property);
+        }
+
+        property.setOwner(this);
+        properties.add(property);
+    }
+
+    public void removeProperty(Property property) {
+        property.setOwner(null);
+
+        properties.remove(property);
     }
 
     public void setFree(Boolean free) {
