@@ -5,7 +5,7 @@ import java.util.*;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import big.manopoly.utilities.Colour;
+import big.manopoly.utilities.PropertyType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -42,25 +42,19 @@ public class Player {
     public Player() {
     }
 
-    public boolean doesOwnSet(Colour colour) {
-        List<Property> citySet = getSet(colour);        
+    public boolean doesOwnSet(PropertyType colour) {
+        List<Property> citySet = getSet(colour);
 
         return citySet.size() == colour.propertyCount;
     }
 
-
-    public List<Property> getSet(Colour colour) {
-        List<Property> citySet = properties.stream().filter(p -> {
-            if (p.getClass() == City.class) {
-                City city = (City) p;
-                return city.getColour() == colour;
-            }
-
-            return false;
+    public List<Property> getSet(PropertyType type) {
+        List<Property> set = properties.stream().filter(p -> {
+            return p.getType() == type;
         }).toList();
 
-        return citySet;
-    } 
+        return set;
+    }
 
     public Long getId() {
         return id;

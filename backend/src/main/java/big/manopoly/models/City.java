@@ -3,38 +3,35 @@ package big.manopoly.models;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import big.manopoly.utilities.Colour;
-import big.manopoly.utilities.PropertyName;
-import jakarta.persistence.DiscriminatorValue;
+import big.manopoly.utilities.CityName;
+import big.manopoly.utilities.PropertyType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
 
 @Entity
-@DiscriminatorValue("CITY")
 public class City extends Property {
+    @Id
+    private CityName name;
 
     // number of houses built on the property (5 if property has hotel).
     private int houses;
-
-    @Enumerated(EnumType.STRING)
-    private Colour colour;
 
     public City() {
         super();
     }
 
     @JsonCreator
-    public City(int position, PropertyName name, Colour colour) {
-        super(position, name);
-        this.colour = colour;
+    public City(@JsonProperty("position") int position, @JsonProperty("type") PropertyType colour,
+            @JsonProperty("name") CityName name) {
+        super(position, colour);
+        this.name = name;
         houses = 0;
     }
 
-    @Override
     public int getHouseCost() {
-        return colour.houseCost;
+        return this.type.houseCost;
     }
 
     @Override
@@ -48,8 +45,8 @@ public class City extends Property {
         if (houses > 0) {
             return rentPrices.get(houses);
         }
-        
-        if (this.owner.doesOwnSet(colour)) {
+
+        if (this.owner.doesOwnSet(this.type)) {
             return rentPrices.get(0) * 2;
         } else {
             return rentPrices.get(0);
@@ -61,27 +58,27 @@ public class City extends Property {
         return houses;
     }
 
-    public Colour getColour() {
-        return colour;
+    public CityName getName() {
+        return name;
     }
 
     public boolean addHouse() {
-        //TODO money stuff
-        if(houses == 5 || owner == null) {
+        // TODO money stuff
+        if (houses == 5 || owner == null) {
             return false;
         }
 
-        if(!owner.doesOwnSet(colour)) {
+        if (!owner.doesOwnSet(this.type)) {
             return false;
         }
 
         houses++;
 
-        List<Property> citySet = owner.getSet(colour);
+        List<Property> citySet = owner.getSet(this.type);
 
         for (Property property : citySet) {
             City city = (City) property;
-            if(houses > (city.houses + 1)) {
+            if (houses > (city.houses + 1)) {
                 houses--;
                 return false;
             }

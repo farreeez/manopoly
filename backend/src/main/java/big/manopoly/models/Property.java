@@ -3,22 +3,16 @@ package big.manopoly.models;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import big.manopoly.utilities.PropertyName;
+import big.manopoly.utilities.PropertyType;
 import jakarta.persistence.*;;
 
-@Entity
 // all entity types are put into a single table and dtype is used to see the
 // type
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "dtype", discriminatorType = DiscriminatorType.STRING)
+@MappedSuperclass
 public abstract class Property extends BoardSquare {
-    @Id
-    // this should be the name of the property hyphen board id with the board being
-    // the board that the property belongs to (e.g. "name-board.id").
-    // this is because if there are multiple boards there will be duplicate
-    // properties.
+
     @Enumerated(EnumType.STRING)
-    protected PropertyName name;
+    protected PropertyType type;
 
     // null if owned by the bank.
     @ManyToOne(cascade = CascadeType.PERSIST)
@@ -36,15 +30,10 @@ public abstract class Property extends BoardSquare {
 
     @JsonCreator
     //TODO include @JsonProperty("board") Board board,
-    public Property(@JsonProperty("position") int position, @JsonProperty("name") PropertyName name) {
+    public Property(@JsonProperty("position") int position, @JsonProperty("type") PropertyType type) {
         super(position);
-        this.name = name;
+        this.type = type;
         // this.board = board;
-    }
-
-    // getters with no setters.
-    public PropertyName getName() {
-        return name;
     }
 
     // public Board getBoard() {
@@ -61,9 +50,11 @@ public abstract class Property extends BoardSquare {
         return owner;
     }
 
-    // getters that calculate a variable output
-    public abstract int getHouseCost();
+    public PropertyType getType() {
+        return type;
+    }
 
+    // getters that calculate a variable output
     public abstract int getRent() throws Exception;
 
     // setters

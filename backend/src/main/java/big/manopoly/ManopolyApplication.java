@@ -6,10 +6,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.context.annotation.Bean;
 
 import big.manopoly.data.PlayerRepository;
-import big.manopoly.data.PropertyRepository;
+import big.manopoly.data.CityRepository;
 import big.manopoly.models.*;
-import big.manopoly.utilities.Colour;
-import big.manopoly.utilities.PropertyName;
+import big.manopoly.utilities.UtilityName;
 
 @SpringBootApplication
 public class ManopolyApplication {
@@ -19,25 +18,21 @@ public class ManopolyApplication {
 	}
 
 	@Bean
-	CommandLineRunner commandLineRunner(PropertyRepository repo, PlayerRepository repo2) {
+	CommandLineRunner commandLineRunner(CityRepository repo, PlayerRepository repo2) {
 		return args -> {
 			// TODO finish testing
-			Property city1 = new City(1, PropertyName.ORANGE1, Colour.ORANGE);
-			Property city2 = new City(1, PropertyName.ORANGE2, Colour.ORANGE);
-			Property city3 = new City(1, PropertyName.ORANGE3, Colour.ORANGE);
+			Property utility1 = new Utility(1, UtilityName.ELECTRIC);
+			Property utility2 = new Utility(1, UtilityName.WATER);
 
 			Player player1 = new Player(new Position());
 			// Player player2 = new Player(new Position());
 
-			player1.addProperty(city1);
-			player1.addProperty(city2);
-			player1.addProperty(city3);
+			// player1.addProperty(utility1);
+			// player1.addProperty(utility2);
 
-			City city11 = (City) city1;
-			
-			repo.save(city1);
-			repo.save(city2);
-			repo.save(city3);
+			Utility utility11 = (Utility) utility1;
+
+			utility1.getRent();
 		};
 	}
 

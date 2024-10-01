@@ -3,7 +3,7 @@ package big.manopoly.utilities;
 import java.util.Arrays;
 import java.util.List;
 
-public enum PropertyName {
+public enum CityName {
     BROWN1(Arrays.asList(2, 10, 30, 90, 160, 250), 60), // Property 1 of Brown
     BROWN2(Arrays.asList(4, 20, 60, 180, 320, 450), 60), // Property 2 of Brown
 
@@ -37,12 +37,7 @@ public enum PropertyName {
     public final List<Integer> rentPrices;
     public final int propertyPrice;
 
-    PropertyName() {
-        this.rentPrices = null;
-        this.propertyPrice = 0;
-    }
-
-    PropertyName(List<Integer> rentPrices, int propertyPrice) {
+    CityName(List<Integer> rentPrices, int propertyPrice) {
         this.rentPrices = rentPrices;
         this.propertyPrice = propertyPrice;
     }
