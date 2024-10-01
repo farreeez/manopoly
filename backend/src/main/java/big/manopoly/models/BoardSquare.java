@@ -7,6 +7,10 @@ import jakarta.persistence.MappedSuperclass;
 public class BoardSquare {
     private final int position;
 
+    public BoardSquare() {
+        position = 0;
+    }
+
     public BoardSquare(int position) {
         this.position = position;
     }

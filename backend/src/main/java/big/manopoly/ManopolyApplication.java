@@ -21,21 +21,23 @@ public class ManopolyApplication {
 	@Bean
 	CommandLineRunner commandLineRunner(PropertyRepository repo, PlayerRepository repo2) {
 		return args -> {
-			//TODO finish testing
+			// TODO finish testing
 			Property city1 = new City(1, PropertyName.ORANGE1, Colour.ORANGE);
 			Property city2 = new City(1, PropertyName.ORANGE2, Colour.ORANGE);
 			Property city3 = new City(1, PropertyName.ORANGE3, Colour.ORANGE);
 
-			repo.save(city1);
-			repo.save(city2);
-			repo.save(city3);
-
 			Player player1 = new Player(new Position());
-			Player player2 = new Player(new Position());
+			// Player player2 = new Player(new Position());
 
 			player1.addProperty(city1);
 			player1.addProperty(city2);
 			player1.addProperty(city3);
+
+			City city11 = (City) city1;
+			
+			repo.save(city1);
+			repo.save(city2);
+			repo.save(city3);
 		};
 	}
 

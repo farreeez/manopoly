@@ -29,7 +29,6 @@ public class Player {
 
     private Integer money;
 
-    // TODO polymorphism stuff
     @OneToMany(cascade = CascadeType.PERSIST)
     private Set<Property> properties = new HashSet<>();
 
@@ -44,8 +43,14 @@ public class Player {
     }
 
     public boolean doesOwnSet(Colour colour) {
-        // TODO Test
-        List<Property> citySetCount = properties.stream().filter(p -> {
+        List<Property> citySet = getSet(colour);        
+
+        return citySet.size() == colour.propertyCount;
+    }
+
+
+    public List<Property> getSet(Colour colour) {
+        List<Property> citySet = properties.stream().filter(p -> {
             if (p.getClass() == City.class) {
                 City city = (City) p;
                 return city.getColour() == colour;
@@ -54,8 +59,8 @@ public class Player {
             return false;
         }).toList();
 
-        return citySetCount.size() == colour.propertyCount;
-    }
+        return citySet;
+    } 
 
     public Long getId() {
         return id;

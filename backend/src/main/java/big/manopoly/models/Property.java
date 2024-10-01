@@ -21,7 +21,7 @@ public abstract class Property extends BoardSquare {
     protected PropertyName name;
 
     // null if owned by the bank.
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     protected Player owner;
 
     // TODO check if not needed once functionality done
@@ -29,6 +29,10 @@ public abstract class Property extends BoardSquare {
     // protected Board board;
 
     protected boolean mortgaged;
+
+    public Property() {
+        super();
+    }
 
     @JsonCreator
     //TODO include @JsonProperty("board") Board board,

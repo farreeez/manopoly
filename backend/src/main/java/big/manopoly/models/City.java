@@ -21,15 +21,19 @@ public class City extends Property {
     @Enumerated(EnumType.STRING)
     private Colour colour;
 
+    public City() {
+        super();
+    }
+
     @JsonCreator
     public City(int position, PropertyName name, Colour colour) {
         super(position, name);
         this.colour = colour;
+        houses = 0;
     }
 
     @Override
     public int getHouseCost() {
-        // TODO test
         return colour.houseCost;
     }
 
@@ -44,8 +48,7 @@ public class City extends Property {
         if (houses > 0) {
             return rentPrices.get(houses);
         }
-
-        // TODO test
+        
         if (this.owner.doesOwnSet(colour)) {
             return rentPrices.get(0) * 2;
         } else {
@@ -62,9 +65,29 @@ public class City extends Property {
         return colour;
     }
 
-    // setters
-    public void setHouses(int houses) {
-        this.houses = houses;
+    public boolean addHouse() {
+        //TODO money stuff
+        if(houses == 5 || owner == null) {
+            return false;
+        }
+
+        if(!owner.doesOwnSet(colour)) {
+            return false;
+        }
+
+        houses++;
+
+        List<Property> citySet = owner.getSet(colour);
+
+        for (Property property : citySet) {
+            City city = (City) property;
+            if(houses > (city.houses + 1)) {
+                houses--;
+                return false;
+            }
+        }
+
+        return true;
     }
 
 }
