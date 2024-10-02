@@ -7,14 +7,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import big.manopoly.utilities.CityName;
 import big.manopoly.utilities.PropertyType;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 
 @Entity
+@DiscriminatorValue("CITY")
 public class City extends Property {
-    @Id
-    private CityName name;
-
     // number of houses built on the property (5 if property has hotel).
     private int houses;
 
@@ -25,8 +23,7 @@ public class City extends Property {
     @JsonCreator
     public City(@JsonProperty("position") int position, @JsonProperty("type") PropertyType colour,
             @JsonProperty("name") CityName name) {
-        super(position, colour);
-        this.name = name;
+        super(position, colour, name.toString());
         houses = 0;
     }
 
@@ -39,6 +36,8 @@ public class City extends Property {
         if (this.owner == null) {
             throw new Exception("cannot get rent because property is owned by the bank");
         }
+
+        CityName name = CityName.valueOf(getName());
 
         List<Integer> rentPrices = name.rentPrices;
 
@@ -56,10 +55,6 @@ public class City extends Property {
     // getters
     public int getHouses() {
         return houses;
-    }
-
-    public CityName getName() {
-        return name;
     }
 
     public boolean addHouse() {
