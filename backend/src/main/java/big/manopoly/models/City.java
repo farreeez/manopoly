@@ -82,4 +82,25 @@ public class City extends Property {
         return true;
     }
 
+    @Override
+    public int getCost() {
+        CityName name = CityName.valueOf(getName());
+
+        return name.propertyPrice;
+    }
+
+    @Override
+    public int getMortgageCost() {
+        CityName name = CityName.valueOf(getName());
+
+        return name.getMortgageCost();
+    }
+
+    @Override
+    public int getMortgagePayout() {
+        CityName name = CityName.valueOf(getName());
+
+        return name.getMortgagePayout();
+    }
+
 }

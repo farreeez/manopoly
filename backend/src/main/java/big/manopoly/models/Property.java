@@ -71,6 +71,12 @@ public abstract class Property extends BoardSquare {
     // getters that calculate a variable output
     public abstract int getRent() throws Exception;
 
+    public abstract int getCost();
+
+    public abstract int getMortgageCost();
+
+    public abstract int getMortgagePayout();
+
     // setters
     public void setMortgaged(boolean mortgaged) {
         this.mortgaged = mortgaged;

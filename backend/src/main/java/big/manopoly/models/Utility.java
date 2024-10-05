@@ -19,9 +19,7 @@ public class Utility extends Property {
 
     @Override
     public int getRent() throws Exception {
-        // TODO Auto-generated method stub
         if (owner == null) {
-            System.out.println("this card has no owner (at getRent function in big.manopoly.models.Utility.java)");
             throw new Exception("this card has no owner (at getRent function in big.manopoly.models.Utility.java)");
         }
 
@@ -33,5 +31,26 @@ public class Utility extends Property {
         UtilityName name = UtilityName.valueOf(getName());
 
         return name.utilityMultiplier.get(utilityCount - 1) * roll;
+    }
+
+    @Override
+    public int getCost() {
+        UtilityName name = UtilityName.valueOf(getName());
+
+        return name.propertyPrice;
+    }
+
+    @Override
+    public int getMortgageCost() {
+        UtilityName name = UtilityName.valueOf(getName());
+
+        return name.getMortgageCost();
+    }
+
+    @Override
+    public int getMortgagePayout() {
+        UtilityName name = UtilityName.valueOf(getName());
+
+        return name.getMortgagePayout();
     }
 }
