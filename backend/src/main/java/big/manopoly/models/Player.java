@@ -12,6 +12,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
 @Entity
@@ -25,7 +26,8 @@ public class Player {
     private Position position;
 
     // TODO create relationship with board once board is created
-    // private Board board;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    private Board board;
 
     private Integer money;
 
@@ -64,9 +66,9 @@ public class Player {
         return position;
     }
 
-    // public Board getBoard() {
-    // return board;
-    // }
+    public Board getBoard() {
+        return board;
+    }
 
     public Integer getMoney() {
         return money;
@@ -80,9 +82,9 @@ public class Player {
         return free;
     }
 
-    // public void setBoard(Board board) {
-    // this.board = board;
-    // }
+    public void setBoard(Board board) {
+        this.board = board;
+    }
 
     public void setMoney(Integer money) {
         this.money = money;

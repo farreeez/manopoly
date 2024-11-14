@@ -9,8 +9,9 @@ import jakarta.persistence.*;;
 // all entity types are put into a single table and dtype is used to see the
 // type
 @Entity
+@DiscriminatorValue("PROPERTY")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "dtype", discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorColumn(name = "Property Type", discriminatorType = DiscriminatorType.STRING)
 public abstract class Property extends BoardSquare {
     @Id
     protected String id;
@@ -22,10 +23,6 @@ public abstract class Property extends BoardSquare {
     @ManyToOne(cascade = CascadeType.PERSIST)
     protected Player owner;
 
-    // TODO check if not needed once functionality done
-    // TODO make relationship
-    // protected Board board;
-
     protected boolean mortgaged;
 
     public Property() {
@@ -34,17 +31,12 @@ public abstract class Property extends BoardSquare {
 
     @JsonCreator
     //TODO include @JsonProperty("board") Board board,
-    public Property(@JsonProperty("position") int position, @JsonProperty("type") PropertyType type, @JsonProperty("name") String name) {
-        super(position);
+    public Property(@JsonProperty("board") Board board ,@JsonProperty("position") int position, @JsonProperty("type") PropertyType type, @JsonProperty("name") String name) {
+        super(board, position);
         this.type = type;
         // after the : the board id is inputed to identify different properties with the same name across different boards
-        this.id = name + ":";
-        // this.board = board;
+        this.id = name + ":" + board.getId();
     }
-
-    // public Board getBoard() {
-    // return board;
-    // }
 
     // getters with setters.
 

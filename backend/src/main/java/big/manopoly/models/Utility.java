@@ -13,8 +13,8 @@ import jakarta.persistence.Entity;
 public class Utility extends Property {
 
     @JsonCreator
-    public Utility(@JsonProperty("position") int position, @JsonProperty("name") UtilityName name) {
-        super(position, PropertyType.UTILITY, name.toString());
+    public Utility(@JsonProperty("board") Board board, @JsonProperty("position") int position, @JsonProperty("name") UtilityName name) {
+        super(board, position, PropertyType.UTILITY, name.toString());
     }
 
     @Override

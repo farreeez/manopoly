@@ -21,9 +21,9 @@ public class City extends Property {
     }
 
     @JsonCreator
-    public City(@JsonProperty("position") int position, @JsonProperty("type") PropertyType colour,
+    public City(@JsonProperty("board") Board board, @JsonProperty("position") int position, @JsonProperty("type") PropertyType colour,
             @JsonProperty("name") CityName name) {
-        super(position, colour, name.toString());
+        super(board,position, colour, name.toString());
         houses = 0;
     }
 

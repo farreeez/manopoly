@@ -13,8 +13,9 @@ import jakarta.persistence.Entity;
 public class Train extends Property {
 
     @JsonCreator
-    public Train(@JsonProperty("position") int position, @JsonProperty("name") TrainName name) {
-        super(position, PropertyType.TRAIN, name.toString());
+    public Train(@JsonProperty("board") Board board, @JsonProperty("position") int position,
+            @JsonProperty("name") TrainName name) {
+        super(board, position, PropertyType.TRAIN, name.toString());
     }
 
     @Override
@@ -26,10 +27,10 @@ public class Train extends Property {
         // get the number of trains owned by the user.
         int trainCount = this.owner.getSet(type).size() - 1;
 
-        if(trainCount < 0) {
+        if (trainCount < 0) {
             throw new Exception("owner doesnt have trains (at getRent function in big.manopoly.models.Train.java)");
         }
- 
+
         return (int) (25 * Math.pow(2, trainCount));
     }
 

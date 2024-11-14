@@ -5,15 +5,16 @@ import java.util.Queue;
 
 import jakarta.persistence.Embeddable;
 
+//TODO finish card functionality
 @Embeddable
-public class CardPiles extends BoardSquare {
+public class CardPiles {
     private Queue<Integer> cards;
 
     // determines if community chest pile or chance pile (true if chance pile).
     private boolean chancePile;
 
     public CardPiles(int position) {
-        super(position);
+        // super(position);
 
         //TODO add list of cards and make card type.
         cards = new LinkedList<>();
