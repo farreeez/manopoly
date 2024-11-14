@@ -3,7 +3,7 @@ package big.manopoly.models;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import big.manopoly.utilities.PropertyType;
+import big.manopoly.utils.PropertyType;
 import jakarta.persistence.*;;
 
 // all entity types are put into a single table and dtype is used to see the

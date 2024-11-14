@@ -3,8 +3,8 @@ package big.manopoly.models;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import big.manopoly.utilities.PropertyType;
-import big.manopoly.utilities.UtilityName;
+import big.manopoly.utils.PropertyType;
+import big.manopoly.utils.UtilityName;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 

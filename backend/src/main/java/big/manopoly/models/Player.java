@@ -5,7 +5,7 @@ import java.util.*;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import big.manopoly.utilities.PropertyType;
+import big.manopoly.utils.PropertyType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;

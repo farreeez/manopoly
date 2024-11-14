@@ -5,10 +5,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import big.manopoly.utilities.CityName;
-import big.manopoly.utilities.PropertyType;
-import big.manopoly.utilities.TrainName;
-import big.manopoly.utilities.UtilityName;
+import big.manopoly.utils.CityName;
+import big.manopoly.utils.PropertyType;
+import big.manopoly.utils.TrainName;
+import big.manopoly.utils.UtilityName;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

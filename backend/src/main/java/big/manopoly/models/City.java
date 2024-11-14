@@ -5,8 +5,8 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import big.manopoly.utilities.CityName;
-import big.manopoly.utilities.PropertyType;
+import big.manopoly.utils.CityName;
+import big.manopoly.utils.PropertyType;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
