@@ -8,3 +8,7 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
+
+#usernameInput, #loginButton {
+  margin: 5px; /* Add some space between the text box and button */
+}

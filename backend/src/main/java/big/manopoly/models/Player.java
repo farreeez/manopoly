@@ -22,6 +22,8 @@ public class Player {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String name;
+
     @Embedded
     private Position position;
 
@@ -107,6 +109,14 @@ public class Player {
 
     public void setFree(Boolean free) {
         this.free = free;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
 }
