@@ -5,11 +5,13 @@ import java.net.URLEncoder;
 import java.net.http.HttpHeaders;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.jackson.JsonObjectSerializer;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -41,7 +43,8 @@ public class PlayerService {
     }
 
     @PostMapping("/createPlayer/{name}")
-    public ResponseEntity<?> createPlayer(@PathVariable String name, HttpServletResponse response) throws JsonProcessingException {
+    public ResponseEntity<?> createPlayer(@PathVariable String name, HttpServletResponse response)
+            throws JsonProcessingException {
         Player newPlayer = new Player();
 
         newPlayer.setName(name);
@@ -54,14 +57,29 @@ public class PlayerService {
         ResponseCookie cookie = ResponseCookie.from("playerId").value(newPlayer.getId().toString())
                 .maxAge(Duration.ofMinutes(360)).httpOnly(true).secure(true).path("/").build();
 
-        return ResponseEntity.created(location).header("Set-Cookie", cookie.toString()).header("Access-Control-Allow-Credentials", "true").body(newPlayer);
+        return ResponseEntity.created(location).header("Set-Cookie", cookie.toString())
+                .header("Access-Control-Allow-Credentials", "true").body(newPlayer);
     }
 
     @GetMapping("/checkCookie")
     public ResponseEntity<?> checkCookie(@CookieValue(value = "playerId", defaultValue = "") String cookie) {
-        System.out.println(cookie);
+        if (cookie.length() > 0) {
+            Long id = Long.valueOf(cookie);
 
-        return ResponseEntity.ok().header("Access-Control-Allow-Credentials", "true").body(cookie);
+            Player player = repository.getReferenceById(id);
+
+            Map<String, String> jsonMap = new HashMap<>();
+
+            jsonMap.put("name", player.getName());
+
+            jsonMap.put("boardId", player.getBoardId().toString());
+
+            jsonMap.put("playerId", cookie);
+
+            return ResponseEntity.ok().header("Access-Control-Allow-Credentials", "true").body(jsonMap);
+        } else {
+            return ResponseEntity.ok().header("Access-Control-Allow-Credentials", "true").body(cookie);
+        }
     }
 
     @GetMapping("/getPlayer/{id}")

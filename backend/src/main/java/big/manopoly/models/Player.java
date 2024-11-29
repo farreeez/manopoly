@@ -68,6 +68,14 @@ public class Player {
         return position;
     }
 
+    public Long getBoardId() {
+        if(board == null) {
+            return Long.valueOf(-1);
+        } else {
+            return board.getId();
+        }
+    }
+
     public Board getBoard() {
         return board;
     }
