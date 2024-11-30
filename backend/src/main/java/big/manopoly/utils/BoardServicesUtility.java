@@ -6,12 +6,11 @@ import big.manopoly.models.Board;
 import big.manopoly.models.Player;
 
 public class BoardServicesUtility {
-    public static boolean addPlayerToBoard(Player player, Board board, PlayerRepository playerRepository, BoardRepository boardRepository) {
+    public static boolean addPlayer(Player player, Board board, PlayerRepository playerRepository,
+            BoardRepository boardRepository) {
         // creating a new board should remove player from previous board
         if (player.getBoard() != null) {
-            Board playerBoard = player.getBoard();
-            playerBoard.removePlayer(player);
-            boardRepository.save(playerBoard);
+            removePlayer(player, boardRepository);
         }
 
         boolean checkAdded = board.addPlayer(player);
@@ -24,5 +23,16 @@ public class BoardServicesUtility {
         playerRepository.save(player);
 
         return true;
+    }
+
+    public static void removePlayer(Player player, BoardRepository boardRepository) {
+        Board playerBoard = player.getBoard();
+
+        if (playerBoard == null) {
+            return;
+        }
+        
+        playerBoard.removePlayer(player);
+        boardRepository.save(playerBoard);
     }
 }

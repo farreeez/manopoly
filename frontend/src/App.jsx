@@ -44,7 +44,7 @@ function App() {
         player.boardId === -1 ? (
           <HomePage player={player} setPlayer={setPlayer} />
         ): (
-          <Board />
+          <Board player={player} setPlayer={setPlayer}/>
         )
       ) : (
         <Login player={player} setPlayer={setPlayer} />

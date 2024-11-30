@@ -3,11 +3,11 @@ package big.manopoly.services;
 import java.net.URI;
 import java.util.Optional;
 
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -55,7 +55,7 @@ public class BoardService {
 
         Board board = new Board();
 
-        boolean added = BoardServicesUtility.addPlayerToBoard(player, board, playerRepository, boardRepository);
+        boolean added = BoardServicesUtility.addPlayer(player, board, playerRepository, boardRepository);
 
         if(!added) {
             return ResponseEntity.badRequest().build();
@@ -86,6 +86,10 @@ public class BoardService {
 
     @PostMapping("/joinBoard/{id}")
     public ResponseEntity<?> joinBoard(@CookieValue(value = "playerId", defaultValue = "") String cookie, @PathVariable Long id) {
+        if (cookie.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+        
         Optional<Board> optionalBoard = boardRepository.findById(id);
 
         if (!optionalBoard.isPresent()) {
@@ -104,7 +108,7 @@ public class BoardService {
             return ResponseEntity.badRequest().body("Invalid playerId cookie value");
         }
 
-        boolean added = BoardServicesUtility.addPlayerToBoard(player, board, playerRepository, boardRepository);
+        boolean added = BoardServicesUtility.addPlayer(player, board, playerRepository, boardRepository);
 
         if(!added) {
             return ResponseEntity.badRequest().build();
@@ -117,5 +121,25 @@ public class BoardService {
 
         return ResponseEntity.created(location)
                 .header("Access-Control-Allow-Credentials", "true").body(BoardDTO);
+    }
+
+    @DeleteMapping("/leaveBoard")
+    public ResponseEntity<?> leaveBoard(@CookieValue(value = "playerId", defaultValue = "") String cookie, @PathVariable Long id) {
+        if (cookie.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Player player;
+
+        try {
+            Long playerId = Long.valueOf(cookie);
+            player = playerRepository.getReferenceById(playerId);
+        } catch (NumberFormatException e) {
+            return ResponseEntity.badRequest().body("Invalid playerId cookie value");
+        }
+
+        BoardServicesUtility.removePlayer(player, boardRepository);
+
+        return ResponseEntity.ok().header("Access-Control-Allow-Credentials", "true").build();
     }
 }
