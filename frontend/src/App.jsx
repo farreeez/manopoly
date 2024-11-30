@@ -3,6 +3,7 @@ import Login from "./components/Login";
 import { useState } from "react";
 import "./App.css";
 import HomePage from "./components/HomePage";
+import Board from "./components/Board";
 
 function App() {
   const [player, setPlayer] = useState({ name: "", id: -1, isLoggedIn: false, boardId: -1 });
@@ -40,7 +41,11 @@ function App() {
   return (
     <div className="App">
       {player.isLoggedIn ? (
-        <HomePage player={player} setPlayer={setPlayer} />
+        player.boardId === -1 ? (
+          <HomePage player={player} setPlayer={setPlayer} />
+        ): (
+          <Board />
+        )
       ) : (
         <Login player={player} setPlayer={setPlayer} />
       )}

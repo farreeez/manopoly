@@ -34,6 +34,9 @@
 #joinBoard, 
 #createBoard {
   padding: 5px 5px; /* Add padding for better usability */
+}
+
+.button {
   background-color: #0a755a;
   border-color: #282c34;
   color: rgb(0, 0, 0);

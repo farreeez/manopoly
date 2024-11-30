@@ -12,6 +12,10 @@ import jakarta.persistence.Entity;
 @DiscriminatorValue("UTILITY")
 public class Utility extends Property {
 
+    public Utility() {
+        super();
+    }
+
     @JsonCreator
     public Utility(@JsonProperty("board") Board board, @JsonProperty("position") int position, @JsonProperty("name") UtilityName name) {
         super(board, position, PropertyType.UTILITY, name.toString());

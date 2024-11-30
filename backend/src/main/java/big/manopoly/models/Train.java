@@ -12,6 +12,10 @@ import jakarta.persistence.Entity;
 @DiscriminatorValue("TRAIN")
 public class Train extends Property {
 
+    public Train() {
+        super();
+    }
+
     @JsonCreator
     public Train(@JsonProperty("board") Board board, @JsonProperty("position") int position,
             @JsonProperty("name") TrainName name) {

@@ -1,5 +1,5 @@
 import "../App.css";
-function joinBoard(setPlayer) {
+function joinBoard(player, setPlayer) {
   const textBox = document.getElementById("boardId");
   let boardCode;
 
@@ -14,6 +14,30 @@ function joinBoard(setPlayer) {
     alert("please enter a valid name.");
     return;
   }
+
+  fetch("http://localhost:8080/board/joinBoard/" + boardCode, {
+    method: "POST",
+    credentials: "include",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Invalid Board Code.");
+      }
+
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data);
+
+      let newPlayer = {
+        name: player.name,
+        id: player.id,
+        isLoggedIn: player.isLoggedIn,
+        boardId: data.id,
+      };
+      setPlayer(newPlayer);
+    })
+    .catch((error) => console.error(error));
 }
 
 function createBoard(player, setPlayer) {
@@ -29,23 +53,39 @@ function createBoard(player, setPlayer) {
       return response.json();
     })
     .then((data) => {
-      console.log(data)
+      console.log(data);
 
-      let newPlayer = {name: player.name, id: player.id, isLoggedIn: player.isLoggedIn, boardId: data.id}
-      setPlayer(newPlayer)
+      let newPlayer = {
+        name: player.name,
+        id: player.id,
+        isLoggedIn: player.isLoggedIn,
+        boardId: data.id,
+      };
+      setPlayer(newPlayer);
     })
     .catch((error) => console.error(error));
 }
 
-
-function HomePage({player, setPlayer}) {
+function HomePage({ player, setPlayer }) {
   return (
     <div id="homePage">
       <h1 id="greetingPlayer">Hi {player.name}!</h1>
       <input type="text" id="boardId" placeholder="Enter Board Code"></input>
       <div id="buttonContainer">
-        <button id="joinBoard" onClick={() => joinBoard(setPlayer)}>Join Board</button>
-        <button id="createBoard" onClick = {() => createBoard(player, setPlayer)}>Create New Board</button>
+        <button
+          id="joinBoard"
+          className="button"
+          onClick={() => joinBoard(player, setPlayer)}
+        >
+          Join Board
+        </button>
+        <button
+          id="createBoard"
+          className="button"
+          onClick={() => createBoard(player, setPlayer)}
+        >
+          Create New Board
+        </button>
       </div>
     </div>
   );

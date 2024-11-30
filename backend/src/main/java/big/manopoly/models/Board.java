@@ -104,6 +104,7 @@ public class Board {
             return false;
         } else {
             players.remove(player);
+            player.setBoard(null);
             return true;
         }
     }
@@ -113,6 +114,7 @@ public class Board {
         if(player == null || players.contains(player)) {
             return false;
         } else {
+            player.setBoard(this);
             players.add(player);
             return true;
         }
