@@ -13,9 +13,6 @@ import jakarta.persistence.*;;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "Property Type", discriminatorType = DiscriminatorType.STRING)
 public abstract class Property extends BoardSquare {
-    @Id
-    protected String id;
-
     @Enumerated(EnumType.STRING)
     protected PropertyType type;
 
@@ -50,10 +47,6 @@ public abstract class Property extends BoardSquare {
 
     public PropertyType getType() {
         return type;
-    }
-
-    public String getId() {
-        return id;
     }
 
     public String getName() {

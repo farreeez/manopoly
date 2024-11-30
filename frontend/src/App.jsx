@@ -5,7 +5,7 @@ import "./App.css";
 import HomePage from "./components/HomePage";
 
 function App() {
-  const [player, setPlayer] = useState({ name: "", id: -1, isLoggedIn: false });
+  const [player, setPlayer] = useState({ name: "", id: -1, isLoggedIn: false, boardId: -1 });
 
   useEffect(() => {
     fetch("http://localhost:8080/players/checkCookie", {
@@ -27,18 +27,20 @@ function App() {
             name: data.name,
             id: data.playerId,
             isLoggedIn: true,
+            boardId: data.boardId,
           };
 
           setPlayer(newPlayer);
         }
       })
       .catch((error) => console.error(error));
-  });
+  }, []);
 
+  // make sure player goes to correct board if a board is already allocated
   return (
     <div className="App">
       {player.isLoggedIn ? (
-        <HomePage />
+        <HomePage player={player} setPlayer={setPlayer} />
       ) : (
         <Login player={player} setPlayer={setPlayer} />
       )}

@@ -28,11 +28,11 @@ function joinGame(player, setPlayer) {
       return response.json();
     })
     .then((data) => {
-      alert(data.name)
       setPlayer({
         name: data.name,
         id: data.id,
         isLoggedIn: true,
+        boardId: -1,
       });
     })
     .catch((error) => console.error(error));

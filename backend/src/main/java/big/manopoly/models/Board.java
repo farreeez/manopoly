@@ -11,10 +11,12 @@ import big.manopoly.utils.TrainName;
 import big.manopoly.utils.UtilityName;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PostPersist;
 
 @Entity
 public class Board {
@@ -24,14 +26,22 @@ public class Board {
     private Long id;
 
     // TODO set up other side of relationship
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private Set<Player> players = new HashSet<>();
 
     // TODO set up relationship + initialise
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<BoardSquare> squares;
 
     public Board() {
+    }
+
+    @PostPersist
+    public void initialiseSquares() {
+        if(squares != null) {
+            return;
+        } 
+        
         squares = Arrays.asList(
                 new NotProperty(this, 0), // GO
                 new City(this, 1, PropertyType.BROWN, CityName.BROWN1), // Brown 1
@@ -86,6 +96,26 @@ public class Board {
 
     public Set<Player> getPlayers() {
         return players;
+    }
+
+    // removes player from player pool and returns true if successful and false otherwise
+    public boolean removePlayer(Player player) {
+        if(!players.contains(player)) {
+            return false;
+        } else {
+            players.remove(player);
+            return true;
+        }
+    }
+
+    // adds player and returns true if successfully added
+    public boolean addPlayer(Player player) {
+        if(player == null || players.contains(player)) {
+            return false;
+        } else {
+            players.add(player);
+            return true;
+        }
     }
 
 }

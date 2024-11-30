@@ -12,3 +12,33 @@
 #usernameInput, #loginButton {
   margin: 5px; /* Add some space between the text box and button */
 }
+
+#homePage {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center elements horizontally */
+  margin-top: 20px; /* Optional spacing at the top */
+}
+
+#boardId {
+  margin-bottom: 10px; /* Space between search box and buttons */
+  width: 80%; /* Optional width for the search box */
+  padding: 8px; /* Add padding for better usability */
+}
+
+#buttonContainer {
+  display: flex;
+  gap: 10px; /* Space between the buttons */
+}
+
+#joinBoard, 
+#createBoard {
+  padding: 5px 5px; /* Add padding for better usability */
+  background-color: #0a755a;
+  border-color: #282c34;
+  color: rgb(0, 0, 0);
+}
+
+#greetingPlayer{
+  color: white
+}

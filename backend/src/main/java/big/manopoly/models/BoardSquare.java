@@ -21,8 +21,7 @@ import jakarta.persistence.ManyToOne;
 @DiscriminatorColumn(name = "Board Square Type", discriminatorType = DiscriminatorType.STRING)
 public class BoardSquare {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    protected String id;
 
     private int position;
 
@@ -38,6 +37,11 @@ public class BoardSquare {
     public BoardSquare(@JsonProperty("board") Board board, @JsonProperty("position") int position) {
         this.position = position;
         this.board = board;
+        this.id = position + ":" + board.getId();
+    }
+
+    public String getId() {
+        return id;
     }
 
     public int getPosition() {
