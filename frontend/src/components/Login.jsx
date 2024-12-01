@@ -41,7 +41,7 @@ function joinGame(player, setPlayer) {
 function Login({ player, setPlayer }) {
   return (
     <div id="login">
-      <input type="text" id="usernameInput"></input>
+      <input type="text" id="usernameInput" placeholder="Enter Username"></input>
       <button id="loginButton" className="button" onClick={() => joinGame(player, setPlayer)}>
         Login
       </button>
