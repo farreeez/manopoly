@@ -30,7 +30,7 @@ function joinGame(player, setPlayer) {
     .then((data) => {
       setPlayer({
         name: data.name,
-        id: data.id,
+        id: Number(data.id),
         isLoggedIn: true,
         boardId: -1,
       });

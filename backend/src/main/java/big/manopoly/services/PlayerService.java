@@ -1,17 +1,12 @@
 package big.manopoly.services;
 
 import java.net.URI;
-import java.net.URLEncoder;
-import java.net.http.HttpHeaders;
-import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jackson.JsonObjectSerializer;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -24,15 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import big.manopoly.data.PlayerRepository;
 import big.manopoly.models.Player;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RequestMapping("/players")
 public class PlayerService {
     private final PlayerRepository repository;
@@ -58,7 +51,7 @@ public class PlayerService {
                 .maxAge(Duration.ofMinutes(360)).httpOnly(true).secure(true).path("/").build();
 
         return ResponseEntity.created(location).header("Set-Cookie", cookie.toString())
-                .header("Access-Control-Allow-Credentials", "true").body(newPlayer);
+                .body(newPlayer);
     }
 
     @GetMapping("/checkCookie")
@@ -78,9 +71,9 @@ public class PlayerService {
 
             jsonMap.put("playerId", cookie);
 
-            return ResponseEntity.ok().header("Access-Control-Allow-Credentials", "true").body(jsonMap);
+            return ResponseEntity.ok().body(jsonMap);
         } else {
-            return ResponseEntity.ok().header("Access-Control-Allow-Credentials", "true").body(cookie);
+            return ResponseEntity.ok().body(cookie);
         }
     }
 

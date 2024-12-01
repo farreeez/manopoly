@@ -1,6 +1,6 @@
 import "../App.css";
 function joinBoard(player, setPlayer) {
-  const textBox = document.getElementById("boardId");
+  const textBox = document.getElementById("boardCodeTextBox");
   let boardCode;
 
   if (textBox) {
@@ -27,15 +27,16 @@ function joinBoard(player, setPlayer) {
       return response.json();
     })
     .then((data) => {
-      console.log(data);
 
       let newPlayer = {
         name: player.name,
-        id: player.id,
+        id: Number(player.id),
         isLoggedIn: player.isLoggedIn,
-        boardId: data.id,
+        boardId: Number(data.id),
       };
       setPlayer(newPlayer);
+
+      console.log(player.boardId)
     })
     .catch((error) => console.error(error));
 }
@@ -57,9 +58,9 @@ function createBoard(player, setPlayer) {
 
       let newPlayer = {
         name: player.name,
-        id: player.id,
+        id: Number(player.id),
         isLoggedIn: player.isLoggedIn,
-        boardId: data.id,
+        boardId: Number(data.id),
       };
       setPlayer(newPlayer);
     })
@@ -70,7 +71,7 @@ function HomePage({ player, setPlayer }) {
   return (
     <div id="homePage">
       <h1 id="greetingPlayer">Hi {player.name}!</h1>
-      <input type="text" id="boardId" placeholder="Enter Board Code"></input>
+      <input type="text" id="boardCodeTextBox" placeholder="Enter Board Code"></input>
       <div id="buttonContainer">
         <button
           id="joinBoard"

@@ -20,7 +20,7 @@
   margin-top: 20px; /* Optional spacing at the top */
 }
 
-#boardId {
+#boardCodeTextBox {
   margin-bottom: 10px; /* Space between search box and buttons */
   width: 80%; /* Optional width for the search box */
   padding: 8px; /* Add padding for better usability */
@@ -46,12 +46,25 @@
   color: white
 }
 
-#boardId {
-  font-size: 16px; /* Makes the header text small */
-  position: absolute; /* Positions the header relative to the top-left of the page */
+#headerContainer {
+  display: flex; /* Align items horizontally */
+  align-items: center; /* Align items vertically in the middle */
+  position: absolute; /* Position the container absolutely */
   top: 10px; /* Distance from the top of the page */
-  left: 10px; /* Distance from the left of the page */
-  margin: 0; /* Removes default margin */
-  padding: 0; /* Removes default padding */
+  left: 0px; /* Distance from the left of the page */
+}
+
+#boardId {
+  font-size: 16px;
+  margin-bottom: 2px;
+  margin-top: 0px;
+  padding: 0;
   color: white;
+}
+
+#leaveButton {
+  font-size: 14px; /* Adjust button size */
+  margin-left: 10px; /* Space between the header and button */
+  margin-right: 10px;
+  padding: 1px 5px; /* Button padding */
 }

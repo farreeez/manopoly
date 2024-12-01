@@ -26,9 +26,9 @@ function App() {
 
           let newPlayer = {
             name: data.name,
-            id: data.playerId,
+            id: Number(data.playerId),
             isLoggedIn: true,
-            boardId: data.boardId,
+            boardId: Number(data.boardId),
           };
 
           setPlayer(newPlayer);
@@ -41,7 +41,7 @@ function App() {
   return (
     <div className="App">
       {player.isLoggedIn ? (
-        player.boardId === -1 ? (
+        Number(player.boardId) === -1 ? (
           <HomePage player={player} setPlayer={setPlayer} />
         ): (
           <Board player={player} setPlayer={setPlayer}/>

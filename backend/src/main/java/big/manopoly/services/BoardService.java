@@ -1,6 +1,5 @@
 package big.manopoly.services;
 
-import java.net.URI;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,18 +12,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import big.manopoly.data.BoardRepository;
 import big.manopoly.data.PlayerRepository;
-import big.manopoly.dtos.BoardDTO;
 import big.manopoly.models.Board;
 import big.manopoly.models.Player;
 import big.manopoly.utils.BoardServicesUtility;
-import big.manopoly.utils.Mapper;
+import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RequestMapping("/board")
 public class BoardService {
 
@@ -44,30 +41,9 @@ public class BoardService {
             return ResponseEntity.badRequest().build();
         }
 
-        Player player;
-
-        try {
-            Long playerId = Long.valueOf(cookie);
-            player = playerRepository.getReferenceById(playerId);
-        } catch (NumberFormatException e) {
-            return ResponseEntity.badRequest().body("Invalid playerId cookie value");
-        }
-
         Board board = new Board();
 
-        boolean added = BoardServicesUtility.addPlayer(player, board, playerRepository, boardRepository);
-
-        if(!added) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        BoardDTO BoardDTO = Mapper.toBoardDTO(board);
-
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().replacePath("/getBoard/{id}")
-                .buildAndExpand(board.getId()).toUri();
-
-        return ResponseEntity.created(location)
-                .header("Access-Control-Allow-Credentials", "true").body(BoardDTO);
+        return BoardServicesUtility.addPlayerFromCookie(cookie, board, playerRepository, boardRepository);
     }
 
     @GetMapping("/getBoard/{id}")
@@ -98,33 +74,13 @@ public class BoardService {
 
         Board board = optionalBoard.get();
 
-        // TODO: replicated code
-        Player player;
-
-        try {
-            Long playerId = Long.valueOf(cookie);
-            player = playerRepository.getReferenceById(playerId);
-        } catch (NumberFormatException e) {
-            return ResponseEntity.badRequest().body("Invalid playerId cookie value");
-        }
-
-        boolean added = BoardServicesUtility.addPlayer(player, board, playerRepository, boardRepository);
-
-        if(!added) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        BoardDTO BoardDTO = Mapper.toBoardDTO(board);
-
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().replacePath("/getBoard/{id}")
-                .buildAndExpand(board.getId()).toUri();
-
-        return ResponseEntity.created(location)
-                .header("Access-Control-Allow-Credentials", "true").body(BoardDTO);
+        return BoardServicesUtility.addPlayerFromCookie(cookie, board, playerRepository, boardRepository);
     }
 
     @DeleteMapping("/leaveBoard")
-    public ResponseEntity<?> leaveBoard(@CookieValue(value = "playerId", defaultValue = "") String cookie, @PathVariable Long id) {
+    public ResponseEntity<?> leaveBoard(@CookieValue(value = "playerId", defaultValue = "") String cookie, HttpServletResponse response) {
+        System.out.println("hello");
+
         if (cookie.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
@@ -140,6 +96,6 @@ public class BoardService {
 
         BoardServicesUtility.removePlayer(player, boardRepository);
 
-        return ResponseEntity.ok().header("Access-Control-Allow-Credentials", "true").build();
+        return ResponseEntity.ok().build();
     }
 }
