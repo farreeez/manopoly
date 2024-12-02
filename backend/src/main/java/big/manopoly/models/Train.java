@@ -39,7 +39,7 @@ public class Train extends Property {
     }
 
     @Override
-    public int getCost() {
+    public int getPrice() {
         TrainName name = TrainName.valueOf(getName());
 
         return name.propertyPrice;

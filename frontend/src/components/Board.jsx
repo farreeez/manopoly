@@ -1,4 +1,5 @@
 import BoardSquare from "./BoardSquare";
+import { useEffect, useState } from "react";
 
 function leaveBoard(player, setPlayer) {
   fetch("http://localhost:8080/board/leaveBoard", {
@@ -22,11 +23,31 @@ function leaveBoard(player, setPlayer) {
     .catch((error) => console.error(error));
 }
 
+function getBoard(player, setSquares) {
+  fetch("http://localhost:8080/board/getBoard/" + player.boardId, {
+    method: "GET",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Board does not exist.");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      setSquares({ ids: data.squareIds });
+      console.log("happened")
+    })
+    .catch((error) => console.error(error));
+}
+
 function Board({ player, setPlayer }) {
-  let squares = [];
-  for (let i = 0; i < 40; i++) {
-    squares.push(i);
-  }
+  const [squares, setSquares] = useState({
+    ids: Array.from({ length: 40 }, (_, i) => i + 1),
+  });
+
+  useEffect(() => {
+    getBoard(player, setSquares);
+  }, [player]);
 
   // TODO: make a better solution to draw the board
   return (
@@ -44,44 +65,47 @@ function Board({ player, setPlayer }) {
 
       <ul id="topRowBoardSquares">
         <li key={0}>
-          <BoardSquare width={"90px"} height={"90px"} />
+          <BoardSquare width={"90px"} height={"90px"} squareId={squares.ids[0]} />
         </li>
-        {squares.slice(1, 10).map((square, index) => (
+        {squares.ids.slice(1, 10).map((square, index) => (
           <li key={index}>
-            <BoardSquare width={"70px"} height={"90px"} />
+            <BoardSquare width={"70px"} height={"90px"} squareId={square} />
           </li>
         ))}
         <li key={10}>
-          <BoardSquare width={"90px"} height={"90px"} />
+          <BoardSquare width={"90px"} height={"90px"} squareId={squares.ids[10]} />
         </li>
       </ul>
 
       <ul id="rightColBoardSquares">
-        {squares.slice(11, 20).map((square, index) => (
+        {squares.ids.slice(11, 20).map((square, index) => (
           <li key={index}>
-            <BoardSquare width={"90px"} height={"70px"} />
+            <BoardSquare width={"90px"} height={"70px"} squareId={square} />
           </li>
         ))}
       </ul>
 
       <ul id="bottomRowBoardSquares">
         <li key={20}>
-          <BoardSquare width={"90px"} height={"90px"} />
+          <BoardSquare width={"90px"} height={"90px"} squareId={squares.ids[20]} />
         </li>
-        {squares.slice(21, 30).reverse().map((square, index) => (
-          <li key={index}>
-            <BoardSquare width={"70px"} height={"90px"} />
-          </li>
-        ))}
+        {squares.ids
+          .slice(21, 30)
+          .reverse()
+          .map((square, index) => (
+            <li key={index}>
+              <BoardSquare width={"70px"} height={"90px"} squareId={square} />
+            </li>
+          ))}
         <li key={30}>
-          <BoardSquare width={"90px"} height={"90px"} />
+          <BoardSquare width={"90px"} height={"90px"} squareId={squares.ids[30]} />
         </li>
       </ul>
 
       <ul id="leftColBoardSquares">
-        {squares.slice(31, 40).map((square, index) => (
+        {squares.ids.slice(31, 40).map((square, index) => (
           <li key={index}>
-            <BoardSquare width={"90px"} height={"70px"} />
+            <BoardSquare width={"90px"} height={"70px"} squareId={square} />
           </li>
         ))}
       </ul>

@@ -7,8 +7,6 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
@@ -25,6 +23,8 @@ public class BoardSquare {
 
     private int position;
 
+    protected String name;
+
     @ManyToOne(cascade = CascadeType.PERSIST)
     protected Board board;
 
@@ -34,10 +34,11 @@ public class BoardSquare {
     }
 
     @JsonCreator
-    public BoardSquare(@JsonProperty("board") Board board, @JsonProperty("position") int position) {
+    public BoardSquare(@JsonProperty("board") Board board, @JsonProperty("position") int position, @JsonProperty("name") String name) {
         this.position = position;
         this.board = board;
         this.id = position + ":" + board.getId();
+        this.name = name;
     }
 
     public String getId() {
@@ -50,5 +51,13 @@ public class BoardSquare {
 
     public Board getBoard() {
         return board;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getPrice() {
+        return 0;
     }
 }

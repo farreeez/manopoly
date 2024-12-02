@@ -83,7 +83,7 @@ public class City extends Property {
     }
 
     @Override
-    public int getCost() {
+    public int getPrice() {
         CityName name = CityName.valueOf(getName());
 
         return name.propertyPrice;

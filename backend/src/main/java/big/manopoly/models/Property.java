@@ -29,7 +29,7 @@ public abstract class Property extends BoardSquare {
     @JsonCreator
     //TODO include @JsonProperty("board") Board board,
     public Property(@JsonProperty("board") Board board ,@JsonProperty("position") int position, @JsonProperty("type") PropertyType type, @JsonProperty("name") String name) {
-        super(board, position);
+        super(board, position, name);
         this.type = type;
         // after the : the board id is inputed to identify different properties with the same name across different boards
         this.id = name + ":" + board.getId();
@@ -56,7 +56,8 @@ public abstract class Property extends BoardSquare {
     // getters that calculate a variable output
     public abstract int getRent() throws Exception;
 
-    public abstract int getCost();
+    @Override
+    public abstract int getPrice();
 
     public abstract int getMortgageCost();
 

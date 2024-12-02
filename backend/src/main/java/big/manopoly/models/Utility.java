@@ -38,7 +38,7 @@ public class Utility extends Property {
     }
 
     @Override
-    public int getCost() {
+    public int getPrice() {
         UtilityName name = UtilityName.valueOf(getName());
 
         return name.propertyPrice;

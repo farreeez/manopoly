@@ -59,8 +59,6 @@ public class PlayerService {
         if (cookie.length() > 0) {
             Long id = Long.valueOf(cookie);
 
-            System.out.println("here");
-
             Player player = repository.getReferenceById(id);
 
             Map<String, String> jsonMap = new HashMap<>();

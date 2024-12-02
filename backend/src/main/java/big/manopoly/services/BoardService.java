@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import big.manopoly.data.BoardRepository;
 import big.manopoly.data.PlayerRepository;
+import big.manopoly.dtos.BoardDTO;
 import big.manopoly.models.Board;
 import big.manopoly.models.Player;
 import big.manopoly.utils.BoardServicesUtility;
+import big.manopoly.utils.Mapper;
 import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
@@ -34,7 +36,6 @@ public class BoardService {
         this.playerRepository = playerRepository;
     }
 
-    // look into seperating some of the logic in here into a seperate class
     @PostMapping("/createBoard")
     public ResponseEntity<?> createBoard(@CookieValue(value = "playerId", defaultValue = "") String cookie) {
         if (cookie.isEmpty()) {
@@ -56,7 +57,9 @@ public class BoardService {
 
         Board board = optionalBoard.get();
 
-        return ResponseEntity.ok().body(board);
+        BoardDTO boardDTO = Mapper.toBoardDTO(board);
+
+        return ResponseEntity.ok().body(boardDTO);
     }
 
 

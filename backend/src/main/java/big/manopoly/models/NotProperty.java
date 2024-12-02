@@ -6,12 +6,13 @@ import jakarta.persistence.Entity;
 // TODO jail, suprise, chance, taxes, vacation/parking,
 @Entity
 @DiscriminatorValue("Not a Property")
-public class NotProperty extends BoardSquare{
+public class NotProperty extends BoardSquare {
 
     public NotProperty() {
         super();
     }
-    public NotProperty(Board board,int position) {
-        super(board,position);
+
+    public NotProperty(Board board, int position, String name) {
+        super(board, position, name);
     }
 }
