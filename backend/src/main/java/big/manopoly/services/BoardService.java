@@ -2,6 +2,7 @@ package big.manopoly.services;
 
 import java.util.Optional;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -14,9 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import big.manopoly.data.BoardRepository;
+import big.manopoly.data.BoardSquareRepository;
 import big.manopoly.data.PlayerRepository;
 import big.manopoly.dtos.BoardDTO;
+import big.manopoly.dtos.BoardSquareDTO;
 import big.manopoly.models.Board;
+import big.manopoly.models.BoardSquare;
 import big.manopoly.models.Player;
 import big.manopoly.utils.BoardServicesUtility;
 import big.manopoly.utils.Mapper;
@@ -29,11 +33,13 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
     private final PlayerRepository playerRepository;
+    private final BoardSquareRepository boardSqRepository;
 
     @Autowired
-    public BoardService(BoardRepository boardRepository, PlayerRepository playerRepository) {
+    public BoardService(BoardRepository boardRepository, PlayerRepository playerRepository, BoardSquareRepository boardSquareRepository) {
         this.boardRepository = boardRepository;
         this.playerRepository = playerRepository;
+        this.boardSqRepository = boardSquareRepository;
     }
 
     @PostMapping("/createBoard")
@@ -100,5 +106,20 @@ public class BoardService {
         BoardServicesUtility.removePlayer(player, boardRepository);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/getBoardSquare/{id}")
+    public ResponseEntity<?> getBoardSquare(@PathVariable String id) {
+        BoardSquare square;
+
+        try {
+            square = boardSqRepository.getReferenceById(id);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+
+        BoardSquareDTO squareDTO = Mapper.toBoardSquareDTO(square);
+
+        return ResponseEntity.ok().body(squareDTO);
     }
 }

@@ -93,6 +93,14 @@
 .boardSquare {
   border: 2px solid black;  /* Adding border style and width */
   background-color: rgb(118, 152, 192);
+  font-size: 12px;
+  font-weight: bold;
+  padding: 0px 0px;
+}
+
+.boardSquare span{
+  display: flex;
+  justify-content: center;
 }
 
 #rightColBoardSquares {
