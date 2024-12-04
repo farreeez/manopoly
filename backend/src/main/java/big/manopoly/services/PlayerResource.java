@@ -27,11 +27,11 @@ import jakarta.servlet.http.HttpServletResponse;
 @RestController
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RequestMapping("/players")
-public class PlayerService {
+public class PlayerResource {
     private final PlayerRepository repository;
 
     @Autowired
-    public PlayerService(PlayerRepository repository) {
+    public PlayerResource(PlayerRepository repository) {
         this.repository = repository;
     }
 

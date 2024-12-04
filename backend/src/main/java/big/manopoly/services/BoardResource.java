@@ -2,7 +2,6 @@ package big.manopoly.services;
 
 import java.util.Optional;
 
-import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -24,33 +23,39 @@ import big.manopoly.models.BoardSquare;
 import big.manopoly.models.Player;
 import big.manopoly.utils.BoardServicesUtility;
 import big.manopoly.utils.Mapper;
+import jakarta.servlet.AsyncContext;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RequestMapping("/board")
-public class BoardService {
+public class BoardResource {
 
     private final BoardRepository boardRepository;
     private final PlayerRepository playerRepository;
     private final BoardSquareRepository boardSqRepository;
 
     @Autowired
-    public BoardService(BoardRepository boardRepository, PlayerRepository playerRepository, BoardSquareRepository boardSquareRepository) {
+    public BoardResource(BoardRepository boardRepository, PlayerRepository playerRepository,
+            BoardSquareRepository boardSquareRepository) {
         this.boardRepository = boardRepository;
         this.playerRepository = playerRepository;
         this.boardSqRepository = boardSquareRepository;
     }
 
     @PostMapping("/createBoard")
-    public ResponseEntity<?> createBoard(@CookieValue(value = "playerId", defaultValue = "") String cookie) {
+    public ResponseEntity<?> createBoard(@CookieValue(value = "playerId", defaultValue = "") String cookie,
+            HttpServletRequest request) {
         if (cookie.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
 
         Board board = new Board();
 
-        return BoardServicesUtility.addPlayerFromCookie(cookie, board, playerRepository, boardRepository);
+        AsyncContext sub = request.startAsync();
+
+        return BoardServicesUtility.addPlayerFromCookie(cookie, board, playerRepository, boardRepository, sub);
     }
 
     @GetMapping("/getBoard/{id}")
@@ -68,26 +73,28 @@ public class BoardService {
         return ResponseEntity.ok().body(boardDTO);
     }
 
-
     @PostMapping("/joinBoard/{id}")
-    public ResponseEntity<?> joinBoard(@CookieValue(value = "playerId", defaultValue = "") String cookie, @PathVariable Long id) {
+    public ResponseEntity<?> joinBoard(@CookieValue(value = "playerId", defaultValue = "") String cookie,
+            @PathVariable Long id, HttpServletRequest request) {
         if (cookie.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
-        
-        Optional<Board> optionalBoard = boardRepository.findById(id);
 
-        if (!optionalBoard.isPresent()) {
+        Board board;
+        try {
+            board = boardRepository.getReferenceById(id);
+        } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
 
-        Board board = optionalBoard.get();
+        AsyncContext sub = request.startAsync();
 
-        return BoardServicesUtility.addPlayerFromCookie(cookie, board, playerRepository, boardRepository);
+        return BoardServicesUtility.addPlayerFromCookie(cookie, board, playerRepository, boardRepository, sub);
     }
 
     @DeleteMapping("/leaveBoard")
-    public ResponseEntity<?> leaveBoard(@CookieValue(value = "playerId", defaultValue = "") String cookie, HttpServletResponse response) {
+    public ResponseEntity<?> leaveBoard(@CookieValue(value = "playerId", defaultValue = "") String cookie,
+            HttpServletResponse response) {
         System.out.println("hello");
 
         if (cookie.isEmpty()) {
@@ -121,5 +128,14 @@ public class BoardService {
         BoardSquareDTO squareDTO = Mapper.toBoardSquareDTO(square);
 
         return ResponseEntity.ok().body(squareDTO);
+    }
+
+    @PostMapping("/subscribeToBoard/{id}")
+    public ResponseEntity<?> subscribeToBoard(
+            @PathVariable Long id, HttpServletRequest request) {
+        AsyncContext sub = request.startAsync();
+        BoardSubscriptionManager.instance().addSubscription(id, sub);
+
+        return ResponseEntity.ok().build();
     }
 }

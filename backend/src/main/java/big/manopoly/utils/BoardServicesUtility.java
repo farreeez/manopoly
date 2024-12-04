@@ -10,10 +10,12 @@ import big.manopoly.data.PlayerRepository;
 import big.manopoly.dtos.BoardDTO;
 import big.manopoly.models.Board;
 import big.manopoly.models.Player;
+import big.manopoly.services.BoardSubscriptionManager;
+import jakarta.servlet.AsyncContext;
 
 public class BoardServicesUtility {
     public static ResponseEntity<?> addPlayerFromCookie(String cookie, Board board, PlayerRepository playerRepository,
-            BoardRepository boardRepository) {
+            BoardRepository boardRepository, AsyncContext sub) {
         Player player;
 
         try {
@@ -42,6 +44,8 @@ public class BoardServicesUtility {
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().replacePath("/getBoard/{id}")
                 .buildAndExpand(board.getId()).toUri();
 
+        BoardSubscriptionManager.instance().addSubscription(board.getId(), sub);
+
         return ResponseEntity.created(location)
                 .body(BoardDTO);
     }
@@ -55,5 +59,7 @@ public class BoardServicesUtility {
 
         playerBoard.removePlayer(player);
         boardRepository.save(playerBoard);
+
+        BoardSubscriptionManager.instance().processSubsFor(playerBoard.getId(), boardRepository);
     }
 }
