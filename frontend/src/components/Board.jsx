@@ -93,16 +93,15 @@ function Board({ player, setPlayer }) {
           </ul>
 
           <ul id="bottomRowBoardSquares">
-            <li key={20}>
+            <li key={30}>
               <BoardSquare
                 width={"90px"}
                 height={"90px"}
-                squareId={squares[20]}
+                squareId={squares[30]}
               />
             </li>
             {squares
-              .slice(21, 30)
-              .reverse()
+              .slice(21, 30).reverse()
               .map((square, index) => (
                 <li key={index}>
                   <BoardSquare
@@ -112,17 +111,17 @@ function Board({ player, setPlayer }) {
                   />
                 </li>
               ))}
-            <li key={30}>
+            <li key={20}>
               <BoardSquare
                 width={"90px"}
                 height={"90px"}
-                squareId={squares[30]}
+                squareId={squares[20]}
               />
             </li>
           </ul>
 
           <ul id="leftColBoardSquares">
-            {squares.slice(31, 40).map((square, index) => (
+            {squares.slice(31, 40).reverse().map((square, index) => (
               <li key={index}>
                 <BoardSquare width={"90px"} height={"70px"} squareId={square} />
               </li>

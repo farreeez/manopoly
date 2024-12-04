@@ -1,16 +1,21 @@
 package big.manopoly.models;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import big.manopoly.utils.CityName;
+import big.manopoly.utils.PlayerColour;
 import big.manopoly.utils.PropertyType;
 import big.manopoly.utils.TrainName;
 import big.manopoly.utils.UtilityName;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,11 +30,17 @@ public class Board {
     // could use as the room code
     private Long id;
 
-    // TODO set up other side of relationship
+    @ElementCollection
+    @Enumerated(EnumType.STRING)
+    private List<PlayerColour> takenColours = new ArrayList<>();
+
+    @ElementCollection
+    @Enumerated(EnumType.STRING)
+    private List<PlayerColour> possibleColours;
+
     @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private Set<Player> players = new HashSet<>();
 
-    // TODO set up relationship + initialise
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<BoardSquare> squares;
 
@@ -84,10 +95,20 @@ public class Board {
                 new NotProperty(this, 38, "Luxury Tax"), // Luxury Tax
                 new City(this, 39, PropertyType.DARK_BLUE, CityName.DARK_BLUE2) // Dark Blue 2
         );
+
+        possibleColours = Arrays.asList(PlayerColour.values());
     }
 
     public Long getId() {
         return id;
+    }
+
+    public List<PlayerColour> getPossibleColours() {
+        return possibleColours;
+    }
+
+    public List<PlayerColour> getTakenColours() {
+        return takenColours;
     }
 
     public List<BoardSquare> getSquares() {
@@ -96,6 +117,27 @@ public class Board {
 
     public Set<Player> getPlayers() {
         return players;
+    }
+
+    // TODO: maybe also deal with the logic of giving the player their colour and taking it away in the methods below
+    // TODO: also consider not throwing an error in the future and simply updating the client side state such that the site doesnt crash if there is a bug.
+    public void giveBackColour(PlayerColour colour) {
+        boolean taken = takenColours.contains(colour);
+
+        if(!taken) {
+            throw new Error("error in method giveBackColour in Board class: colour was never taken to begin with");
+        }
+
+        takenColours.remove(colour);
+    }
+
+    
+    public void takeColour(PlayerColour colour) {
+        if(takenColours.contains(colour)) {
+            throw new Error("error in method takeColour in Board class: colour already taken");
+        }
+
+        takenColours.add(colour);
     }
 
     // removes player from player pool and returns true if successful and false

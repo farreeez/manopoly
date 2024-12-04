@@ -5,10 +5,13 @@ import java.util.*;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import big.manopoly.utils.PlayerColour;
 import big.manopoly.utils.PropertyType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -17,17 +20,19 @@ import jakarta.persistence.OneToMany;
 
 @Entity
 public class Player {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
 
+    @Enumerated(EnumType.STRING)
+    private PlayerColour colour;
+
     @Embedded
     private Position position;
 
-    // TODO create relationship with board once board is created
+    // TODO: create relationship with board once board is created
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Board board;
 
@@ -58,6 +63,10 @@ public class Player {
         }).toList();
 
         return set;
+    }
+
+    public PlayerColour getColour() {
+        return colour;
     }
 
     public Long getId() {
@@ -125,6 +134,10 @@ public class Player {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setColour(PlayerColour colour) {
+        this.colour = colour;
     }
 
 }
