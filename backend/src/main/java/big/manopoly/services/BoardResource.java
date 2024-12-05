@@ -1,9 +1,11 @@
 package big.manopoly.services;
 
+import java.io.PrintWriter;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -45,17 +47,14 @@ public class BoardResource {
     }
 
     @PostMapping("/createBoard")
-    public ResponseEntity<?> createBoard(@CookieValue(value = "playerId", defaultValue = "") String cookie,
-            HttpServletRequest request) {
+    public ResponseEntity<?> createBoard(@CookieValue(value = "playerId", defaultValue = "") String cookie) {
         if (cookie.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
 
         Board board = new Board();
 
-        AsyncContext sub = request.startAsync();
-
-        return BoardServicesUtility.addPlayerFromCookie(cookie, board, playerRepository, boardRepository, sub);
+        return BoardServicesUtility.addPlayerFromCookie(cookie, board, playerRepository, boardRepository);
     }
 
     @GetMapping("/getBoard/{id}")
@@ -75,7 +74,7 @@ public class BoardResource {
 
     @PostMapping("/joinBoard/{id}")
     public ResponseEntity<?> joinBoard(@CookieValue(value = "playerId", defaultValue = "") String cookie,
-            @PathVariable Long id, HttpServletRequest request) {
+            @PathVariable Long id) {
         if (cookie.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
@@ -87,14 +86,11 @@ public class BoardResource {
             return ResponseEntity.notFound().build();
         }
 
-        AsyncContext sub = request.startAsync();
-
-        return BoardServicesUtility.addPlayerFromCookie(cookie, board, playerRepository, boardRepository, sub);
+        return BoardServicesUtility.addPlayerFromCookie(cookie, board, playerRepository, boardRepository);
     }
 
     @DeleteMapping("/leaveBoard")
-    public ResponseEntity<?> leaveBoard(@CookieValue(value = "playerId", defaultValue = "") String cookie,
-            HttpServletResponse response) {
+    public ResponseEntity<?> leaveBoard(@CookieValue(value = "playerId", defaultValue = "") String cookie) {
         System.out.println("hello");
 
         if (cookie.isEmpty()) {
@@ -130,12 +126,16 @@ public class BoardResource {
         return ResponseEntity.ok().body(squareDTO);
     }
 
-    @PostMapping("/subscribeToBoard/{id}")
-    public ResponseEntity<?> subscribeToBoard(
+    @GetMapping("/subscribeToBoard/{id}")
+    public void subscribeToBoard(
             @PathVariable Long id, HttpServletRequest request) {
         AsyncContext sub = request.startAsync();
         BoardSubscriptionManager.instance().addSubscription(id, sub);
+    }
 
+    @GetMapping("/processSubs/{id}")
+    public ResponseEntity<?> processSubs(@PathVariable Long id) {
+        BoardSubscriptionManager.instance().processSubsFor(id, boardRepository);
         return ResponseEntity.ok().build();
     }
 }

@@ -15,7 +15,7 @@ import jakarta.servlet.AsyncContext;
 
 public class BoardServicesUtility {
     public static ResponseEntity<?> addPlayerFromCookie(String cookie, Board board, PlayerRepository playerRepository,
-            BoardRepository boardRepository, AsyncContext sub) {
+            BoardRepository boardRepository) {
         Player player;
 
         try {
@@ -44,7 +44,7 @@ public class BoardServicesUtility {
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().replacePath("/getBoard/{id}")
                 .buildAndExpand(board.getId()).toUri();
 
-        BoardSubscriptionManager.instance().addSubscription(board.getId(), sub);
+        BoardSubscriptionManager.instance().processSubsFor(board.getId(), boardRepository);
 
         return ResponseEntity.created(location)
                 .body(BoardDTO);

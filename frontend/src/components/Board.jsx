@@ -1,6 +1,8 @@
 import BoardSquare from "./BoardSquare";
 import { useEffect, useState } from "react";
 
+let boardId = -1;
+
 function leaveBoard(player, setPlayer) {
   fetch("http://localhost:8080/board/leaveBoard", {
     method: "DELETE",
@@ -13,6 +15,7 @@ function leaveBoard(player, setPlayer) {
       return response;
     })
     .then(() => {
+      boardId = -1;
       setPlayer({
         name: player.name,
         id: Number(player.id),
@@ -40,10 +43,48 @@ function getBoard(player, setSquares) {
     .catch((error) => console.error(error));
 }
 
+function subscribe(player) {
+  console.log("ran")
+  fetch("http://localhost:8080/board/subscribeToBoard/" + player.boardId, {
+    method: "GET",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Board does not exist.");
+      }
+
+      return response.text();
+    })
+    .then((data) => {
+      console.log(data);
+      if(Number(boardId) !== -1) {
+        subscribe(player);
+      }
+    })
+    .catch((error) => console.error(error));
+}
+
+function process(player) {
+  fetch("http://localhost:8080/board/processSubs/" + player.boardId, {
+    method: "GET",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Board does not exist.");
+      }
+
+      console.log("processed")
+    })
+    .then(() => {
+    })
+    .catch((error) => console.error(error));
+}
+
 function Board({ player, setPlayer }) {
   const [squares, setSquares] = useState([]);
 
   useEffect(() => {
+    boardId = player.boardId;
     getBoard(player, setSquares);
   }, [player]);
 
@@ -58,6 +99,9 @@ function Board({ player, setPlayer }) {
         >
           Leave Board
         </button>
+
+        <button className="button" onClick={() => subscribe(player)}>subscribe</button>
+        <button className="button" onClick={() => process(player)}>processSubs</button>
         <h1 id="boardId">Board Code: {player.boardId}</h1>
       </div>
       {squares.length ? (

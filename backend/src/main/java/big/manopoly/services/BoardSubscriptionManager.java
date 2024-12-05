@@ -17,7 +17,6 @@ import big.manopoly.utils.Mapper;
 import jakarta.servlet.AsyncContext;
 import jakarta.servlet.http.HttpServletResponse;
 
-
 // TODO: consider changing AsyncContext solution to a more robust method later on (such as SseEmitter).
 public class BoardSubscriptionManager {
     private static BoardSubscriptionManager instance;
@@ -86,36 +85,38 @@ public class BoardSubscriptionManager {
      * @param boardId the board id
      */
     public void processSubsFor(final long boardId, BoardRepository boardRepository) {
+        Board board = boardRepository.getReferenceById(boardId);
+        BoardDTO boardDTO = Mapper.toBoardDTO(board);
         THREAD_POOL.submit(() -> {
             // Get the subs which will be notified if the board with the given id is updated
             List<AsyncContext> subs = getSubsFor(boardId);
             if (!subs.isEmpty()) {
                 subs.parallelStream().forEach(sub -> {
-                    // sub.resume(Response.ok(violation).build());
-                    HttpServletResponse response = (HttpServletResponse) sub.getResponse();
-                    response.setContentType("application/json");
-                    response.setCharacterEncoding("UTF-8");
+                    sub.start(new Runnable() {
+                        public void run() {
+                            HttpServletResponse response = (HttpServletResponse) sub.getResponse();
+                            response.setCharacterEncoding("UTF-8");
+                            response.setContentType("text/plain");
 
-                    Board board = boardRepository.getReferenceById(boardId);
-                    BoardDTO boardDTO = Mapper.toBoardDTO(board);
+                            try {
+                                ObjectMapper objectMapper = new ObjectMapper();
+                                String json = objectMapper.writeValueAsString(boardDTO);
 
-                    try {
-                        ObjectMapper objectMapper = new ObjectMapper();
-                        String json = objectMapper.writeValueAsString(boardDTO);
+                                PrintWriter writer = response.getWriter();
+                                writer.write(json);
+                                writer.flush();
 
-                        PrintWriter writer = response.getWriter();
-                        writer.write(json);
-                        writer.flush();
+                                response.setStatus(HttpServletResponse.SC_OK);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                            }
 
-                        response.setStatus(HttpServletResponse.SC_OK);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                    }
-
-                    // this might need to be changed
-                    sub.complete();
-                    removeSub(boardId, sub);
+                            // this might need to be changed
+                            sub.complete();
+                            removeSub(boardId, sub);
+                        }
+                    });
                 });
             }
         });

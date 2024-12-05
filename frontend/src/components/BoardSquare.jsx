@@ -24,7 +24,7 @@ function BoardSquare({ player, setPlayer, width, height, squareId }) {
     if (squareId) {
       getSquare(squareId, setSquare);
     }
-  }, []);
+  }, [squareId]);
 
   return (
     <div className="boardSquare" style={{ width: width, height: height }}>
