@@ -6,6 +6,7 @@ import big.manopoly.dtos.BoardDTO;
 import big.manopoly.dtos.BoardSquareDTO;
 import big.manopoly.models.Board;
 import big.manopoly.models.BoardSquare;
+import big.manopoly.models.Colour;
 import big.manopoly.models.Player;
 
 public class Mapper {
@@ -13,7 +14,13 @@ public class Mapper {
         return new BoardDTO(
                 board.getId(),
                 board.getPlayers().stream().map(Player::getId).collect(Collectors.toSet()),
-                board.getSquares().stream().map(BoardSquare::getId).collect(Collectors.toList()));
+                board.getSquares().stream().map(BoardSquare::getId).collect(Collectors.toList()),
+                board.getTakenColours().stream().map(Mapper::playerColourToColour).collect(Collectors.toList()),
+                board.getPossibleColours().stream().map(Mapper::playerColourToColour).collect(Collectors.toList()));
+    }
+
+    public static Colour playerColourToColour(PlayerColour playerColour) {
+        return new Colour(playerColour.getRed(), playerColour.getGreen(), playerColour.getBlue(), playerColour.ordinal());
     }
 
     public static BoardSquareDTO toBoardSquareDTO(BoardSquare boardSquare) {

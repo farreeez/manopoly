@@ -3,6 +3,46 @@ import { useEffect, useState } from "react";
 
 let boardId = -1;
 
+function subscribe(player, setBoard) {
+  console.log("ran")
+  fetch("http://localhost:8080/board/subscribeToBoard/" + player.boardId, {
+    method: "GET",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Issue with subscribing to board.");
+      }
+
+      return response.text();
+    })
+    .then((data) => {
+      console.log(data);
+      let board = JSON.parse(data);
+      console.log(board);
+      setBoard(board);
+      if(Number(boardId) !== -1) {
+        subscribe(player);
+      }
+    })
+    .catch((error) => console.error(error));
+}
+
+function process(player) {
+  fetch("http://localhost:8080/board/processSubs/" + player.boardId, {
+    method: "GET",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("unable to process board.");
+      }
+
+      console.log("processed")
+    })
+    .then(() => {
+    })
+    .catch((error) => console.error(error));
+}
+
 function leaveBoard(player, setPlayer) {
   fetch("http://localhost:8080/board/leaveBoard", {
     method: "DELETE",
@@ -10,7 +50,7 @@ function leaveBoard(player, setPlayer) {
   })
     .then((response) => {
       if (!response.ok) {
-        throw new Error("Player does not exist.");
+        throw new Error("Player does not exist (cannot leave board).");
       }
       return response;
     })
@@ -26,7 +66,7 @@ function leaveBoard(player, setPlayer) {
     .catch((error) => console.error(error));
 }
 
-function getBoard(player, setSquares) {
+function getBoard(player, setSquares, setBoard) {
   fetch("http://localhost:8080/board/getBoard/" + player.boardId, {
     method: "GET",
   })
@@ -38,54 +78,19 @@ function getBoard(player, setSquares) {
     })
     .then((data) => {
       setSquares(data.squareIds);
-      console.log("happened");
-    })
-    .catch((error) => console.error(error));
-}
-
-function subscribe(player) {
-  console.log("ran")
-  fetch("http://localhost:8080/board/subscribeToBoard/" + player.boardId, {
-    method: "GET",
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Board does not exist.");
-      }
-
-      return response.text();
-    })
-    .then((data) => {
-      console.log(data);
-      if(Number(boardId) !== -1) {
-        subscribe(player);
-      }
-    })
-    .catch((error) => console.error(error));
-}
-
-function process(player) {
-  fetch("http://localhost:8080/board/processSubs/" + player.boardId, {
-    method: "GET",
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Board does not exist.");
-      }
-
-      console.log("processed")
-    })
-    .then(() => {
+      setBoard(data);
     })
     .catch((error) => console.error(error));
 }
 
 function Board({ player, setPlayer }) {
   const [squares, setSquares] = useState([]);
+  const [board, setBoard] = useState();
 
   useEffect(() => {
     boardId = player.boardId;
-    getBoard(player, setSquares);
+    getBoard(player, setSquares, setBoard);
+    subscribe(player, setBoard);
   }, [player]);
 
   // TODO: make a better solution to draw the board

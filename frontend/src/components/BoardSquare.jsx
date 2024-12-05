@@ -12,7 +12,6 @@ function getSquare(squareId, setSquare) {
     })
     .then((data) => {
       setSquare(data);
-      console.log(data)
     })
     .catch((error) => console.error(error));
 }
