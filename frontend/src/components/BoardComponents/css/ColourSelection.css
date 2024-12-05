@@ -1,0 +1,51 @@
+/* body.active-modal {
+    overflow-y: hidden;
+} */
+
+.modal,
+.overlay {
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: fixed;
+}
+
+.overlay {
+  background: rgba(49, 49, 49, 0.7);
+}
+
+.modal-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  line-height: 1.4;
+  background: #000000;
+  padding: 0px 28px;
+  border-radius: 3px;
+  text-align: center;
+  width: 800px;
+  height: 700px;
+}
+
+.circle {
+  width: 150px;
+  height: 150px;
+  background-color: red;
+  border-radius: 50%; /* This creates the circular shape */
+  outline: 1px solid white;
+}
+
+.chooseColour {
+  color: white;
+}
+
+.colours {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  gap: 20px;
+  justify-items: center;
+}

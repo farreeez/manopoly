@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "./css/BoardSquare.css"
 
 function getSquare(squareId, setSquare) {
   fetch("http://localhost:8080/board/getBoardSquare/" + squareId, {

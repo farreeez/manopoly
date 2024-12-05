@@ -1,28 +1,31 @@
 import BoardSquare from "./BoardSquare";
 import { useEffect, useState } from "react";
+import "./css/Board.css";
+import ColourSelection from "./ColourSelection";
 
 let boardId = -1;
+let counter = 0;
+let oldNum = 0;
 
 function subscribe(player, setBoard) {
-  console.log("ran")
+  console.log("ran");
+  oldNum = counter;
   fetch("http://localhost:8080/board/subscribeToBoard/" + player.boardId, {
     method: "GET",
   })
     .then((response) => {
       if (!response.ok) {
+        counter++;
         throw new Error("Issue with subscribing to board.");
       }
 
       return response.text();
     })
     .then((data) => {
-      console.log(data);
       let board = JSON.parse(data);
       console.log(board);
       setBoard(board);
-      if(Number(boardId) !== -1) {
-        subscribe(player);
-      }
+      counter++;
     })
     .catch((error) => console.error(error));
 }
@@ -36,10 +39,9 @@ function process(player) {
         throw new Error("unable to process board.");
       }
 
-      console.log("processed")
+      console.log("processed");
     })
-    .then(() => {
-    })
+    .then(() => {})
     .catch((error) => console.error(error));
 }
 
@@ -88,6 +90,12 @@ function Board({ player, setPlayer }) {
   const [board, setBoard] = useState();
 
   useEffect(() => {
+    if (boardId !== -1 && counter > oldNum) {
+      subscribe(player, setBoard);
+    }
+  });
+
+  useEffect(() => {
     boardId = player.boardId;
     getBoard(player, setSquares, setBoard);
     subscribe(player, setBoard);
@@ -105,8 +113,12 @@ function Board({ player, setPlayer }) {
           Leave Board
         </button>
 
-        <button className="button" onClick={() => subscribe(player)}>subscribe</button>
-        <button className="button" onClick={() => process(player)}>processSubs</button>
+        <button className="button" onClick={() => subscribe(player, setBoard)}>
+          subscribe
+        </button>
+        <button className="button" onClick={() => process(player)}>
+          processSubs
+        </button>
         <h1 id="boardId">Board Code: {player.boardId}</h1>
       </div>
       {squares.length ? (
@@ -150,7 +162,8 @@ function Board({ player, setPlayer }) {
               />
             </li>
             {squares
-              .slice(21, 30).reverse()
+              .slice(21, 30)
+              .reverse()
               .map((square, index) => (
                 <li key={index}>
                   <BoardSquare
@@ -170,16 +183,25 @@ function Board({ player, setPlayer }) {
           </ul>
 
           <ul id="leftColBoardSquares">
-            {squares.slice(31, 40).reverse().map((square, index) => (
-              <li key={index}>
-                <BoardSquare width={"90px"} height={"70px"} squareId={square} />
-              </li>
-            ))}
+            {squares
+              .slice(31, 40)
+              .reverse()
+              .map((square, index) => (
+                <li key={index}>
+                  <BoardSquare
+                    width={"90px"}
+                    height={"70px"}
+                    squareId={square}
+                  />
+                </li>
+              ))}
           </ul>
         </div>
       ) : (
         <div></div>
       )}
+
+      {board && <ColourSelection possibleColours={board.possibleColours} />}
     </div>
   );
 }

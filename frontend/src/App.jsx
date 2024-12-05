@@ -3,7 +3,7 @@ import Login from "./components/Login";
 import { useState } from "react";
 import "./App.css";
 import HomePage from "./components/HomePage";
-import Board from "./components/Board";
+import Board from "./components/BoardComponents/Board";
 
 function App() {
   const [player, setPlayer] = useState({ name: "", id: -1, isLoggedIn: false, boardId: -1 });
