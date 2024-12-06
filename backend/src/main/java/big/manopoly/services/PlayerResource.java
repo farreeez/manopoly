@@ -21,7 +21,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import big.manopoly.data.PlayerRepository;
+import big.manopoly.dtos.PlayerDTO;
 import big.manopoly.models.Player;
+import big.manopoly.utils.Mapper;
 import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
@@ -82,7 +84,9 @@ public class PlayerResource {
         if (optionalPlayer.isPresent()) {
             Player player = optionalPlayer.get();
 
-            return ResponseEntity.ok().body(player);
+            PlayerDTO playerDTO = Mapper.toPlayerDTO(player);
+
+            return ResponseEntity.ok().body(playerDTO);
         } else {
             return ResponseEntity.notFound().build();
         }

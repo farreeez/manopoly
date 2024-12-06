@@ -1,11 +1,11 @@
 package big.manopoly.dtos;
 
 public class BoardSquareDTO {
-    private String id;
-    private int position;
-    private String name;
-    private Long boardId;
-    private int price;
+    protected String id;
+    protected int position;
+    protected String name;
+    protected Long boardId;
+    protected int price;
 
     // Default constructor
     public BoardSquareDTO() {

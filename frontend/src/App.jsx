@@ -6,7 +6,7 @@ import HomePage from "./components/HomePage";
 import Board from "./components/BoardComponents/Board";
 
 function App() {
-  const [player, setPlayer] = useState({ name: "", id: -1, isLoggedIn: false, boardId: -1 });
+  const [player, setPlayer] = useState({ name: "", id: -1, isLoggedIn: false, boardId: -1, colour: -1 });
 
   useEffect(() => {
     fetch("http://localhost:8080/players/checkCookie", {
@@ -29,6 +29,7 @@ function App() {
             id: Number(data.playerId),
             isLoggedIn: true,
             boardId: Number(data.boardId),
+            colour: data.colour,
           };
 
           setPlayer(newPlayer);

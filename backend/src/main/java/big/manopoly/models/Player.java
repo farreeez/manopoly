@@ -2,9 +2,15 @@ package big.manopoly.models;
 
 import java.util.*;
 
+import org.springframework.http.ResponseEntity;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import big.manopoly.data.BoardRepository;
+import big.manopoly.data.PlayerRepository;
+import big.manopoly.services.BoardSubscriptionManager;
+import big.manopoly.utils.Mapper;
 import big.manopoly.utils.PlayerColour;
 import big.manopoly.utils.PropertyType;
 import jakarta.persistence.CascadeType;
@@ -63,6 +69,39 @@ public class Player {
         }).toList();
 
         return set;
+    }
+
+    public ResponseEntity<?> setColour(int colourId, BoardRepository boardRepository, PlayerRepository playerRepository) {
+        if(board == null) {
+            return ResponseEntity.badRequest().body("This player is not in a board and thus cannot take a colour");
+        }
+
+        PlayerColour colour;
+
+        try {
+            colour = PlayerColour.values()[colourId];
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("invalid colour id.");
+        }
+
+        if(board.getTakenColours().contains(colour)) {
+            return ResponseEntity.badRequest().body("Colour is already taken.");
+        }
+
+        if(this.colour != null) {
+            return ResponseEntity.badRequest().body("This player already has a colour");
+        }
+
+        this.colour = colour;
+
+        board.getTakenColours().add(colour);
+
+        boardRepository.save(board);
+        playerRepository.save(this);
+
+        BoardSubscriptionManager.instance().processSubsFor(board.getId(), boardRepository);
+
+        return ResponseEntity.ok().body(Mapper.toPlayerDTO(this));
     }
 
     public PlayerColour getColour() {

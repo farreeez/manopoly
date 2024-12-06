@@ -33,6 +33,7 @@ function joinBoard(player, setPlayer) {
         id: Number(player.id),
         isLoggedIn: player.isLoggedIn,
         boardId: Number(data.id),
+        colour: data.colour,
       };
       setPlayer(newPlayer);
 
@@ -61,6 +62,7 @@ function createBoard(player, setPlayer) {
         id: Number(player.id),
         isLoggedIn: player.isLoggedIn,
         boardId: Number(data.id),
+        colour: data.colour,
       };
       setPlayer(newPlayer);
     })

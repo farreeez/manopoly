@@ -63,6 +63,7 @@ function leaveBoard(player, setPlayer) {
         id: Number(player.id),
         isLoggedIn: true,
         boardId: -1,
+        colour: undefined,
       });
     })
     .catch((error) => console.error(error));
@@ -201,7 +202,7 @@ function Board({ player, setPlayer }) {
         <div></div>
       )}
 
-      {board && <ColourSelection possibleColours={board.possibleColours} />}
+      {board && !player.colour && <ColourSelection possibleColours={board.possibleColours} takenColours={board.takenColours} setPlayer={setPlayer} />}
     </div>
   );
 }

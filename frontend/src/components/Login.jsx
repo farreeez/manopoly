@@ -33,6 +33,7 @@ function joinGame(player, setPlayer) {
         id: Number(data.id),
         isLoggedIn: true,
         boardId: -1,
+        colour: data.colour,
       });
     })
     .catch((error) => console.error(error));

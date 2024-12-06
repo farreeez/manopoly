@@ -11,7 +11,6 @@ import big.manopoly.dtos.BoardDTO;
 import big.manopoly.models.Board;
 import big.manopoly.models.Player;
 import big.manopoly.services.BoardSubscriptionManager;
-import jakarta.servlet.AsyncContext;
 
 public class BoardServicesUtility {
     public static ResponseEntity<?> addPlayerFromCookie(String cookie, Board board, PlayerRepository playerRepository,
@@ -27,7 +26,7 @@ public class BoardServicesUtility {
 
         // creating a new board should remove player from previous board
         if (player.getBoard() != null) {
-            removePlayer(player, boardRepository);
+            removePlayer(player, boardRepository, playerRepository);
         }
 
         boolean checkAdded = board.addPlayer(player);
@@ -50,7 +49,7 @@ public class BoardServicesUtility {
                 .body(BoardDTO);
     }
 
-    public static void removePlayer(Player player, BoardRepository boardRepository) {
+    public static void removePlayer(Player player, BoardRepository boardRepository, PlayerRepository playerRepository) {
         Board playerBoard = player.getBoard();
 
         if (playerBoard == null) {
@@ -58,7 +57,14 @@ public class BoardServicesUtility {
         }
 
         playerBoard.removePlayer(player);
+
+        PlayerColour colour = player.getColour();
+        player.setColour(null);
+
+        playerBoard.giveBackColour(colour);
+
         boardRepository.save(playerBoard);
+        playerRepository.save(player);
 
         BoardSubscriptionManager.instance().processSubsFor(playerBoard.getId(), boardRepository);
     }

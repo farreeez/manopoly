@@ -1,11 +1,9 @@
 package big.manopoly.services;
 
-import java.io.PrintWriter;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,7 +25,6 @@ import big.manopoly.utils.BoardServicesUtility;
 import big.manopoly.utils.Mapper;
 import jakarta.servlet.AsyncContext;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
@@ -91,8 +88,6 @@ public class BoardResource {
 
     @DeleteMapping("/leaveBoard")
     public ResponseEntity<?> leaveBoard(@CookieValue(value = "playerId", defaultValue = "") String cookie) {
-        System.out.println("hello");
-
         if (cookie.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
@@ -106,7 +101,7 @@ public class BoardResource {
             return ResponseEntity.badRequest().body("Invalid playerId cookie value");
         }
 
-        BoardServicesUtility.removePlayer(player, boardRepository);
+        BoardServicesUtility.removePlayer(player, boardRepository, playerRepository);
 
         return ResponseEntity.ok().build();
     }
@@ -137,5 +132,23 @@ public class BoardResource {
     public ResponseEntity<?> processSubs(@PathVariable Long id) {
         BoardSubscriptionManager.instance().processSubsFor(id, boardRepository);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/chooseColour/{colourId}")
+    public ResponseEntity<?> chooseColour(@CookieValue(value = "playerId", defaultValue = "") String cookie, @PathVariable int colourId) {
+        if (cookie.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Player player;
+
+        try {
+            Long playerId = Long.valueOf(cookie);
+            player = playerRepository.getReferenceById(playerId);
+        } catch (NumberFormatException e) {
+            return ResponseEntity.badRequest().body("Invalid playerId cookie value");
+        }
+
+        return player.setColour(colourId, boardRepository, playerRepository);
     }
 }
