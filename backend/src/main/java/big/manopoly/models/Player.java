@@ -55,6 +55,7 @@ public class Player {
     }
 
     public Player() {
+        this.position = new Position();
     }
 
     public boolean doesOwnSet(PropertyType colour) {

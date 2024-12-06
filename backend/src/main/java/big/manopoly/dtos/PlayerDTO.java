@@ -8,7 +8,7 @@ public class PlayerDTO {
     private Long id;
     private String name;
     private Colour colour;
-    private Position position;  // You can choose to include Position details as needed
+    private int position;  // You can choose to include Position details as needed
     private Long boardId;  // Instead of including the full Board, just include the ID for simplicity
     private Integer money;
     private Set<PropertyDTO> properties;  // Set of properties the player owns
@@ -19,7 +19,7 @@ public class PlayerDTO {
         this.id = id;
         this.name = name;
         this.colour = colour;
-        this.position = position;
+        this.position = position.getPosition();
         this.boardId = boardId;
         this.money = money;
         this.properties = properties;
@@ -51,11 +51,11 @@ public class PlayerDTO {
         this.colour = colour;
     }
 
-    public Position getPosition() {
+    public int getPosition() {
         return position;
     }
 
-    public void setPosition(Position position) {
+    public void setPosition(int position) {
         this.position = position;
     }
 

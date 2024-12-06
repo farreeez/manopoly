@@ -6,6 +6,57 @@ import ColourSelection from "./ColourSelection";
 let boardId = -1;
 let counter = 0;
 let oldNum = 0;
+let run = true;
+
+async function getPlayerJson(playerId) {
+  try {
+    const response = await fetch(
+      `http://localhost:8080/players/getPlayer/${playerId}`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("player id does not exist in function getPlayerJson.");
+    }
+
+    const data = await response.json();
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error; // Re-throw the error if you want the caller to handle it
+  }
+}
+
+async function updatePositions(playerIds) {
+  for (let i = 0; i < playerIds.length; i++) {
+    const playerJson = await getPlayerJson(playerIds[i]);
+
+    const playerSquare = document.getElementById(playerJson.position);
+
+    if (playerSquare) {
+      // Create a new div element for the circle
+      const circleOverlay = document.createElement("div");
+
+      Object.assign(circleOverlay.style, {
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        width: "50px",
+        height: "50px",
+        backgroundColor: "black",
+        borderRadius: "50%",
+        pointerEvents: "none", // Ensures the circle doesn't block interactions
+      });
+
+      // Add the circle div to the playerSquare
+      playerSquare.appendChild(circleOverlay);
+    }
+  }
+}
 
 function subscribe(player, setBoard) {
   console.log("ran");
@@ -25,6 +76,7 @@ function subscribe(player, setBoard) {
       let board = JSON.parse(data);
       console.log(board);
       setBoard(board);
+      updatePositions(board.playerIds);
       counter++;
     })
     .catch((error) => console.error(error));
@@ -94,6 +146,12 @@ function Board({ player, setPlayer }) {
     if (boardId !== -1 && counter > oldNum) {
       subscribe(player, setBoard);
     }
+
+    if(board && run) {
+      updatePositions(board.playerIds);
+      run = false;
+      console.log("test")
+    }
   });
 
   useEffect(() => {
@@ -125,7 +183,7 @@ function Board({ player, setPlayer }) {
       {squares.length ? (
         <div>
           <ul id="topRowBoardSquares">
-            <li key={0}>
+            <li key={0} id="0">
               <BoardSquare
                 width={"90px"}
                 height={"90px"}
@@ -133,11 +191,11 @@ function Board({ player, setPlayer }) {
               />
             </li>
             {squares.slice(1, 10).map((square, index) => (
-              <li key={index}>
+              <li key={index} id={index}>
                 <BoardSquare width={"70px"} height={"90px"} squareId={square} />
               </li>
             ))}
-            <li key={10}>
+            <li key={10} id="10">
               <BoardSquare
                 width={"90px"}
                 height={"90px"}
@@ -148,14 +206,14 @@ function Board({ player, setPlayer }) {
 
           <ul id="rightColBoardSquares">
             {squares.slice(11, 20).map((square, index) => (
-              <li key={index}>
+              <li key={index} id={index}>
                 <BoardSquare width={"90px"} height={"70px"} squareId={square} />
               </li>
             ))}
           </ul>
 
           <ul id="bottomRowBoardSquares">
-            <li key={30}>
+            <li key={30} id="30">
               <BoardSquare
                 width={"90px"}
                 height={"90px"}
@@ -166,7 +224,7 @@ function Board({ player, setPlayer }) {
               .slice(21, 30)
               .reverse()
               .map((square, index) => (
-                <li key={index}>
+                <li key={index} id={index}>
                   <BoardSquare
                     width={"70px"}
                     height={"90px"}
@@ -174,7 +232,7 @@ function Board({ player, setPlayer }) {
                   />
                 </li>
               ))}
-            <li key={20}>
+            <li key={20} id="20">
               <BoardSquare
                 width={"90px"}
                 height={"90px"}
@@ -188,7 +246,7 @@ function Board({ player, setPlayer }) {
               .slice(31, 40)
               .reverse()
               .map((square, index) => (
-                <li key={index}>
+                <li key={index} id={index}>
                   <BoardSquare
                     width={"90px"}
                     height={"70px"}
@@ -202,7 +260,13 @@ function Board({ player, setPlayer }) {
         <div></div>
       )}
 
-      {board && !player.colour && <ColourSelection possibleColours={board.possibleColours} takenColours={board.takenColours} setPlayer={setPlayer} />}
+      {board && !player.colour && (
+        <ColourSelection
+          possibleColours={board.possibleColours}
+          takenColours={board.takenColours}
+          setPlayer={setPlayer}
+        />
+      )}
     </div>
   );
 }

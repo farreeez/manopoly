@@ -63,15 +63,7 @@ public class PlayerResource {
 
             Player player = repository.getReferenceById(id);
 
-            Map<String, String> jsonMap = new HashMap<>();
-
-            jsonMap.put("name", player.getName());
-
-            jsonMap.put("boardId", player.getBoardId().toString());
-
-            jsonMap.put("playerId", cookie);
-
-            return ResponseEntity.ok().body(jsonMap);
+            return ResponseEntity.ok().body(Mapper.toPlayerDTO(player));
         } else {
             return ResponseEntity.ok().body(cookie);
         }
