@@ -6,10 +6,10 @@ import ColourSelection from "./ColourSelection";
 let boardId = -1;
 let counter = 0;
 let oldNum = 0;
-let run = true;
 
 async function getPlayerJson(playerId) {
   try {
+    console.log(playerId);
     const response = await fetch(
       `http://localhost:8080/players/getPlayer/${playerId}`,
       {
@@ -31,29 +31,41 @@ async function getPlayerJson(playerId) {
 }
 
 async function updatePositions(playerIds) {
+  for (let i = 0; i < 40; i++) {
+    const playerSquare = document.getElementById(i);
+
+    if (playerSquare) {
+      playerSquare.querySelector(".circleContainer").innerHTML = "";
+    }
+  }
+
   for (let i = 0; i < playerIds.length; i++) {
     const playerJson = await getPlayerJson(playerIds[i]);
 
     const playerSquare = document.getElementById(playerJson.position);
+    const existingCircle = document.getElementById("colour" + i);
 
-    if (playerSquare) {
+    if (playerSquare && playerJson.colour && !existingCircle) {
+      console.log(playerSquare);
+
       // Create a new div element for the circle
       const circleOverlay = document.createElement("div");
 
+      circleOverlay.id = "colour" + i;
+
       Object.assign(circleOverlay.style, {
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        width: "50px",
-        height: "50px",
-        backgroundColor: "black",
+        width: "15px",
+        height: "15px",
+        backgroundColor: `rgb(${playerJson.colour.red},${playerJson.colour.green},${playerJson.colour.blue})`,
         borderRadius: "50%",
-        pointerEvents: "none", // Ensures the circle doesn't block interactions
+        pointerEvents: "none",
+        outline: "1px solid black",
+        margin: "0px 2px",
       });
 
       // Add the circle div to the playerSquare
-      playerSquare.appendChild(circleOverlay);
+      let child = playerSquare.querySelector(".circleContainer");
+      child.appendChild(circleOverlay);
     }
   }
 }
@@ -76,7 +88,6 @@ function subscribe(player, setBoard) {
       let board = JSON.parse(data);
       console.log(board);
       setBoard(board);
-      updatePositions(board.playerIds);
       counter++;
     })
     .catch((error) => console.error(error));
@@ -97,7 +108,7 @@ function process(player) {
     .catch((error) => console.error(error));
 }
 
-function leaveBoard(player, setPlayer) {
+function leaveBoard(player, setPlayer, setBoard) {
   fetch("http://localhost:8080/board/leaveBoard", {
     method: "DELETE",
     credentials: "include",
@@ -117,6 +128,8 @@ function leaveBoard(player, setPlayer) {
         boardId: -1,
         colour: undefined,
       });
+
+      setBoard(null);
     })
     .catch((error) => console.error(error));
 }
@@ -143,21 +156,23 @@ function Board({ player, setPlayer }) {
   const [board, setBoard] = useState();
 
   useEffect(() => {
+    subscribe(player, setBoard);
+  }, []);
+
+  useEffect(() => {
     if (boardId !== -1 && counter > oldNum) {
       subscribe(player, setBoard);
     }
 
-    if(board && run) {
+    if (board) {
       updatePositions(board.playerIds);
-      run = false;
-      console.log("test")
+      console.log("test");
     }
-  });
+  }, [board]);
 
   useEffect(() => {
     boardId = player.boardId;
     getBoard(player, setSquares, setBoard);
-    subscribe(player, setBoard);
   }, [player]);
 
   // TODO: make a better solution to draw the board
@@ -167,7 +182,7 @@ function Board({ player, setPlayer }) {
         <button
           id="leaveButton"
           className="button"
-          onClick={() => leaveBoard(player, setPlayer)}
+          onClick={() => leaveBoard(player, setPlayer, setBoard)}
         >
           Leave Board
         </button>
@@ -191,7 +206,7 @@ function Board({ player, setPlayer }) {
               />
             </li>
             {squares.slice(1, 10).map((square, index) => (
-              <li key={index} id={index}>
+              <li key={index} id={index + 1}>
                 <BoardSquare width={"70px"} height={"90px"} squareId={square} />
               </li>
             ))}
@@ -206,7 +221,7 @@ function Board({ player, setPlayer }) {
 
           <ul id="rightColBoardSquares">
             {squares.slice(11, 20).map((square, index) => (
-              <li key={index} id={index}>
+              <li key={index} id={index + 11}>
                 <BoardSquare width={"90px"} height={"70px"} squareId={square} />
               </li>
             ))}
@@ -224,7 +239,7 @@ function Board({ player, setPlayer }) {
               .slice(21, 30)
               .reverse()
               .map((square, index) => (
-                <li key={index} id={index}>
+                <li key={index} id={index + 21}>
                   <BoardSquare
                     width={"70px"}
                     height={"90px"}
@@ -246,7 +261,7 @@ function Board({ player, setPlayer }) {
               .slice(31, 40)
               .reverse()
               .map((square, index) => (
-                <li key={index} id={index}>
+                <li key={index} id={index + 31}>
                   <BoardSquare
                     width={"90px"}
                     height={"70px"}

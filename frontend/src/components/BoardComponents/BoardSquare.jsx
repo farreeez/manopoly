@@ -31,7 +31,9 @@ function BoardSquare({ player, setPlayer, width, height, squareId }) {
       {square && square.name && <span>{square.name}</span>}
       <br></br>
       <br></br>
+      {height > width && <br></br>}
       {square && Number(square.price) > 0 && <span>{square.price}</span>}
+      <div className="circleContainer" style={{ width: width }}></div>
     </div>
   );
 }

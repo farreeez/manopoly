@@ -1,12 +1,28 @@
 .boardSquare {
-    border: 2px solid black;  /* Adding border style and width */
-    background-color: rgb(118, 152, 192);
-    font-size: 12px;
-    font-weight: bold;
-    padding: 0px 0px;
-  }
-  
-  .boardSquare span{
-    display: flex;
-    justify-content: center;
-  }
+  border: 2px solid black;
+  background-color: rgb(118, 152, 192);
+  font-size: 12px;
+  font-weight: bold;
+  padding: 0px 0px;
+  position: relative;
+}
+
+.boardSquare span {
+  display: flex;
+  justify-content: center;
+}
+
+.circleContainer {
+  position: absolute;
+  top: 25px;
+  left: 0px;
+  pointer-events: none;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; 
+  align-items: center; 
+  row-gap: 2px; 
+  column-gap: 2px;
+}
+

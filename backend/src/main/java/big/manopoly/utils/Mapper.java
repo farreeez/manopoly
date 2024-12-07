@@ -23,6 +23,10 @@ public class Mapper {
     }
 
     public static Colour playerColourToColour(PlayerColour playerColour) {
+        if(playerColour == null) {
+            return null;
+        }
+
         return new Colour(playerColour.getRed(), playerColour.getGreen(), playerColour.getBlue(),
                 playerColour.ordinal());
     }
