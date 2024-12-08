@@ -151,4 +151,74 @@ public class BoardResource {
 
         return player.setColour(colourId, boardRepository, playerRepository);
     }
+
+    @PostMapping("/rollDice")
+    public ResponseEntity<?> rollDice(@CookieValue(value="playerId", defaultValue = "") String cookie) {
+        if (cookie.isEmpty()) {
+            return ResponseEntity.badRequest().body("player cookie is empty.");
+        }
+
+        Player player;
+
+        try {
+            Long playerId = Long.valueOf(cookie);
+            player = playerRepository.getReferenceById(playerId);
+        } catch (NumberFormatException e) {
+            return ResponseEntity.badRequest().body("Invalid playerId cookie value");
+        }
+
+        Board board = player.getBoard();
+
+        if(board == null) {
+            return ResponseEntity.badRequest().body("player cannot roll the dice as they have no board.");
+        }
+
+        if(player.getId() != board.getPlayerWithCurrentTurn().getId()) {
+            return ResponseEntity.badRequest().body("player cannot roll the dice as it is not their turn.");
+        }
+
+        if(board.isDiceRolled()) {
+            return ResponseEntity.badRequest().body("player cannot roll the dice it has already been rolled.");
+        }
+
+        int[] diceRolls = board.movePlayer();
+
+        board.saveBoard(boardRepository);
+
+        return ResponseEntity.ok().body(diceRolls);
+    }
+
+    @PostMapping("/endTurn")
+    public ResponseEntity<?> endTurn(@CookieValue(value="playerId", defaultValue = "") String cookie) {
+        if (cookie.isEmpty()) {
+            return ResponseEntity.badRequest().body("player cookie is empty.");
+        }
+
+        Player player;
+
+        try {
+            Long playerId = Long.valueOf(cookie);
+            player = playerRepository.getReferenceById(playerId);
+        } catch (NumberFormatException e) {
+            return ResponseEntity.badRequest().body("Invalid playerId cookie value");
+        }
+
+        Board board = player.getBoard();
+
+        if(board == null) {
+            return ResponseEntity.badRequest().body("player cannot end the turn as they have no board.");
+        }
+
+        if(player.getId() != board.getPlayerWithCurrentTurn().getId()) {
+            return ResponseEntity.badRequest().body("player cannot end the turn as it is not their turn.");
+        }
+
+        if(!board.endTurn()) {
+            return ResponseEntity.badRequest().body("player cannot end the turn as the dice has not been rolled.");
+        }
+
+        board.saveBoard(boardRepository);
+
+        return ResponseEntity.ok().build();
+    }
 }

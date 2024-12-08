@@ -2,10 +2,12 @@ package big.manopoly.models;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
+import java.util.Random;
 
+import big.manopoly.data.BoardRepository;
+import big.manopoly.services.BoardSubscriptionManager;
 import big.manopoly.utils.CityName;
 import big.manopoly.utils.PlayerColour;
 import big.manopoly.utils.PropertyType;
@@ -39,12 +41,20 @@ public class Board {
     private List<PlayerColour> possibleColours;
 
     @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    private Set<Player> players = new HashSet<>();
+    private List<Player> players = new LinkedList<>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<BoardSquare> squares;
 
+    private int currentTurn;
+
+    private boolean diceRolled;
+
     public Board() {
+        diceRolled = false;
+        currentTurn = 0;
+
+        possibleColours = Arrays.asList(PlayerColour.values());
     }
 
     @PostPersist
@@ -95,8 +105,14 @@ public class Board {
                 new NotProperty(this, 38, "Luxury Tax"), // Luxury Tax
                 new City(this, 39, PropertyType.DARK_BLUE, CityName.DARK_BLUE2) // Dark Blue 2
         );
+    }
 
-        possibleColours = Arrays.asList(PlayerColour.values());
+    public int getCurrentTurn() {
+        return currentTurn;
+    }
+
+    public boolean isDiceRolled() {
+        return diceRolled;
     }
 
     public Long getId() {
@@ -115,25 +131,34 @@ public class Board {
         return squares;
     }
 
-    public Set<Player> getPlayers() {
+    public List<Player> getPlayers() {
         return players;
     }
 
-    // TODO: maybe also deal with the logic of giving the player their colour and taking it away in the methods below
-    // TODO: also consider not throwing an error in the future and simply updating the client side state such that the site doesnt crash if there is a bug.
+    public Player getPlayerWithCurrentTurn() {
+        if(players == null || players.isEmpty()) {
+            return null;
+        }
+
+        return players.get(currentTurn);
+    }
+
+    // TODO: maybe also deal with the logic of giving the player their colour and
+    // taking it away in the methods below
+    // TODO: also consider not throwing an error in the future and simply updating
+    // the client side state such that the site doesnt crash if there is a bug.
     public void giveBackColour(PlayerColour colour) {
         boolean taken = takenColours.contains(colour);
 
-        if(!taken) {
+        if (!taken) {
             throw new Error("error in method giveBackColour in Board class: colour was never taken to begin with");
         }
 
         takenColours.remove(colour);
     }
 
-    
     public void takeColour(PlayerColour colour) {
-        if(takenColours.contains(colour)) {
+        if (takenColours.contains(colour)) {
             throw new Error("error in method takeColour in Board class: colour already taken");
         }
 
@@ -161,6 +186,57 @@ public class Board {
             players.add(player);
             return true;
         }
+    }
+
+    // iterates current turn to roll dice if the dice has been rolled
+    public boolean endTurn() {
+        // returns false and does not iterate if the dice has not been rolled for the
+        // previous turn
+        if (!diceRolled) {
+            return false;
+        }
+
+        currentTurn++;
+        diceRolled = false;
+
+        if (currentTurn > players.size() - 1) {
+            currentTurn = 0;
+        }
+
+        return true;
+    }
+
+    public int[] movePlayer() {
+        if (diceRolled) {
+            return null;
+        }
+
+        Random random = new Random(System.currentTimeMillis());
+
+        int firstDice = random.nextInt(6) + 1;
+        int secondDice = random.nextInt(6) + 1;
+
+        int squaresMoved = firstDice + secondDice;
+
+        Player player = players.get(currentTurn);
+
+        player.getPosition().add(squaresMoved);
+
+        System.out.println(player.getPosition().getPosition());
+
+        // allows player to keep rolling if there is a double
+        // TODO: handle triple doubles.
+        diceRolled = !(firstDice == secondDice);
+
+        int[] diceRolls = {firstDice, secondDice};
+
+        return diceRolls;
+    }
+
+    public void saveBoard(BoardRepository boardRepository) {
+        boardRepository.save(this);
+
+        BoardSubscriptionManager.instance().processSubsFor(this.id, boardRepository);
     }
 
 }
