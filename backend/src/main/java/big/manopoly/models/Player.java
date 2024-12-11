@@ -180,4 +180,8 @@ public class Player {
         this.colour = colour;
     }
 
+    public void resetPosition() {
+        this.position = new Position();
+    }
+
 }

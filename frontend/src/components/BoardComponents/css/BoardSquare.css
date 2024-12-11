@@ -14,7 +14,7 @@
 
 .circleContainer {
   position: absolute;
-  top: 25px;
+  top: 35px;
   left: 0px;
   pointer-events: none;
   z-index: 10;

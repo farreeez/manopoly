@@ -2,14 +2,12 @@ import BoardSquare from "./BoardSquare";
 import { useEffect, useState } from "react";
 import "./css/Board.css";
 import ColourSelection from "./ColourSelection";
+import PlayerMovement from "./PlayerMovement";
 
 let boardId = -1;
-let counter = 0;
-let oldNum = 0;
 
 async function getPlayerJson(playerId) {
   try {
-    console.log(playerId);
     const response = await fetch(
       `http://localhost:8080/players/getPlayer/${playerId}`,
       {
@@ -22,7 +20,6 @@ async function getPlayerJson(playerId) {
     }
 
     const data = await response.json();
-    console.log(data);
     return data;
   } catch (error) {
     console.error(error);
@@ -42,12 +39,12 @@ async function updatePositions(playerIds) {
   for (let i = 0; i < playerIds.length; i++) {
     const playerJson = await getPlayerJson(playerIds[i]);
 
+    console.log(playerJson.position);
+
     const playerSquare = document.getElementById(playerJson.position);
     const existingCircle = document.getElementById("colour" + i);
 
     if (playerSquare && playerJson.colour && !existingCircle) {
-      console.log(playerSquare);
-
       // Create a new div element for the circle
       const circleOverlay = document.createElement("div");
 
@@ -70,27 +67,28 @@ async function updatePositions(playerIds) {
   }
 }
 
-function subscribe(player, setBoard) {
-  console.log("ran");
-  oldNum = counter;
+
+function subscribe(player, setBoard, resubscribe, setResubscribe) {
   fetch("http://localhost:8080/board/subscribeToBoard/" + player.boardId, {
     method: "GET",
   })
-    .then((response) => {
+    .then(async (response) => {
       if (!response.ok) {
-        counter++;
-        throw new Error("Issue with subscribing to board.");
+        const message = await response.text();
+        console.error("Error message from response:", message);
       }
+      setResubscribe(-1 * resubscribe);
 
       return response.text();
     })
     .then((data) => {
       let board = JSON.parse(data);
-      console.log(board);
       setBoard(board);
-      counter++;
+      console.log("working");
     })
-    .catch((error) => console.error(error));
+    .catch((error) => {
+      console.error(error);
+    });
 }
 
 function process(player) {
@@ -99,10 +97,9 @@ function process(player) {
   })
     .then((response) => {
       if (!response.ok) {
+
         throw new Error("unable to process board.");
       }
-
-      console.log("processed");
     })
     .then(() => {})
     .catch((error) => console.error(error));
@@ -154,19 +151,19 @@ function getBoard(player, setSquares, setBoard) {
 function Board({ player, setPlayer }) {
   const [squares, setSquares] = useState([]);
   const [board, setBoard] = useState();
+  const [resubscribe, setResubscribe] = useState(-1);
 
   useEffect(() => {
     subscribe(player, setBoard);
   }, []);
 
   useEffect(() => {
-    if (boardId !== -1 && counter > oldNum) {
-      subscribe(player, setBoard);
-    }
+    subscribe(player, setBoard, resubscribe, setResubscribe);
+  }, [resubscribe]);
 
+  useEffect(() => {
     if (board) {
       updatePositions(board.playerIds);
-      console.log("test");
     }
   }, [board]);
 
@@ -187,7 +184,12 @@ function Board({ player, setPlayer }) {
           Leave Board
         </button>
 
-        <button className="button" onClick={() => subscribe(player, setBoard)}>
+        <button
+          className="button"
+          onClick={() =>
+            subscribe(player, setBoard, resubscribe, setResubscribe)
+          }
+        >
           subscribe
         </button>
         <button className="button" onClick={() => process(player)}>
@@ -195,6 +197,7 @@ function Board({ player, setPlayer }) {
         </button>
         <h1 id="boardId">Board Code: {player.boardId}</h1>
       </div>
+      <PlayerMovement board={board}/>
       {squares.length ? (
         <div>
           <ul id="topRowBoardSquares">
@@ -239,7 +242,7 @@ function Board({ player, setPlayer }) {
               .slice(21, 30)
               .reverse()
               .map((square, index) => (
-                <li key={index} id={index + 21}>
+                <li key={index} id={8 - index + 21}>
                   <BoardSquare
                     width={"70px"}
                     height={"90px"}
@@ -261,7 +264,7 @@ function Board({ player, setPlayer }) {
               .slice(31, 40)
               .reverse()
               .map((square, index) => (
-                <li key={index} id={index + 31}>
+                <li key={index} id={8 - index + 31}>
                   <BoardSquare
                     width={"90px"}
                     height={"70px"}

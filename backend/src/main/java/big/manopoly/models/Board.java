@@ -183,7 +183,9 @@ public class Board {
             return false;
         } else {
             player.setBoard(this);
+            player.resetPosition();
             players.add(player);
+            player.setFree(null);
             return true;
         }
     }

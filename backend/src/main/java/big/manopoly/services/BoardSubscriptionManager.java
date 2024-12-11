@@ -87,9 +87,12 @@ public class BoardSubscriptionManager {
     public void processSubsFor(final long boardId, BoardRepository boardRepository) {
         Board board = boardRepository.getReferenceById(boardId);
         BoardDTO boardDTO = Mapper.toBoardDTO(board);
+        System.out.println("00000000000000000000000000000000000000000000");
+        System.out.println("PROCESSING!");
         THREAD_POOL.submit(() -> {
             // Get the subs which will be notified if the board with the given id is updated
             List<AsyncContext> subs = getSubsFor(boardId);
+            System.out.println(subs.size());
             if (!subs.isEmpty()) {
                 subs.parallelStream().forEach(sub -> {
                     sub.start(new Runnable() {
@@ -97,10 +100,12 @@ public class BoardSubscriptionManager {
                             HttpServletResponse response = (HttpServletResponse) sub.getResponse();
                             response.setCharacterEncoding("UTF-8");
                             response.setContentType("text/plain");
+                            System.out.println("BEFORE TRY CATCH");
 
                             try {
                                 ObjectMapper objectMapper = new ObjectMapper();
                                 String json = objectMapper.writeValueAsString(boardDTO);
+                                System.out.println(json);
 
                                 PrintWriter writer = response.getWriter();
                                 writer.write(json);
@@ -109,7 +114,7 @@ public class BoardSubscriptionManager {
                                 response.setStatus(HttpServletResponse.SC_OK);
                             } catch (Exception e) {
                                 e.printStackTrace();
-                                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                             }
 
                             // this might need to be changed

@@ -124,7 +124,10 @@ public class BoardResource {
     @GetMapping("/subscribeToBoard/{id}")
     public void subscribeToBoard(
             @PathVariable Long id, HttpServletRequest request) {
+
+        System.out.println("subscribed");
         AsyncContext sub = request.startAsync();
+        sub.setTimeout(1800000);
         BoardSubscriptionManager.instance().addSubscription(id, sub);
     }
 
@@ -135,7 +138,8 @@ public class BoardResource {
     }
 
     @PostMapping("/chooseColour/{colourId}")
-    public ResponseEntity<?> chooseColour(@CookieValue(value = "playerId", defaultValue = "") String cookie, @PathVariable int colourId) {
+    public ResponseEntity<?> chooseColour(@CookieValue(value = "playerId", defaultValue = "") String cookie,
+            @PathVariable int colourId) {
         if (cookie.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
@@ -153,7 +157,7 @@ public class BoardResource {
     }
 
     @PostMapping("/rollDice")
-    public ResponseEntity<?> rollDice(@CookieValue(value="playerId", defaultValue = "") String cookie) {
+    public ResponseEntity<?> rollDice(@CookieValue(value = "playerId", defaultValue = "") String cookie) {
         if (cookie.isEmpty()) {
             return ResponseEntity.badRequest().body("player cookie is empty.");
         }
@@ -169,15 +173,15 @@ public class BoardResource {
 
         Board board = player.getBoard();
 
-        if(board == null) {
+        if (board == null) {
             return ResponseEntity.badRequest().body("player cannot roll the dice as they have no board.");
         }
 
-        if(player.getId() != board.getPlayerWithCurrentTurn().getId()) {
+        if (player.getId() != board.getPlayerWithCurrentTurn().getId()) {
             return ResponseEntity.badRequest().body("player cannot roll the dice as it is not their turn.");
         }
 
-        if(board.isDiceRolled()) {
+        if (board.isDiceRolled()) {
             return ResponseEntity.badRequest().body("player cannot roll the dice it has already been rolled.");
         }
 
@@ -189,7 +193,7 @@ public class BoardResource {
     }
 
     @PostMapping("/endTurn")
-    public ResponseEntity<?> endTurn(@CookieValue(value="playerId", defaultValue = "") String cookie) {
+    public ResponseEntity<?> endTurn(@CookieValue(value = "playerId", defaultValue = "") String cookie) {
         if (cookie.isEmpty()) {
             return ResponseEntity.badRequest().body("player cookie is empty.");
         }
@@ -205,15 +209,15 @@ public class BoardResource {
 
         Board board = player.getBoard();
 
-        if(board == null) {
+        if (board == null) {
             return ResponseEntity.badRequest().body("player cannot end the turn as they have no board.");
         }
 
-        if(player.getId() != board.getPlayerWithCurrentTurn().getId()) {
+        if (player.getId() != board.getPlayerWithCurrentTurn().getId()) {
             return ResponseEntity.badRequest().body("player cannot end the turn as it is not their turn.");
         }
 
-        if(!board.endTurn()) {
+        if (!board.endTurn()) {
             return ResponseEntity.badRequest().body("player cannot end the turn as the dice has not been rolled.");
         }
 
