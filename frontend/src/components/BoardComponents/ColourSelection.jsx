@@ -24,7 +24,7 @@ function chooseColour(colour, setPlayer) {
     .catch((error) => console.error(error));
 }
 
-function ColourSelection({ possibleColours, takenColours, setPlayer }) {
+function ColourSelection({ possibleColours, takenColours, player, setPlayer }) {
   return (
     <div className="modal">
       <div className="overlay"></div>
@@ -32,7 +32,9 @@ function ColourSelection({ possibleColours, takenColours, setPlayer }) {
         <h1 className="chooseColour">Choose your colour</h1>
         <div className="colours">
           {possibleColours.map((colour) =>
-            !takenColours.map((colour) => Number(colour.identifier)).includes(colour.identifier) ? (
+            !takenColours
+              .map((colour) => Number(colour.identifier))
+              .includes(colour.identifier) ? (
               <div
                 className="circle"
                 onClick={() => chooseColour(colour, setPlayer)}

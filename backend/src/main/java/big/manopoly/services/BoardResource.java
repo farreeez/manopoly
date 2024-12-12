@@ -18,11 +18,13 @@ import big.manopoly.data.BoardSquareRepository;
 import big.manopoly.data.PlayerRepository;
 import big.manopoly.dtos.BoardDTO;
 import big.manopoly.dtos.BoardSquareDTO;
+import big.manopoly.dtos.TileActionDTO;
 import big.manopoly.models.Board;
 import big.manopoly.models.BoardSquare;
 import big.manopoly.models.Player;
 import big.manopoly.utils.BoardServicesUtility;
 import big.manopoly.utils.Mapper;
+import big.manopoly.utils.TileActions;
 import jakarta.servlet.AsyncContext;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -157,7 +159,7 @@ public class BoardResource {
     }
 
     @PostMapping("/rollDice")
-    public ResponseEntity<?> rollDice(@CookieValue(value = "playerId", defaultValue = "") String cookie) {
+    public ResponseEntity<?> rollDice(@CookieValue(value = "playerId", defaultValue = "") String cookie) throws Exception {
         if (cookie.isEmpty()) {
             return ResponseEntity.badRequest().body("player cookie is empty.");
         }
@@ -187,9 +189,11 @@ public class BoardResource {
 
         int[] diceRolls = board.movePlayer();
 
+        TileActionDTO action = TileActions.conductTileAction(player, board, diceRolls);
+
         board.saveBoard(boardRepository);
 
-        return ResponseEntity.ok().body(diceRolls);
+        return ResponseEntity.ok().body(action);
     }
 
     @PostMapping("/endTurn")

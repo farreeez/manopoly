@@ -28,6 +28,7 @@ function joinGame(player, setPlayer) {
       return response.json();
     })
     .then((data) => {
+      console.log(Number(data.id))
       setPlayer({
         name: data.name,
         id: Number(data.id),

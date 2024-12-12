@@ -67,7 +67,6 @@ async function updatePositions(playerIds) {
   }
 }
 
-
 function subscribe(player, setBoard, resubscribe, setResubscribe) {
   fetch("http://localhost:8080/board/subscribeToBoard/" + player.boardId, {
     method: "GET",
@@ -91,19 +90,19 @@ function subscribe(player, setBoard, resubscribe, setResubscribe) {
     });
 }
 
-function process(player) {
-  fetch("http://localhost:8080/board/processSubs/" + player.boardId, {
-    method: "GET",
-  })
-    .then((response) => {
-      if (!response.ok) {
+// function process(player) {
+//   fetch("http://localhost:8080/board/processSubs/" + player.boardId, {
+//     method: "GET",
+//   })
+//     .then((response) => {
+//       if (!response.ok) {
 
-        throw new Error("unable to process board.");
-      }
-    })
-    .then(() => {})
-    .catch((error) => console.error(error));
-}
+//         throw new Error("unable to process board.");
+//       }
+//     })
+//     .then(() => {})
+//     .catch((error) => console.error(error));
+// }
 
 function leaveBoard(player, setPlayer, setBoard) {
   fetch("http://localhost:8080/board/leaveBoard", {
@@ -153,6 +152,9 @@ function Board({ player, setPlayer }) {
   const [board, setBoard] = useState();
   const [resubscribe, setResubscribe] = useState(-1);
 
+  // this is different from player object in the app state as it has all of the player dto elements
+  const [playerDTO, setPlayerDTO] = useState({ money: 0 });
+
   useEffect(() => {
     subscribe(player, setBoard);
   }, []);
@@ -162,9 +164,19 @@ function Board({ player, setPlayer }) {
   }, [resubscribe]);
 
   useEffect(() => {
-    if (board) {
-      updatePositions(board.playerIds);
-    }
+    const fetchData = async () => {
+      if (board) {
+        updatePositions(board.playerIds);
+        try {
+          const playerData = await getPlayerJson(player.id);
+          setPlayerDTO(playerData);
+        } catch (error) {
+          console.error("Error fetching player data:", error);
+        }
+      }
+    };
+  
+    fetchData();
   }, [board]);
 
   useEffect(() => {
@@ -184,7 +196,7 @@ function Board({ player, setPlayer }) {
           Leave Board
         </button>
 
-        <button
+        {/* <button
           className="button"
           onClick={() =>
             subscribe(player, setBoard, resubscribe, setResubscribe)
@@ -194,10 +206,12 @@ function Board({ player, setPlayer }) {
         </button>
         <button className="button" onClick={() => process(player)}>
           processSubs
-        </button>
-        <h1 id="boardId">Board Code: {player.boardId}</h1>
+        </button> */}
+        <h1 className="boardHeaders">Board Code: {player.boardId}</h1>
+
+        <h2 className="boardHeaders">Player Money: {playerDTO.money}</h2>
       </div>
-      <PlayerMovement board={board}/>
+      <PlayerMovement board={board} player={player} />
       {squares.length ? (
         <div>
           <ul id="topRowBoardSquares">

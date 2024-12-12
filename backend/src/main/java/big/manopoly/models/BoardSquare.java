@@ -17,7 +17,7 @@ import jakarta.persistence.ManyToOne;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "Board Square Type", discriminatorType = DiscriminatorType.STRING)
-public class BoardSquare {
+public abstract class BoardSquare {
     @Id
     protected String id;
 

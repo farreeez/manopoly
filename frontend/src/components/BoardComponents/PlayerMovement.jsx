@@ -15,8 +15,7 @@ function endTurn() {
     .catch((error) => console.error(error));
 }
 
-function rollDice(board) {
-  console.log(board)
+function rollDice(board, player) {
   fetch("http://localhost:8080/board/rollDice", {
     method: "POST",
     credentials: "include",
@@ -30,21 +29,26 @@ function rollDice(board) {
       return response.json();
     })
     .then((data) => {
-      console.log(data);
     })
     .catch((error) => console.error(error));
 }
 
-function PlayerMovement({board}) {
+function PlayerMovement({ board, player }) {
   return (
     <div>
-      <button className="button" onClick={() => rollDice(board)}>
-        Roll Dice.
-      </button>
-
-      <button className="button" onClick={() => endTurn()}>
-        End Turn.
-      </button>
+      {board && board.currentPlayerTurn.id === player.id && (
+        <div>
+          {!board.diceRolled ? (
+            <button className="button" onClick={() => rollDice(board, player)}>
+              Roll Dice.
+            </button>
+          ) : (
+            <button className="button" onClick={() => endTurn()}>
+              End Turn.
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 }

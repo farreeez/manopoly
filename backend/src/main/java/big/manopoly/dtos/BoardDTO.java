@@ -1,26 +1,37 @@
 package big.manopoly.dtos;
 
 import java.util.List;
-import java.util.Set;
 
 import big.manopoly.models.Colour;
 
 public class BoardDTO {
     private Long id;
-    private Set<Long> playerIds;
+    private List<Long> playerIds;
     private List<String> squareIds;
     private List<Colour> possibleColours;
     private List<Colour> takenColours;
+    private boolean diceRolled;
+    private PlayerDTO currentPlayerTurn;
 
     public BoardDTO() {
     }
 
-    public BoardDTO(Long id, Set<Long> playerIds, List<String> squareIds, List<Colour> takenColours, List<Colour> possibleColours) {
+    public BoardDTO(Long id, List<Long> playerIds, List<String> squareIds, List<Colour> takenColours, List<Colour> possibleColours, PlayerDTO currentPlayerTurn, boolean diceRolled) {
         this.id = id;
         this.playerIds = playerIds;
         this.squareIds = squareIds;
         this.takenColours = takenColours;
         this.possibleColours = possibleColours;
+        this.currentPlayerTurn = currentPlayerTurn;
+        this.diceRolled = diceRolled;
+    }
+    
+    public boolean isDiceRolled() {
+        return diceRolled;
+    }
+
+    public PlayerDTO getCurrentPlayerTurn() {
+        return currentPlayerTurn;
     }
 
     public Long getId() {
@@ -47,11 +58,11 @@ public class BoardDTO {
         this.takenColours = takenColours;
     }
 
-    public Set<Long> getPlayerIds() {
+    public List<Long> getPlayerIds() {
         return playerIds;
     }
 
-    public void setPlayerIds(Set<Long> playerIds) {
+    public void setPlayerIds(List<Long> playerIds) {
         this.playerIds = playerIds;
     }
 
@@ -61,5 +72,13 @@ public class BoardDTO {
 
     public void setSquareIds(List<String> squareIds) {
         this.squareIds = squareIds;
+    }
+
+    public void setDiceRolled(boolean diceRolled) {
+        this.diceRolled = diceRolled;
+    }
+
+    public void setCurrentPlayerTurn(PlayerDTO currentPlayerTurn) {
+        this.currentPlayerTurn = currentPlayerTurn;
     }
 }

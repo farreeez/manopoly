@@ -16,10 +16,12 @@ public class Mapper {
     public static BoardDTO toBoardDTO(Board board) {
         return new BoardDTO(
                 board.getId(),
-                board.getPlayers().stream().map(Player::getId).collect(Collectors.toSet()),
+                board.getPlayers().stream().map(Player::getId).collect(Collectors.toList()),
                 board.getSquares().stream().map(BoardSquare::getId).collect(Collectors.toList()),
                 board.getTakenColours().stream().map(Mapper::playerColourToColour).collect(Collectors.toList()),
-                board.getPossibleColours().stream().map(Mapper::playerColourToColour).collect(Collectors.toList()));
+                board.getPossibleColours().stream().map(Mapper::playerColourToColour).collect(Collectors.toList()),
+                toPlayerDTO(board.getPlayerWithCurrentTurn()),
+                board.isDiceRolled());
     }
 
     public static Colour playerColourToColour(PlayerColour playerColour) {

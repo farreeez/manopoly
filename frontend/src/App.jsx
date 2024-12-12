@@ -26,7 +26,7 @@ function App() {
 
           let newPlayer = {
             name: data.name,
-            id: Number(data.playerId),
+            id: Number(data.id),
             isLoggedIn: true,
             boardId: Number(data.boardId),
             colour: data.colour,

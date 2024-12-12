@@ -55,8 +55,6 @@ function createBoard(player, setPlayer) {
       return response.json();
     })
     .then((data) => {
-      console.log(data);
-
       let newPlayer = {
         name: player.name,
         id: Number(player.id),

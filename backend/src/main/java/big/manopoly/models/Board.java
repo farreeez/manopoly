@@ -186,6 +186,7 @@ public class Board {
             player.resetPosition();
             players.add(player);
             player.setFree(null);
+            player.setMoney(1500);
             return true;
         }
     }
@@ -223,8 +224,6 @@ public class Board {
         Player player = players.get(currentTurn);
 
         player.getPosition().add(squaresMoved);
-
-        System.out.println(player.getPosition().getPosition());
 
         // allows player to keep rolling if there is a double
         // TODO: handle triple doubles.
