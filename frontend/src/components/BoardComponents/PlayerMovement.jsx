@@ -1,4 +1,6 @@
-function endTurn() {
+import { useState } from "react";
+//find and fix the bug where the end turn button does not change correctly
+function endTurn(rerender, setRerender) {
   fetch("http://localhost:8080/board/endTurn", {
     method: "POST",
     credentials: "include",
@@ -7,6 +9,9 @@ function endTurn() {
       if (!response.ok) {
         const message = await response.text();
         console.error("Error message from response:", message);
+
+        // changes the rerender prop to update the scene because the end turn button is there when it shouldn't be
+        setRerender(!rerender);
       }
     })
     .then((data) => {
@@ -34,6 +39,8 @@ function rollDice(board, player) {
 }
 
 function PlayerMovement({ board, player }) {
+  const [rerender, setRerender] = useState(false);
+
   return (
     <div>
       {board && board.currentPlayerTurn.id === player.id && (
@@ -43,7 +50,7 @@ function PlayerMovement({ board, player }) {
               Roll Dice.
             </button>
           ) : (
-            <button className="button" onClick={() => endTurn()}>
+            <button className="button" onClick={() => endTurn(rerender, setRerender)}>
               End Turn.
             </button>
           )}

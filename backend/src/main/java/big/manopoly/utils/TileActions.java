@@ -30,10 +30,10 @@ public class TileActions {
 
         if(owner == null) {
             // card owned by the bank ask player if they want to purchase it
-            return new CardPurchaseActionDTO(property.getPrice());
+            return new CardPurchaseActionDTO(diceRolls, property.getPrice());
         } else if (owner == player) {
             // player owns card do nothing and return empty actionDTO
-            return new TileActionDTO();
+            return new TileActionDTO(diceRolls);
         } else {
             // other player owns property pay rent.
 
@@ -54,12 +54,12 @@ public class TileActions {
 
             owner.setMoney(owner.getMoney() + rent);
 
-            return new TileActionDTO();
+            return new TileActionDTO(diceRolls);
         }
     }
 
     // TODO: finish this once chance card and jail functionality is complete.
     public static TileActionDTO conductNonPropertyAction(Player player, Board board, NotProperty notProperty, int[] diceRolls) {
-        return new TileActionDTO();
+        return new TileActionDTO(diceRolls);
     }
 }
