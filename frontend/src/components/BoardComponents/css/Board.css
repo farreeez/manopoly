@@ -1,61 +1,100 @@
 .boardHeaders {
-    font-size: 16px;
-    margin-bottom: 2px;
-    margin-top: 0px;
-    padding: 0px 10px;
-    color: white;
-  }
-  
-  #leaveButton {
-    font-size: 14px; /* Adjust button size */
-    margin-left: 10px; /* Space between the header and button */
-    margin-right: 10px;
-    padding: 1px 5px; /* Button padding */
-  }
-  
-  #topRowBoardSquares {
-    display: flex;
-    list-style-type: none; /* Removes default list bullet points */
-    padding: 0; /* Removes default padding */
-    margin: 0; /* Removes default margin */
-    position: fixed; /* Fix the position */
-    top:8px;          /* Stick to the top of the screen */
-    left: 475px;         /* Align to the left edge */
-  }
-  
-  #bottomRowBoardSquares {
-    display: flex;
-    list-style-type: none; /* Removes default list bullet points */
-    padding: 0; /* Removes default padding */
-    margin: 0; /* Removes default margin */
-    position: fixed; /* Fix the position */
-    top: 768px;          /* Stick to the top of the screen */
-    left: 475px;         /* Align to the left edge */
-  }
-  
-  #rightColBoardSquares {
-    list-style-type: none; /* Removes default list bullet points */
-    padding: 0; /* Removes default padding */
-    margin: 0; /* Removes default margin */
-    position: fixed; /* Fix the position */
-    top: 102px;          /* Stick to the top of the screen */
-    left: 1235px;         /* Align to the left edge */
-  }
-  
-  #leftColBoardSquares {
-    list-style-type: none; /* Removes default list bullet points */
-    padding: 0; /* Removes default padding */
-    margin: 0; /* Removes default margin */
-    position: fixed; /* Fix the position */
-    top: 102px;          /* Stick to the top of the screen */
-    left: 475px;         /* Align to the left edge */
-  }
+  font-size: 13px;  /* Reduced from 18px */
+  margin-bottom: 0px;  /* Reduced from 8px */
+  margin-top: 0;
+  padding: 0 7px;  /* Reduced from 15px */
+  color: var(--text-light);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);  /* Slightly reduced shadow */
+}
 
-  #headerContainer {
-    display: flex; /* Align items horizontally */
-    align-items: center; /* Align items vertically in the middle */
-    position: absolute; /* Position the container absolutely */
-    top: 10px; /* Distance from the top of the page */
-    left: 0px; /* Distance from the left of the page */
-  }
-  
+#leaveButton {
+  font-size: 12px;  /* Reduced from 14px */
+  margin-right: 10px;  /* Reduced from 15px */
+  padding: 5px 10px;  /* Reduced from 8px 15px */
+  background-color: var(--primary-color);
+  color: var(--text-light);
+  border: none;
+  border-radius: var(--border-radius);
+  font-weight: 600;
+}
+
+#leaveButton:hover {
+  background-color: #8e2727;
+}
+
+#headerContainer {
+  display: flex;
+  align-items: center;
+  position: fixed;
+  top: 10px;  /* Reduced from 20px */
+  left: 10px;  /* Reduced from 20px */
+  background-color: rgba(45, 64, 83, 0.85);
+  padding: 7px;  /* Reduced from 12px */
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  backdrop-filter: blur(5px);
+  z-index: 100;
+}
+
+#topRowBoardSquares {
+  display: flex;
+  list-style-type: none;
+  /* Removes default list bullet points */
+  padding: 0;
+  /* Removes default padding */
+  margin: 0;
+  /* Removes default margin */
+  position: fixed;
+  /* Fix the position */
+  top: 8px;
+  /* Stick to the top of the screen */
+  left: 375px;
+  /* Align to the left edge */
+}
+
+#bottomRowBoardSquares {
+  display: flex;
+  list-style-type: none;
+  /* Removes default list bullet points */
+  padding: 0;
+  /* Removes default padding */
+  margin: 0;
+  /* Removes default margin */
+  position: fixed;
+  /* Fix the position */
+  top: 768px;
+  /* Stick to the top of the screen */
+  left: 375px;
+  /* Align to the left edge */
+}
+
+#rightColBoardSquares {
+  list-style-type: none;
+  /* Removes default list bullet points */
+  padding: 0;
+  /* Removes default padding */
+  margin: 0;
+  /* Removes default margin */
+  position: fixed;
+  /* Fix the position */
+  top: 102px;
+  /* Stick to the top of the screen */
+  left: 1135px;
+  /* Align to the left edge */
+}
+
+#leftColBoardSquares {
+  list-style-type: none;
+  /* Removes default list bullet points */
+  padding: 0;
+  /* Removes default padding */
+  margin: 0;
+  /* Removes default margin */
+  position: fixed;
+  /* Fix the position */
+  top: 102px;
+  /* Stick to the top of the screen */
+  left: 375px;
+  /* Align to the left edge */
+}
+

@@ -1,4 +1,4 @@
-import "../App.css";
+import "./css/HomePage.css";
 function joinBoard(player, setPlayer) {
   const textBox = document.getElementById("boardCodeTextBox");
   let boardCode;

@@ -1,4 +1,4 @@
-import "../App.css";
+import "./css/Login.css";
 
 function joinGame(player, setPlayer) {
   const textBox = document.getElementById("usernameInput");

@@ -121,19 +121,27 @@ const DiceRoll = ({ board, player }) => {
                 {renderDieFace(currentDice[1])}
             </div>
 
-            {!board.diceRolled ? (
-                <button
-                    className="roll-button"
-                    onClick={() => fetchDiceData()}
-                    disabled={animating}
-                >
-                    Roll Dice
-                </button>
-            ) : (
-                <button className="roll-button" onClick={() => endTurn()}>
-                    End Turn.
-                </button>
-            )}
+            <div>
+                {board && board.currentPlayerTurn.id === player.id && (
+                    <div>
+                        {!board.diceRolled ? (
+                            <button
+                                className="roll-button"
+                                onClick={() => fetchDiceData()}
+                                disabled={animating}
+                            >
+                                Roll Dice
+                            </button>
+                        ) : (
+                            <button className="roll-button" onClick={() => endTurn()}>
+                                End Turn.
+                            </button>
+                        )}
+                    </div>
+                )}
+            </div>
+
+
         </div>
     );
 };

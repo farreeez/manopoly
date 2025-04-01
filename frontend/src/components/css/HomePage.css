@@ -1,0 +1,55 @@
+#homePage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 30px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    backdrop-filter: blur(5px);
+    min-width: 350px;
+  }
+  
+  #greetingPlayer {
+    color: var(--text-light);
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 28px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+  }
+  
+  #boardCodeTextBox {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: var(--border-radius);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--text-light);
+    font-size: 16px;
+  }
+  
+  #boardCodeTextBox:focus {
+    outline: none;
+    border-color: var(--highlight-color);
+    box-shadow: 0 0 0 2px rgba(243, 156, 18, 0.3);
+  }
+  
+  #buttonContainer {
+    display: flex;
+    gap: 15px;
+    width: 100%;
+  }
+  
+  #joinBoard, #createBoard {
+    flex: 1;
+    padding: 12px;
+  }
+  
+  #createBoard {
+    background-color: var(--primary-color);
+  }
+  
+  #createBoard:hover {
+    background-color: #8e2727;
+  }
