@@ -87,8 +87,6 @@ public class BoardSubscriptionManager {
     public void processSubsFor(final long boardId, BoardRepository boardRepository) {
         Board board = boardRepository.getReferenceById(boardId);
         BoardDTO boardDTO = Mapper.toBoardDTO(board);
-        System.out.println("00000000000000000000000000000000000000000000");
-        System.out.println("PROCESSING!");
         THREAD_POOL.submit(() -> {
             // Get the subs which will be notified if the board with the given id is updated
             List<AsyncContext> subs = getSubsFor(boardId);
@@ -100,7 +98,6 @@ public class BoardSubscriptionManager {
                             HttpServletResponse response = (HttpServletResponse) sub.getResponse();
                             response.setCharacterEncoding("UTF-8");
                             response.setContentType("text/plain");
-                            System.out.println("BEFORE TRY CATCH");
 
                             try {
                                 ObjectMapper objectMapper = new ObjectMapper();

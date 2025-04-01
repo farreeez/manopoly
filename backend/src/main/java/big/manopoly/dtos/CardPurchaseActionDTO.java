@@ -18,5 +18,4 @@ public class CardPurchaseActionDTO extends TileActionDTO {
     public void setPrice(int price) {
         this.price = price;
     }
-
 }

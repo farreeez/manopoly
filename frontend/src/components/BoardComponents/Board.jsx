@@ -2,7 +2,7 @@ import BoardSquare from "./BoardSquare";
 import { useEffect, useState } from "react";
 import "./css/Board.css";
 import ColourSelection from "./ColourSelection";
-import PlayerMovement from "./PlayerMovement";
+import DiceRoll from "./DiceRoll";
 
 let boardId = -1;
 
@@ -211,7 +211,7 @@ function Board({ player, setPlayer }) {
 
         <h2 className="boardHeaders">Player Money: {playerDTO.money}</h2>
       </div>
-      <PlayerMovement board={board} player={player} />
+      <DiceRoll board={board} player={player} />
       {squares.length ? (
         <div>
           <ul id="topRowBoardSquares">

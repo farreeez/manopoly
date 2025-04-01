@@ -41,15 +41,17 @@ public class TileActions {
             // TODO: finish negative balance functionality.
             // TODO: display all transactions in real time to all players
             int rent = property.getRent();
-            player.setMoney(player.getMoney() - rent);
-
-            // if player cant afford the rent and has a negative balance only transfer the amoun that they can afford to the owner
-            if(player.getMoney() < 0) {
-                rent += player.getMoney();
-            }
 
             if(rent < 0) {
                 throw new Exception("rent money should not be negative in conductPropertyAction in big.manopoly.utils.TileActions");
+            }
+
+            player.setMoney(player.getMoney() - rent);
+
+            // if player cant afford the rent and has a negative balance only transfer the amount that they can afford to the owner
+            if(player.getMoney() < 0) {
+                // this is so that the owner does not receive money that doesn't exist yet. (player.getMoney() is negative at this stage.)
+                rent += player.getMoney();
             }
 
             owner.setMoney(owner.getMoney() + rent);

@@ -25,6 +25,10 @@ public class TileActionDTO {
         return cardAction;
     }
 
+    public int[] getDiceRolls() {
+        return diceRolls;
+    }
+
     public void setDisplayableAction(boolean displayableAction) {
         this.displayableAction = displayableAction;
     }
@@ -35,6 +39,10 @@ public class TileActionDTO {
 
     public void setCardAction(boolean cardAction) {
         this.cardAction = cardAction;
+    }
+
+    public void setDiceRolls(int[] diceRolls) {
+        this.diceRolls = diceRolls;
     }
 
 }
