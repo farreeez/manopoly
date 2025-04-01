@@ -7,10 +7,12 @@
   right: 0;
   bottom: 0;
   position: fixed;
+  z-index: 1000;
 }
 
 .overlay {
-  background: rgba(49, 49, 49, 0.7);
+  background: rgba(44, 62, 80, 0.8);
+  backdrop-filter: blur(3px);
 }
 
 .modal-content {
@@ -19,29 +21,44 @@
   left: 50%;
   transform: translate(-50%, -50%);
   line-height: 1.4;
-  background: #000000;
-  padding: 0px 28px;
-  border-radius: 3px;
+  background: linear-gradient(135deg, #2c3e50, #1a252f);
+  padding: 20px 28px;
+  border-radius: var(--border-radius); /* Consistent border radius */
+  box-shadow: var(--box-shadow); /* Consistent shadow */
   text-align: center;
-  width: 800px;
-  height: 700px;
+  width: 700px; /* Slightly smaller */
+  height: 600px; /* Slightly smaller */
+  border: 1px solid rgba(255, 255, 255, 0.1); 
 }
 
 .circle {
-  width: 150px;
-  height: 150px;
+  width: 120px; /* Slightly smaller */
+  height: 120px; /* Slightly smaller */
   background-color: red;
-  border-radius: 50%; /* This creates the circular shape */
-  outline: 1px solid white;
+  border-radius: 50%;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3); /* Matching shadow style */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions */
+  cursor: pointer;
+}
+
+/* Add hover effect to selectable circles */
+.circle:not([style*="opacity"]):hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
 }
 
 .chooseColour {
-  color: white;
+  color: var(--text-light);
+  font-size: 47px;
+  margin-top: 10px;
+  margin-bottom: 30px;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3); /* Matching text shadow */
 }
 
 .colours {
   display: grid;
-  grid-template-columns: auto auto auto auto;
-  gap: 20px;
+  grid-template-columns: repeat(4, 1fr); /* Cleaner way to define four columns */
+  gap: 25px; /* Slightly larger gap */
   justify-items: center;
+  margin-top: 20px;
 }
