@@ -48,6 +48,10 @@ public class Mapper {
     }
 
     public static PlayerDTO toPlayerDTO(Player player) {
+        if(player == null) {
+            return null;
+        }
+        
         return new PlayerDTO(player.getId(), player.getName(), playerColourToColour(player.getColour()),
                 player.getPosition(),
                 player.getBoardId(), player.getMoney(),
