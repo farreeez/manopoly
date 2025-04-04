@@ -1,3 +1,9 @@
+.diceRollButtons{
+  display: flex;
+  gap: 10px;
+}
+
+
 .dice-container {
     display: flex;
     flex-direction: column;

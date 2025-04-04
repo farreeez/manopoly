@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import "./css/DiceRoll.css";
 import {updatePositions} from "./Board.jsx";
-
+import CardAction from './CardAction';
 
 // Function to get random dice values during animation
 function getRandomDice() {
@@ -16,6 +16,7 @@ const DiceRoll = ({ board, player }) => {
     const [animating, setAnimating] = useState(false);
     const [currentDice, setCurrentDice] = useState([1, 1]);
     const [rerender, setRerender] = useState(false);
+    const [cardActionData, setCardActionData] = useState();
 
     function fetchDiceData() {
         fetch("http://localhost:8080/board/rollDice", {
@@ -31,6 +32,8 @@ const DiceRoll = ({ board, player }) => {
                 return response.json();
             }).then((data) => {
                 rollDice(data.diceRolls);
+                console.log(data);
+                setCardActionData(data);
             })
             .catch((error) => console.error(error));
     }
@@ -124,7 +127,7 @@ const DiceRoll = ({ board, player }) => {
 
             <div>
                 {board && board.currentPlayerTurn.id === player.id && (
-                    <div>
+                    <div className="diceRollButtons">
                         {!board.diceRolled ? (
                             <button
                                 className="roll-button"
@@ -138,6 +141,7 @@ const DiceRoll = ({ board, player }) => {
                                 End Turn.
                             </button>
                         )}
+                        <CardAction board={board} player={player} cardActionData={cardActionData}/>
                     </div>
                 )}
             </div>
