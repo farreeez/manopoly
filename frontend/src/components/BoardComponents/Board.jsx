@@ -27,7 +27,11 @@ async function getPlayerJson(playerId) {
   }
 }
 
-async function updatePositions(playerIds) {
+// update it so that it does not refresh the entire board.
+// make the dice roll in sync with the player movement.
+// animate the player movement.
+export async function updatePositions(playerIds) {
+  // remove this later
   for (let i = 0; i < 40; i++) {
     const playerSquare = document.getElementById(i);
 
@@ -166,7 +170,6 @@ function Board({ player, setPlayer }) {
   useEffect(() => {
     const fetchData = async () => {
       if (board) {
-        updatePositions(board.playerIds);
         try {
           const playerData = await getPlayerJson(player.id);
           setPlayerDTO(playerData);
@@ -175,7 +178,7 @@ function Board({ player, setPlayer }) {
         }
       }
     };
-  
+
     fetchData();
   }, [board]);
 

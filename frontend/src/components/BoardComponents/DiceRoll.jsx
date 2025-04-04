@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import "./css/DiceRoll.css";
-
+import {updatePositions} from "./Board.jsx";
 
 
 // Function to get random dice values during animation
@@ -74,6 +74,7 @@ const DiceRoll = ({ board, player }) => {
                 clearInterval(animationInterval);
                 setCurrentDice(diceValues);
                 setAnimating(false);
+                updatePositions(board.playerIds);
             }
         }, 50);
     };
