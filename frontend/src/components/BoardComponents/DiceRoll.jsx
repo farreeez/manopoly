@@ -8,7 +8,7 @@ function getRandomDice() {
   return [Math.floor(Math.random() * 6) + 1, Math.floor(Math.random() * 6) + 1];
 }
 
-const DiceRoll = ({ board, player }) => {
+const DiceRoll = ({ syncDiceRolls, board, player }) => {
   const [animating, setAnimating] = useState(false);
   const [currentDice, setCurrentDice] = useState([1, 1]);
   const [rerender, setRerender] = useState(false);
@@ -19,7 +19,7 @@ const DiceRoll = ({ board, player }) => {
 //       rollDice(board.diceRolls);
 //       console.log("running3")
 //     }
-//   }, [diceRolled]);
+//   }, [syncDiceRolls]);
 
   function fetchDiceData() {
     fetch("http://localhost:8080/board/rollDice", {

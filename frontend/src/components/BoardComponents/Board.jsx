@@ -79,34 +79,13 @@ function playerJoined(oldBoard, board) {
   return false;
 }
 
+// very hacky solution should figure out a different way or think it thoroughly to make sure it works.
+function isDiceRolled(oldBoard, board) {
+  if (!(oldBoard.diceRolled || board.diceRolled)) {
+    return false;
+  }
 
-function subscribe(player, oldBoard, setBoard, resubscribe, setResubscribe) {
-  fetch("http://localhost:8080/board/subscribeToBoard/" + player.boardId, {
-    method: "GET",
-  })
-    .then(async (response) => {
-      if (!response.ok) {
-        const message = await response.text();
-        console.error("Error message from response:", message);
-      }
-
-      setResubscribe(-1 * resubscribe);
-
-      return response.text();
-    })
-    .then((data) => {
-      let board = JSON.parse(data);
-      setBoard(board);
-      console.log("resetting board")
-
-      if (playerJoined(oldBoard, board)) {
-        updatePositions(board.playerIds);
-      }
-    })
-    .catch((error) => {
-      console.log("error with resubscribing")
-      console.log(error);
-    });
+  return JSON.stringify(oldBoard.diceRolls) !== JSON.stringify(board.diceRolls);
 }
 
 // function process(player) {
@@ -171,17 +150,19 @@ function Board({ player, setPlayer }) {
   const [squares, setSquares] = useState([]);
   const [board, setBoard] = useState();
   const [resubscribe, setResubscribe] = useState(-1);
+  const [syncDiceRolls, setSyncDiceRolls] = useState(-1);
 
   // this is different from player object in the app state as it has all of the player dto elements
   const [playerDTO, setPlayerDTO] = useState({ money: 0 });
 
   useEffect(() => {
     getBoard(player, setSquares, setBoard);
-    subscribe(player, board, setBoard, resubscribe, setResubscribe);
+    subscribe();
   }, []);
 
   useEffect(() => {
-    subscribe(player, board, setBoard, resubscribe, setResubscribe);
+    subscribe();
+    console.log("testing")
   }, [resubscribe]);
 
   useEffect(() => {
@@ -204,6 +185,40 @@ function Board({ player, setPlayer }) {
     getBoard(player, setSquares, setBoard);
   }, [player]);
 
+  function subscribe() {
+    fetch("http://localhost:8080/board/subscribeToBoard/" + player.boardId, {
+      method: "GET",
+    })
+      .then(async (response) => {
+        if (!response.ok) {
+          const message = await response.text();
+          console.error("Error message from response:", message);
+        }
+
+        setResubscribe(-1 * resubscribe);
+
+        return response.text();
+      })
+      .then((data) => {
+        let newBoard = JSON.parse(data);
+
+        // if (board && isDiceRolled(board, newBoard)) {
+        //   setSyncDiceRolls(-1 * syncDiceRolls);
+        // }
+
+
+        //if true change some sort of state value that then runs a hook in the DiceRoll.jsx to update the UI
+        if (playerJoined(board, newBoard)) {
+          updatePositions(newBoard.playerIds);
+        }
+
+        setBoard(newBoard);
+      })
+      .catch((error) => {
+        console.log("error with resubscribing");
+        console.log(error);
+      });
+  }
   // TODO: make a better solution to draw the board
   return (
     <div>
@@ -231,7 +246,7 @@ function Board({ player, setPlayer }) {
 
         <h2 className="boardHeaders">Player Money: {playerDTO.money}</h2>
       </div>
-      <DiceRoll board={board} player={player} />
+      <DiceRoll syncDiceRolls={syncDiceRolls} board={board} player={player} />
       {squares.length ? (
         <div>
           <ul id="topRowBoardSquares">
