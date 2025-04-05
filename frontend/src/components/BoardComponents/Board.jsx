@@ -157,11 +157,11 @@ function Board({ player, setPlayer }) {
 
   useEffect(() => {
     getBoard(player, setSquares, setBoard);
-    subscribe();
+    subscribe(syncDiceRolls, setSyncDiceRolls);
   }, []);
 
   useEffect(() => {
-    subscribe();
+    subscribe(syncDiceRolls, setSyncDiceRolls);
     console.log("testing")
   }, [resubscribe]);
 
@@ -185,7 +185,7 @@ function Board({ player, setPlayer }) {
     getBoard(player, setSquares, setBoard);
   }, [player]);
 
-  function subscribe() {
+  function subscribe(syncDiceRolls, setSyncDiceRolls) {
     fetch("http://localhost:8080/board/subscribeToBoard/" + player.boardId, {
       method: "GET",
     })
@@ -202,9 +202,9 @@ function Board({ player, setPlayer }) {
       .then((data) => {
         let newBoard = JSON.parse(data);
 
-        // if (board && isDiceRolled(board, newBoard)) {
-        //   setSyncDiceRolls(-1 * syncDiceRolls);
-        // }
+        if (board && isDiceRolled(board, newBoard)) {
+          setSyncDiceRolls(-1 * syncDiceRolls);
+        }
 
 
         //if true change some sort of state value that then runs a hook in the DiceRoll.jsx to update the UI

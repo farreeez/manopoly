@@ -14,12 +14,12 @@ const DiceRoll = ({ syncDiceRolls, board, player }) => {
   const [rerender, setRerender] = useState(false);
   const [cardActionData, setCardActionData] = useState();
 
-//   useEffect(() => {
-//     if (board) {
-//       rollDice(board.diceRolls);
-//       console.log("running3")
-//     }
-//   }, [syncDiceRolls]);
+  useEffect(() => {
+    if (board) {
+      rollDice(board.diceRolls);
+      console.log("running3")
+    }
+  }, [syncDiceRolls]);
 
   function fetchDiceData() {
     fetch("http://localhost:8080/board/rollDice", {
