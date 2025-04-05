@@ -12,11 +12,12 @@ public class BoardDTO {
     private List<Colour> takenColours;
     private boolean diceRolled;
     private PlayerDTO currentPlayerTurn;
+    private int[] diceRolls;
 
     public BoardDTO() {
     }
 
-    public BoardDTO(Long id, List<Long> playerIds, List<String> squareIds, List<Colour> takenColours, List<Colour> possibleColours, PlayerDTO currentPlayerTurn, boolean diceRolled) {
+    public BoardDTO(Long id, List<Long> playerIds, List<String> squareIds, List<Colour> takenColours, List<Colour> possibleColours, PlayerDTO currentPlayerTurn, boolean diceRolled, int[] diceRolls) {
         this.id = id;
         this.playerIds = playerIds;
         this.squareIds = squareIds;
@@ -24,6 +25,7 @@ public class BoardDTO {
         this.possibleColours = possibleColours;
         this.currentPlayerTurn = currentPlayerTurn;
         this.diceRolled = diceRolled;
+        this.diceRolls = diceRolls;
     }
     
     public boolean isDiceRolled() {
@@ -36,6 +38,10 @@ public class BoardDTO {
 
     public Long getId() {
         return id;
+    }
+
+    public int[] getDiceRolls(){
+        return diceRolls;
     }
 
     public void setId(Long id) {
@@ -80,5 +86,9 @@ public class BoardDTO {
 
     public void setCurrentPlayerTurn(PlayerDTO currentPlayerTurn) {
         this.currentPlayerTurn = currentPlayerTurn;
+    }
+
+    public void setDiceRolls(int[] diceRolls) {
+        this.diceRolls = diceRolls;
     }
 }

@@ -50,11 +50,15 @@ public class Board {
 
     private boolean diceRolled;
 
+    @ElementCollection
+    private int[] diceRolls;
+
     public Board() {
         diceRolled = false;
         currentTurn = 0;
 
         possibleColours = Arrays.asList(PlayerColour.values());
+        diceRolls = new int[2];
     }
 
     @PostPersist
@@ -135,8 +139,12 @@ public class Board {
         return players;
     }
 
+    public int[] getDiceRolls() {
+        return diceRolls;
+    }
+
     public Player getPlayerWithCurrentTurn() {
-        if(players == null || players.isEmpty()) {
+        if (players == null || players.isEmpty()) {
             return null;
         }
 
@@ -229,7 +237,8 @@ public class Board {
         // TODO: handle triple doubles.
         diceRolled = !(firstDice == secondDice);
 
-        int[] diceRolls = {firstDice, secondDice};
+        diceRolls[0] = firstDice;
+        diceRolls[1] = secondDice;
 
         return diceRolls;
     }

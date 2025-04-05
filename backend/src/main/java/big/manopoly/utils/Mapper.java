@@ -21,7 +21,8 @@ public class Mapper {
                 board.getTakenColours().stream().map(Mapper::playerColourToColour).collect(Collectors.toList()),
                 board.getPossibleColours().stream().map(Mapper::playerColourToColour).collect(Collectors.toList()),
                 toPlayerDTO(board.getPlayerWithCurrentTurn()),
-                board.isDiceRolled());
+                board.isDiceRolled(),
+                board.getDiceRolls());
     }
 
     public static Colour playerColourToColour(PlayerColour playerColour) {
