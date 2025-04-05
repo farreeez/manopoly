@@ -36,7 +36,6 @@ const DiceRoll = ({ syncDiceRolls, board, player }) => {
       })
       .then((data) => {
         setCardActionData(data);
-        rollDice(data.diceRolls);
       })
       .catch((error) => console.error(error));
   }

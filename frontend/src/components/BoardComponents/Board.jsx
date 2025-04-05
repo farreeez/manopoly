@@ -80,6 +80,7 @@ function playerJoined(oldBoard, board) {
 }
 
 // very hacky solution should figure out a different way or think it thoroughly to make sure it works.
+// does detect dice rolls after doubles
 function isDiceRolled(oldBoard, board) {
   if (!(oldBoard.diceRolled || board.diceRolled)) {
     return false;
