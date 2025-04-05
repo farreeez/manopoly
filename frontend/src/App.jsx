@@ -6,7 +6,13 @@ import HomePage from "./components/HomePage";
 import Board from "./components/BoardComponents/Board";
 
 function App() {
-  const [player, setPlayer] = useState({ name: "", id: -1, isLoggedIn: false, boardId: -1, colour: -1 });
+  const [player, setPlayer] = useState({
+    name: "",
+    id: -1,
+    isLoggedIn: false,
+    boardId: -1,
+    colour: -1,
+  });
 
   useEffect(() => {
     fetch("http://localhost:8080/players/checkCookie", {
@@ -15,6 +21,16 @@ function App() {
     })
       .then((response) => {
         if (!response.ok) {
+          if (document.cookie) {
+            // Get all cookies and split into array
+            const cookies = document.cookie.split(";");
+
+            // Clear all cookies
+            for (let cookie of cookies) {
+              const cookieName = cookie.split("=")[0].trim();
+              document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+            }
+          }
           throw new Error("Could not create a new player.");
         }
 
@@ -44,8 +60,8 @@ function App() {
       {player.isLoggedIn ? (
         Number(player.boardId) === -1 ? (
           <HomePage player={player} setPlayer={setPlayer} />
-        ): (
-          <Board player={player} setPlayer={setPlayer}/>
+        ) : (
+          <Board player={player} setPlayer={setPlayer} />
         )
       ) : (
         <Login player={player} setPlayer={setPlayer} />

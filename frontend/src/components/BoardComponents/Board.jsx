@@ -177,7 +177,7 @@ function Board({ player, setPlayer }) {
 
   useEffect(() => {
     getBoard(player, setSquares, setBoard);
-    subscribe(player, board, setBoard, resubscribe);
+    subscribe(player, board, setBoard, resubscribe, setResubscribe);
   }, []);
 
   useEffect(() => {
