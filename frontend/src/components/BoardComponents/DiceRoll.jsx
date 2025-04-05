@@ -8,18 +8,18 @@ function getRandomDice() {
   return [Math.floor(Math.random() * 6) + 1, Math.floor(Math.random() * 6) + 1];
 }
 
-const DiceRoll = ({ diceRolled, setDiceRolled, board, player }) => {
+const DiceRoll = ({ board, player }) => {
   const [animating, setAnimating] = useState(false);
   const [currentDice, setCurrentDice] = useState([1, 1]);
   const [rerender, setRerender] = useState(false);
   const [cardActionData, setCardActionData] = useState();
 
-  useEffect(() => {
-    if (board) {
-      rollDice(board.diceRolls);
-      console.log("running3")
-    }
-  }, [diceRolled]);
+//   useEffect(() => {
+//     if (board) {
+//       rollDice(board.diceRolls);
+//       console.log("running3")
+//     }
+//   }, [diceRolled]);
 
   function fetchDiceData() {
     fetch("http://localhost:8080/board/rollDice", {
@@ -36,6 +36,7 @@ const DiceRoll = ({ diceRolled, setDiceRolled, board, player }) => {
       })
       .then((data) => {
         setCardActionData(data);
+        rollDice(data.diceRolls);
       })
       .catch((error) => console.error(error));
   }
@@ -57,7 +58,6 @@ const DiceRoll = ({ diceRolled, setDiceRolled, board, player }) => {
       })
       .then((data) => {
         console.log("should be ended.");
-        setDiceRolled(false);
       })
       .catch((error) => console.error(error));
   }

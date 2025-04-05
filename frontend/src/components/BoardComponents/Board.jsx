@@ -79,21 +79,8 @@ function playerJoined(oldBoard, board) {
   return false;
 }
 
-// returns true if the dice rolls are different
-function isDiceRolled(oldBoard, board) {
-  return JSON.stringify(oldBoard.diceRolls) !== JSON.stringify(board.diceRolls);
-}
 
-function subscribe(
-  player,
-  oldBoard,
-  setBoard,
-  resubscribe,
-  setResubscribe,
-  setDiceRolled,
-  diceRolled,
-  firstRender
-) {
+function subscribe(player, oldBoard, setBoard, resubscribe, setResubscribe) {
   fetch("http://localhost:8080/board/subscribeToBoard/" + player.boardId, {
     method: "GET",
   })
@@ -102,6 +89,7 @@ function subscribe(
         const message = await response.text();
         console.error("Error message from response:", message);
       }
+
       setResubscribe(-1 * resubscribe);
 
       return response.text();
@@ -109,23 +97,16 @@ function subscribe(
     .then((data) => {
       let board = JSON.parse(data);
       setBoard(board);
-
-      console.log("running");
+      console.log("resetting board")
 
       if (playerJoined(oldBoard, board)) {
         updatePositions(board.playerIds);
       }
-      console.log(firstRender)
-      console.log("hello")
-      console.log(board.diceRolls)
-      console.log(oldBoard.diceRolls)
-
-      if(isDiceRolled(oldBoard, board)) {
-        console.log("running2")
-        setDiceRolled(diceRolled * -1);
-      }
     })
-    .catch((error) => {});
+    .catch((error) => {
+      console.log("error with resubscribing")
+      console.log(error);
+    });
 }
 
 // function process(player) {
@@ -181,7 +162,7 @@ function getBoard(player, setSquares, setBoard) {
     .then((data) => {
       setSquares(data.squareIds);
       setBoard(data);
-      updatePositions(data.playerIds); 
+      updatePositions(data.playerIds);
     })
     .catch((error) => console.error(error));
 }
@@ -190,36 +171,17 @@ function Board({ player, setPlayer }) {
   const [squares, setSquares] = useState([]);
   const [board, setBoard] = useState();
   const [resubscribe, setResubscribe] = useState(-1);
-  const [diceRolled, setDiceRolled] = useState(1);
 
   // this is different from player object in the app state as it has all of the player dto elements
   const [playerDTO, setPlayerDTO] = useState({ money: 0 });
 
   useEffect(() => {
-    getBoard(player,setSquares,setBoard);
-    subscribe(
-      player,
-      board,
-      setBoard,
-      resubscribe,
-      setResubscribe,
-      setDiceRolled,
-      diceRolled,
-      true
-    );
+    getBoard(player, setSquares, setBoard);
+    subscribe(player, board, setBoard, resubscribe);
   }, []);
 
   useEffect(() => {
-    subscribe(
-      player,
-      board,
-      setBoard,
-      resubscribe,
-      setResubscribe,
-      setDiceRolled,
-      diceRolled,
-      false
-    );
+    subscribe(player, board, setBoard, resubscribe, setResubscribe);
   }, [resubscribe]);
 
   useEffect(() => {
@@ -269,12 +231,7 @@ function Board({ player, setPlayer }) {
 
         <h2 className="boardHeaders">Player Money: {playerDTO.money}</h2>
       </div>
-      <DiceRoll
-        diceRolled={diceRolled}
-        setDiceRolled={setDiceRolled}
-        board={board}
-        player={player}
-      />
+      <DiceRoll board={board} player={player} />
       {squares.length ? (
         <div>
           <ul id="topRowBoardSquares">

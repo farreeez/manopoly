@@ -181,6 +181,11 @@ public class Board {
         } else {
             players.remove(player);
             player.setBoard(null);
+
+            if (currentTurn > players.size() - 1) {
+                currentTurn = 0;
+            }
+
             return true;
         }
     }
