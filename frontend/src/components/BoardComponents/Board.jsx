@@ -199,16 +199,6 @@ function Board({ player, setPlayer }) {
       .then((data) => {
         let newBoard = JSON.parse(data);
 
-        // console.log("---------------------------------")
-        // console.log(newBoard);
-        // console.log(newBoard.rollDiceAction)
-        // if (board && newBoard.rollDiceAction) {
-        //   console.log("changes sync value")
-        //   console.log(syncDiceRolls);
-        //   setSyncDiceRolls(1 + syncDiceRolls);
-        //   console.log(syncDiceRolls);
-        // }
-
         //if true change some sort of state value that then runs a hook in the DiceRoll.jsx to update the UI
         if (playerJoined(board, newBoard)) {
           updatePositions(newBoard.playerIds);
@@ -250,6 +240,7 @@ function Board({ player, setPlayer }) {
       </div>
       <DiceRoll
         rollDiceAction={board ? board.rollDiceAction : false}
+        diceRolls={board? board.diceRolls:[]}
         board={board}
         player={player}
       />
