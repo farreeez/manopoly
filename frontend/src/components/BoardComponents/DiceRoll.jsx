@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "./css/DiceRoll.css";
 import { updatePositions } from "./Board.jsx";
 import CardAction from "./CardAction";
@@ -8,18 +8,17 @@ function getRandomDice() {
   return [Math.floor(Math.random() * 6) + 1, Math.floor(Math.random() * 6) + 1];
 }
 
-const DiceRoll = ({ syncDiceRolls, board, player }) => {
+const DiceRoll = ({ rollDiceAction, board, player }) => {
   const [animating, setAnimating] = useState(false);
   const [currentDice, setCurrentDice] = useState([1, 1]);
   const [rerender, setRerender] = useState(false);
   const [cardActionData, setCardActionData] = useState();
 
   useEffect(() => {
-    if (board) {
+    if (rollDiceAction) {
       rollDice(board.diceRolls);
-      console.log("running3")
     }
-  }, [syncDiceRolls]);
+  }, [rollDiceAction, board.diceRolls]);
 
   function fetchDiceData() {
     fetch("http://localhost:8080/board/rollDice", {

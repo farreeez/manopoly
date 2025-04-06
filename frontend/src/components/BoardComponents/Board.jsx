@@ -4,8 +4,6 @@ import "./css/Board.css";
 import ColourSelection from "./ColourSelection";
 import DiceRoll from "./DiceRoll";
 
-let boardId = -1;
-
 async function getPlayerJson(playerId) {
   try {
     const response = await fetch(
@@ -115,7 +113,6 @@ function leaveBoard(player, setPlayer, setBoard) {
       return response;
     })
     .then(() => {
-      boardId = -1;
       setPlayer({
         name: player.name,
         id: Number(player.id),
@@ -151,19 +148,19 @@ function Board({ player, setPlayer }) {
   const [squares, setSquares] = useState([]);
   const [board, setBoard] = useState();
   const [resubscribe, setResubscribe] = useState(-1);
-  const [syncDiceRolls, setSyncDiceRolls] = useState(-1);
+  // const [syncDiceRolls, setSyncDiceRolls] = useState(-1);
 
   // this is different from player object in the app state as it has all of the player dto elements
   const [playerDTO, setPlayerDTO] = useState({ money: 0 });
 
   useEffect(() => {
     getBoard(player, setSquares, setBoard);
-    subscribe(syncDiceRolls, setSyncDiceRolls);
+    subscribe();
   }, []);
 
   useEffect(() => {
-    subscribe(syncDiceRolls, setSyncDiceRolls);
-    console.log("testing")
+    subscribe();
+    console.log("testing");
   }, [resubscribe]);
 
   useEffect(() => {
@@ -182,11 +179,10 @@ function Board({ player, setPlayer }) {
   }, [board]);
 
   useEffect(() => {
-    boardId = player.boardId;
     getBoard(player, setSquares, setBoard);
   }, [player]);
 
-  function subscribe(syncDiceRolls, setSyncDiceRolls) {
+  function subscribe() {
     fetch("http://localhost:8080/board/subscribeToBoard/" + player.boardId, {
       method: "GET",
     })
@@ -203,10 +199,15 @@ function Board({ player, setPlayer }) {
       .then((data) => {
         let newBoard = JSON.parse(data);
 
-        if (board && isDiceRolled(board, newBoard)) {
-          setSyncDiceRolls(-1 * syncDiceRolls);
-        }
-
+        // console.log("---------------------------------")
+        // console.log(newBoard);
+        // console.log(newBoard.rollDiceAction)
+        // if (board && newBoard.rollDiceAction) {
+        //   console.log("changes sync value")
+        //   console.log(syncDiceRolls);
+        //   setSyncDiceRolls(1 + syncDiceRolls);
+        //   console.log(syncDiceRolls);
+        // }
 
         //if true change some sort of state value that then runs a hook in the DiceRoll.jsx to update the UI
         if (playerJoined(board, newBoard)) {
@@ -247,7 +248,11 @@ function Board({ player, setPlayer }) {
 
         <h2 className="boardHeaders">Player Money: {playerDTO.money}</h2>
       </div>
-      <DiceRoll syncDiceRolls={syncDiceRolls} board={board} player={player} />
+      <DiceRoll
+        rollDiceAction={board ? board.rollDiceAction : false}
+        board={board}
+        player={player}
+      />
       {squares.length ? (
         <div>
           <ul id="topRowBoardSquares">
