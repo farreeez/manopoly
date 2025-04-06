@@ -12,7 +12,7 @@ const DiceRoll = ({ rollDiceAction, diceRolls, board, player }) => {
   const [animating, setAnimating] = useState(false);
   const [currentDice, setCurrentDice] = useState([1, 1]);
   const [rerender, setRerender] = useState(false);
-  const [cardActionData, setCardActionData] = useState();
+  const [cardActionData, setCardActionData] = useState(false);
 
   useEffect(() => {
     if (diceRolls.length > 0 && rollDiceAction) {
@@ -34,6 +34,7 @@ const DiceRoll = ({ rollDiceAction, diceRolls, board, player }) => {
         return response.json();
       })
       .then((data) => {
+        console.log(data);
         setCardActionData(data);
       })
       .catch((error) => console.error(error));
