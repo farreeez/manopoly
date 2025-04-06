@@ -1,11 +1,5 @@
 package big.manopoly.models;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
-
 import big.manopoly.data.BoardRepository;
 import big.manopoly.services.BoardSubscriptionManager;
 import big.manopoly.utils.CityName;
@@ -24,6 +18,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PostPersist;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
 
 @Entity
 public class Board {
@@ -248,10 +247,10 @@ public class Board {
         return diceRolls;
     }
 
-    public void saveBoard(BoardRepository boardRepository) {
+    public void saveBoard(BoardRepository boardRepository, boolean rollDiceAction) {
         boardRepository.save(this);
 
-        BoardSubscriptionManager.instance().processSubsFor(this.id, boardRepository);
+        BoardSubscriptionManager.instance().processSubsFor(this.id, boardRepository, rollDiceAction);
     }
 
 }

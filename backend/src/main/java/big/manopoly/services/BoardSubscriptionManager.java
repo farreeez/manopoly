@@ -84,9 +84,9 @@ public class BoardSubscriptionManager {
      *
      * @param boardId the board id
      */
-    public void processSubsFor(final long boardId, BoardRepository boardRepository) {
+    public void processSubsFor(final long boardId, BoardRepository boardRepository, boolean rollDiceAction) {
         Board board = boardRepository.getReferenceById(boardId);
-        BoardDTO boardDTO = Mapper.toBoardDTO(board);
+        BoardDTO boardDTO = Mapper.toBoardDTO(board, rollDiceAction);
         THREAD_POOL.submit(() -> {
             // Get the subs which will be notified if the board with the given id is updated
             List<AsyncContext> subs = getSubsFor(boardId);

@@ -1,8 +1,7 @@
 package big.manopoly.dtos;
 
-import java.util.List;
-
 import big.manopoly.models.Colour;
+import java.util.List;
 
 public class BoardDTO {
     private Long id;
@@ -13,11 +12,12 @@ public class BoardDTO {
     private boolean diceRolled;
     private PlayerDTO currentPlayerTurn;
     private int[] diceRolls;
+    private boolean rollDiceAction;
 
     public BoardDTO() {
     }
 
-    public BoardDTO(Long id, List<Long> playerIds, List<String> squareIds, List<Colour> takenColours, List<Colour> possibleColours, PlayerDTO currentPlayerTurn, boolean diceRolled, int[] diceRolls) {
+    public BoardDTO(Long id, List<Long> playerIds, List<String> squareIds, List<Colour> takenColours, List<Colour> possibleColours, PlayerDTO currentPlayerTurn, boolean diceRolled, int[] diceRolls, boolean rollDiceAction) {
         this.id = id;
         this.playerIds = playerIds;
         this.squareIds = squareIds;
@@ -26,6 +26,11 @@ public class BoardDTO {
         this.currentPlayerTurn = currentPlayerTurn;
         this.diceRolled = diceRolled;
         this.diceRolls = diceRolls;
+        this.rollDiceAction = rollDiceAction;
+    }
+
+    public boolean isRollDiceAction() {
+        return rollDiceAction;
     }
     
     public boolean isDiceRolled() {
@@ -74,6 +79,10 @@ public class BoardDTO {
 
     public List<String> getSquareIds() {
         return squareIds;
+    }
+
+    public void setRollDiceAction(boolean rollDiceAction) {
+        this.rollDiceAction = rollDiceAction;
     }
 
     public void setSquareIds(List<String> squareIds) {

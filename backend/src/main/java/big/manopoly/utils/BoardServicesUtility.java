@@ -1,16 +1,14 @@
 package big.manopoly.utils;
 
-import java.net.URI;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import big.manopoly.data.BoardRepository;
 import big.manopoly.data.PlayerRepository;
 import big.manopoly.dtos.BoardDTO;
 import big.manopoly.models.Board;
 import big.manopoly.models.Player;
 import big.manopoly.services.BoardSubscriptionManager;
+import java.net.URI;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 public class BoardServicesUtility {
     public static ResponseEntity<?> addPlayerFromCookie(String cookie, Board board, PlayerRepository playerRepository,
@@ -38,12 +36,12 @@ public class BoardServicesUtility {
         boardRepository.save(board);
         playerRepository.save(player);
 
-        BoardDTO BoardDTO = Mapper.toBoardDTO(board);
+        BoardDTO BoardDTO = Mapper.toBoardDTO(board, false);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().replacePath("/getBoard/{id}")
                 .buildAndExpand(board.getId()).toUri();
 
-        BoardSubscriptionManager.instance().processSubsFor(board.getId(), boardRepository);
+        BoardSubscriptionManager.instance().processSubsFor(board.getId(), boardRepository, false);
 
         return ResponseEntity.created(location)
                 .body(BoardDTO);
@@ -66,6 +64,6 @@ public class BoardServicesUtility {
         boardRepository.save(playerBoard);
         playerRepository.save(player);
 
-        BoardSubscriptionManager.instance().processSubsFor(playerBoard.getId(), boardRepository);
+        BoardSubscriptionManager.instance().processSubsFor(playerBoard.getId(), boardRepository, false);
     }
 }

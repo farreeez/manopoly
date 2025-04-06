@@ -1,18 +1,13 @@
 package big.manopoly.models;
 
-import java.util.*;
-
-import org.springframework.http.ResponseEntity;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import big.manopoly.data.BoardRepository;
 import big.manopoly.data.PlayerRepository;
 import big.manopoly.services.BoardSubscriptionManager;
 import big.manopoly.utils.Mapper;
 import big.manopoly.utils.PlayerColour;
 import big.manopoly.utils.PropertyType;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -23,6 +18,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import java.util.*;
+import org.springframework.http.ResponseEntity;
 
 @Entity
 public class Player {
@@ -100,7 +97,7 @@ public class Player {
         boardRepository.save(board);
         playerRepository.save(this);
 
-        BoardSubscriptionManager.instance().processSubsFor(board.getId(), boardRepository);
+        BoardSubscriptionManager.instance().processSubsFor(board.getId(), boardRepository, false);
 
         return ResponseEntity.ok().body(Mapper.toPlayerDTO(this));
     }

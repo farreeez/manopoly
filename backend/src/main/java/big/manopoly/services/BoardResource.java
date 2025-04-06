@@ -66,7 +66,7 @@ public class BoardResource {
 
         Board board = optionalBoard.get();
 
-        BoardDTO boardDTO = Mapper.toBoardDTO(board);
+        BoardDTO boardDTO = Mapper.toBoardDTO(board, false);
 
         return ResponseEntity.ok().body(boardDTO);
     }
@@ -137,7 +137,7 @@ public class BoardResource {
 
     @GetMapping("/processSubs/{id}")
     public ResponseEntity<?> processSubs(@PathVariable Long id) {
-        BoardSubscriptionManager.instance().processSubsFor(id, boardRepository);
+        BoardSubscriptionManager.instance().processSubsFor(id, boardRepository, false);
         return ResponseEntity.ok().build();
     }
 
@@ -193,7 +193,7 @@ public class BoardResource {
 
         TileActionDTO action = TileActions.conductTileAction(player, board, diceRolls);
 
-        board.saveBoard(boardRepository);
+        board.saveBoard(boardRepository, true);
 
         return ResponseEntity.ok().body(action);
     }
@@ -227,7 +227,7 @@ public class BoardResource {
             return ResponseEntity.badRequest().body("player cannot end the turn as the dice has not been rolled.");
         }
 
-        board.saveBoard(boardRepository);
+        board.saveBoard(boardRepository, false);
 
         return ResponseEntity.ok().build();
     }

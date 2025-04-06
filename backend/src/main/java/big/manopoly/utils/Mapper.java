@@ -1,7 +1,5 @@
 package big.manopoly.utils;
 
-import java.util.stream.Collectors;
-
 import big.manopoly.dtos.BoardDTO;
 import big.manopoly.dtos.BoardSquareDTO;
 import big.manopoly.dtos.PlayerDTO;
@@ -11,9 +9,10 @@ import big.manopoly.models.BoardSquare;
 import big.manopoly.models.Colour;
 import big.manopoly.models.Player;
 import big.manopoly.models.Property;
+import java.util.stream.Collectors;
 
 public class Mapper {
-    public static BoardDTO toBoardDTO(Board board) {
+    public static BoardDTO toBoardDTO(Board board, boolean rollDiceAction) {
         return new BoardDTO(
                 board.getId(),
                 board.getPlayers().stream().map(Player::getId).collect(Collectors.toList()),
@@ -22,7 +21,8 @@ public class Mapper {
                 board.getPossibleColours().stream().map(Mapper::playerColourToColour).collect(Collectors.toList()),
                 toPlayerDTO(board.getPlayerWithCurrentTurn()),
                 board.isDiceRolled(),
-                board.getDiceRolls());
+                board.getDiceRolls(),
+                rollDiceAction);
     }
 
     public static Colour playerColourToColour(PlayerColour playerColour) {
