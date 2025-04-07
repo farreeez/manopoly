@@ -91,7 +91,6 @@ public class BoardResource {
     @DeleteMapping("/leaveBoard")
     public ResponseEntity<?> leaveBoard(@CookieValue(value = "playerId", defaultValue = "") String cookie) {
         if (cookie.isEmpty()) {
-            System.out.println("here1");
             return ResponseEntity.badRequest().build();
         }
 
@@ -101,7 +100,6 @@ public class BoardResource {
             Long playerId = Long.valueOf(cookie);
             player = playerRepository.getReferenceById(playerId);
         } catch (NumberFormatException e) {
-            System.out.println("here2");
             return ResponseEntity.badRequest().body("Invalid playerId cookie value");
         }
 

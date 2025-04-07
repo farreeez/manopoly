@@ -150,6 +150,10 @@ public class Board {
         return players.get(currentTurn);
     }
 
+    public BoardSquare getBoardSquare(Position position) throws Exception {
+        return squares.get(position.getPosition());
+    }
+
     // TODO: maybe also deal with the logic of giving the player their colour and
     // taking it away in the methods below
     // TODO: also consider not throwing an error in the future and simply updating

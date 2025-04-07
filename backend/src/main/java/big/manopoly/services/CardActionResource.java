@@ -1,6 +1,5 @@
 package big.manopoly.services;
 
-import org.apache.catalina.connector.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -11,7 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 import big.manopoly.data.BoardRepository;
 import big.manopoly.data.PlayerRepository;
 import big.manopoly.models.Board;
-import big.manopoly.utils.BoardServicesUtility;
+import big.manopoly.models.Player;
+import big.manopoly.utils.PropertyUtils;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
@@ -32,6 +32,32 @@ public class CardActionResource {
             return ResponseEntity.badRequest().build();
         }
 
+        Player player;
+
+        try {
+            Long playerId = Long.valueOf(cookie);
+            player = playerRepository.getReferenceById(playerId);
+        } catch (NumberFormatException e) {
+            return ResponseEntity.badRequest().body("Invalid playerId cookie value");
+        }
+        
+        Board board = player.getBoard();
+
+        if (board == null) {
+            return ResponseEntity.badRequest().body("player cannot buy the property as they are not currently in a game.");
+        }
+
+        if (player.getId() != board.getPlayerWithCurrentTurn().getId()) {
+            return ResponseEntity.badRequest().body("player cannot buy the property as it is not currently their turn.");
+        }
+
+        try {
+           PropertyUtils.buyPropertyFromBoard(player, playerRepository); 
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+        // TODO: CHANGE THIS
         return ResponseEntity.ok("endpoint works");
     }
 }

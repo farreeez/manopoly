@@ -134,6 +134,14 @@ public class Player {
         return properties;
     }
 
+    public BoardSquare getCurrentBoardSquare() throws Exception {
+        if(board == null) {
+            throw new Exception("player is trying to access its current board square without being on a board");
+        }
+
+        return board.getBoardSquare(position);
+    }
+
     public Boolean isFree() {
         return free;
     }
@@ -146,9 +154,9 @@ public class Player {
         this.money = money;
     }
 
-    public void addProperty(Property property) {
+    public void addProperty(Property property) throws Exception {
         if (property.getOwner() != null) {
-            property.getOwner().removeProperty(property);
+            throw new Exception("Cannot add property to player as the property already has an owner.");
         }
 
         property.setOwner(this);
@@ -179,6 +187,11 @@ public class Player {
 
     public void resetPosition() {
         this.position = new Position();
+    }
+
+    // this does not handle the money being lower than the price to account for a scenario where the balance goes negative (player owes rent to another player).
+    public void pay(int price) {
+        money -= price;
     }
 
 }
