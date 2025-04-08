@@ -11,6 +11,8 @@ import big.manopoly.models.Player;
 import big.manopoly.models.Property;
 import java.util.stream.Collectors;
 
+import org.hibernate.Hibernate;
+
 public class Mapper {
     public static BoardDTO toBoardDTO(Board board, boolean rollDiceAction) {
         return new BoardDTO(
@@ -26,7 +28,7 @@ public class Mapper {
     }
 
     public static Colour playerColourToColour(PlayerColour playerColour) {
-        if(playerColour == null) {
+        if (playerColour == null) {
             return null;
         }
 
@@ -34,11 +36,15 @@ public class Mapper {
                 playerColour.ordinal());
     }
 
-    public static BoardSquareDTO toBoardSquareDTO(BoardSquare boardSquare) {
-        Long boardId = boardSquare.getBoard() != null ? boardSquare.getBoard().getId() : null;
+    public static BoardSquareDTO toBoardSquareDTO(BoardSquare proxyBoardSquare) {
+        Long boardId = proxyBoardSquare.getBoard() != null ? proxyBoardSquare.getBoard().getId() : null;
+
+        BoardSquare boardSquare = (BoardSquare) Hibernate.unproxy(proxyBoardSquare);
+
+        boolean isProperty = boardSquare instanceof Property;
 
         return new BoardSquareDTO(boardSquare.getId(), boardSquare.getPosition(), boardSquare.getName(),
-                boardId, boardSquare.getPrice());
+                boardId, boardSquare.getPrice(), isProperty);
     }
 
     public static PropertyDTO toPropertyDTO(Property property) {
@@ -49,10 +55,10 @@ public class Mapper {
     }
 
     public static PlayerDTO toPlayerDTO(Player player) {
-        if(player == null) {
+        if (player == null) {
             return null;
         }
-        
+
         return new PlayerDTO(player.getId(), player.getName(), playerColourToColour(player.getColour()),
                 player.getPosition(),
                 player.getBoardId(), player.getMoney(),

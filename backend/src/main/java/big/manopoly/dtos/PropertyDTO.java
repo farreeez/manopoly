@@ -13,7 +13,7 @@ public class PropertyDTO extends BoardSquareDTO {
     public PropertyDTO(String id, int position, String name, Long boardId, int price, PropertyType type,
             Boolean mortgaged, Long ownerId,
             String ownerName) {
-        super(id, position, name, boardId, price);
+        super(id, position, name, boardId, price, true);
         this.type = type;
         this.mortgaged = mortgaged;
         this.ownerId = ownerId;

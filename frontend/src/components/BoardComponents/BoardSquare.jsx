@@ -13,6 +13,7 @@ function getSquare(squareId, setSquare) {
     })
     .then((data) => {
       setSquare(data);
+      console.log(data)
     })
     .catch((error) => console.error(error));
 }
@@ -29,8 +30,7 @@ function BoardSquare({ player, setPlayer, width, height, squareId }) {
   return (
     <div className="boardSquare" style={{ width: width, height: height }}>
       {square && square.name && <span>{square.name}</span>}
-      <br></br>
-      <br></br>
+      {/* <div className="boardSquareColour" style={{background}}></div> */}
       {height > width && <br></br>}
       {square && Number(square.price) > 0 && <span>{square.price}</span>}
       <div className="circleContainer" style={{ width: width }}></div>

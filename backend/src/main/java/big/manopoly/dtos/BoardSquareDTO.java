@@ -6,18 +6,20 @@ public class BoardSquareDTO {
     protected String name;
     protected Long boardId;
     protected int price;
+    protected boolean isProperty;
 
     // Default constructor
     public BoardSquareDTO() {
     }
 
     // Constructor to populate the DTO from a BoardSquare entity
-    public BoardSquareDTO(String id, int position, String name, Long boardId, int price) {
+    public BoardSquareDTO(String id, int position, String name, Long boardId, int price, boolean isProperty) {
         this.id = id;
         this.position = position;
         this.name = name;
         this.boardId = boardId;
         this.price = price;
+        this.isProperty = isProperty; 
     }
 
     // Getters and setters
@@ -59,5 +61,13 @@ public class BoardSquareDTO {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public boolean isProperty() {
+        return isProperty;
+    }
+
+    public void setIsProperty(boolean isProperty) {
+        this.isProperty = isProperty;
     }
 }
