@@ -57,8 +57,7 @@ public class CardActionResource {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
 
-        // TODO: CHANGE THIS
-        return ResponseEntity.ok("endpoint works");
+        return ResponseEntity.ok().build();
     }
 }
 

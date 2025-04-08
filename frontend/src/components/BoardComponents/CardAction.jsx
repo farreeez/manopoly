@@ -13,7 +13,6 @@ function CardAction({ board, player, cardActionData }) {
         return response.text();
       })
       .then((data) => {
-        console.log(data);
       })
       .catch((error) => console.error(error));
   }

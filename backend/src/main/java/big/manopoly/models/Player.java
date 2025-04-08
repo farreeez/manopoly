@@ -7,6 +7,7 @@ import big.manopoly.utils.Mapper;
 import big.manopoly.utils.PlayerColour;
 import big.manopoly.utils.PropertyType;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embedded;
@@ -134,9 +135,12 @@ public class Player {
         return properties;
     }
 
+    @JsonIgnore
     public BoardSquare getCurrentBoardSquare() throws Exception {
         if(board == null) {
-            throw new Exception("player is trying to access its current board square without being on a board");
+            Exception e = new Exception("player is trying to access its current board square without being on a board");
+            e.printStackTrace();
+            throw e;
         }
 
         return board.getBoardSquare(position);
