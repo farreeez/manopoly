@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import big.manopoly.data.BoardRepository;
 import big.manopoly.data.PlayerRepository;
+import big.manopoly.dtos.TileActionDTO;
 import big.manopoly.models.Board;
 import big.manopoly.models.Player;
 import big.manopoly.utils.PropertyUtils;
+import big.manopoly.utils.TileActions;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
@@ -20,7 +22,7 @@ public class CardActionResource {
 
     private final BoardRepository boardRepository;
     private final PlayerRepository playerRepository;
-    
+
     public CardActionResource(BoardRepository boardRepository, PlayerRepository playerRepository) {
         this.boardRepository = boardRepository;
         this.playerRepository = playerRepository;
@@ -40,24 +42,34 @@ public class CardActionResource {
         } catch (NumberFormatException e) {
             return ResponseEntity.badRequest().body("Invalid playerId cookie value");
         }
-        
+
         Board board = player.getBoard();
 
         if (board == null) {
-            return ResponseEntity.badRequest().body("player cannot buy the property as they are not currently in a game.");
+            return ResponseEntity.badRequest()
+                    .body("player cannot buy the property as they are not currently in a game.");
         }
 
         if (player.getId() != board.getPlayerWithCurrentTurn().getId()) {
-            return ResponseEntity.badRequest().body("player cannot buy the property as it is not currently their turn.");
+            return ResponseEntity.badRequest()
+                    .body("player cannot buy the property as it is not currently their turn.");
         }
 
         try {
-           PropertyUtils.buyPropertyFromBoard(player, playerRepository); 
+            PropertyUtils.buyPropertyFromBoard(player, playerRepository, boardRepository);
+
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
 
-        return ResponseEntity.ok().build();
+        TileActionDTO actionDTO;
+
+        try {
+            actionDTO = TileActions.conductTileAction(player, board, board.getDiceRolls());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+        return ResponseEntity.ok().body(actionDTO);
     }
 }
-

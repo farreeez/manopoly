@@ -28,7 +28,7 @@ public class TileActions {
     public static TileActionDTO conductPropertyAction(Player player, Board board, Property property, int[] diceRolls) throws Exception {
         Player owner = property.getOwner();
 
-        if(owner == null) {
+        if(owner == null){
             // card owned by the bank ask player if they want to purchase it
             return new CardPurchaseActionDTO(diceRolls, property.getPrice());
         } else if (owner == player) {

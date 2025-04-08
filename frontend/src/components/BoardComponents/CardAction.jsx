@@ -1,4 +1,4 @@
-function CardAction({ board, player, cardActionData }) {
+function CardAction({ board, player, cardActionData, setCardActionData}) {
   function buyProperty() {
     fetch("http://localhost:8080/cardActions/buyProperty", {
       method: "POST",
@@ -10,9 +10,10 @@ function CardAction({ board, player, cardActionData }) {
           console.error("error with buying property:", message);
         }
 
-        return response.text();
+        return response.json();
       })
       .then((data) => {
+        setCardActionData(data);
       })
       .catch((error) => console.error(error));
   }

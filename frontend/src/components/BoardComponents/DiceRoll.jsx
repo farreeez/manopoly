@@ -172,6 +172,7 @@ const DiceRoll = ({ rollDiceAction, diceRolls, board, player }) => {
               board={board}
               player={player}
               cardActionData={cardActionData}
+              setCardActionData={setCardActionData}
             />
           </div>
         )}
