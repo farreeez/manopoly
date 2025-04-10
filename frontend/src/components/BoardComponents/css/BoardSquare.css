@@ -45,3 +45,9 @@
   row-gap: 2px; /* Restored original gap values */
   column-gap: 2px;
 }
+
+.boardSquareColour {
+  width: 100%;
+  height: 20px; /* Adjust height as needed */
+  margin-bottom: 5px;
+}

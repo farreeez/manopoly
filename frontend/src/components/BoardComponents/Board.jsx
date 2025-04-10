@@ -211,6 +211,7 @@ function Board({ player, setPlayer }) {
         console.log(error);
       });
   }
+
   // TODO: make a better solution to draw the board
   return (
     <div>
