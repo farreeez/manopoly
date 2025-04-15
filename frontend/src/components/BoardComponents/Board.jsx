@@ -4,7 +4,7 @@ import "./css/Board.css";
 import ColourSelection from "./ColourSelection";
 import DiceRoll from "./DiceRoll";
 
-async function getPlayerJson(playerId) {
+export async function getPlayerJson(playerId) {
   try {
     const response = await fetch(
       `http://localhost:8080/players/getPlayer/${playerId}`,
@@ -149,6 +149,7 @@ function Board({ player, setPlayer }) {
   const [board, setBoard] = useState();
   const [resubscribe, setResubscribe] = useState(-1);
   // const [syncDiceRolls, setSyncDiceRolls] = useState(-1);
+  const [refreshSquares, setRefreshSquares] = useState(new Array(40).fill(0));
 
   // this is different from player object in the app state as it has all of the player dto elements
   const [playerDTO, setPlayerDTO] = useState({ money: 0 });
@@ -241,9 +242,10 @@ function Board({ player, setPlayer }) {
       </div>
       <DiceRoll
         rollDiceAction={board ? board.rollDiceAction : false}
-        diceRolls={board? board.diceRolls:[]}
+        diceRolls={board ? board.diceRolls : []}
         board={board}
         player={player}
+        setRefreshSquares={setRefreshSquares}
       />
       {squares.length ? (
         <div>
@@ -253,11 +255,17 @@ function Board({ player, setPlayer }) {
                 width={"90px"}
                 height={"90px"}
                 squareId={squares[0]}
+                refreshSquare={refreshSquares[0]}
               />
             </li>
             {squares.slice(1, 10).map((square, index) => (
               <li key={index} id={index + 1}>
-                <BoardSquare width={"70px"} height={"90px"} squareId={square} />
+                <BoardSquare
+                  width={"70px"}
+                  height={"90px"}
+                  squareId={square}
+                  refreshSquare={refreshSquares[index + 1]}
+                />
               </li>
             ))}
             <li key={10} id="10">
@@ -265,6 +273,7 @@ function Board({ player, setPlayer }) {
                 width={"90px"}
                 height={"90px"}
                 squareId={squares[10]}
+                refreshSquare={refreshSquares[10]}
               />
             </li>
           </ul>
@@ -272,7 +281,12 @@ function Board({ player, setPlayer }) {
           <ul id="rightColBoardSquares">
             {squares.slice(11, 20).map((square, index) => (
               <li key={index} id={index + 11}>
-                <BoardSquare width={"90px"} height={"70px"} squareId={square} />
+                <BoardSquare
+                  width={"90px"}
+                  height={"70px"}
+                  squareId={square}
+                  refreshSquare={refreshSquares[index + 11]}
+                />
               </li>
             ))}
           </ul>
@@ -283,6 +297,7 @@ function Board({ player, setPlayer }) {
                 width={"90px"}
                 height={"90px"}
                 squareId={squares[30]}
+                refreshSquare={refreshSquares[30]}
               />
             </li>
             {squares
@@ -294,6 +309,7 @@ function Board({ player, setPlayer }) {
                     width={"70px"}
                     height={"90px"}
                     squareId={square}
+                    refreshSquare={refreshSquares[8 - index + 21]}
                   />
                 </li>
               ))}
@@ -302,6 +318,7 @@ function Board({ player, setPlayer }) {
                 width={"90px"}
                 height={"90px"}
                 squareId={squares[20]}
+                refreshSquare={refreshSquares[20]}
               />
             </li>
           </ul>
@@ -316,6 +333,7 @@ function Board({ player, setPlayer }) {
                     width={"90px"}
                     height={"70px"}
                     squareId={square}
+                    refreshSquare={refreshSquares[8 - index + 31]}
                   />
                 </li>
               ))}

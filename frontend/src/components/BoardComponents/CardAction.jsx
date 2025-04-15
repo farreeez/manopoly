@@ -1,4 +1,6 @@
-function CardAction({ board, player, cardActionData, setCardActionData}) {
+import { getPlayerJson } from "./Board";
+
+function CardAction({ board, player, cardActionData, setCardActionData, setRefreshSquares}) {
   function buyProperty() {
     fetch("http://localhost:8080/cardActions/buyProperty", {
       method: "POST",
@@ -12,8 +14,17 @@ function CardAction({ board, player, cardActionData, setCardActionData}) {
 
         return response.json();
       })
-      .then((data) => {
+      .then(async (data) => {
         setCardActionData(data);
+        console.log(player)
+        const playerData = await getPlayerJson(player.id);
+        const currSquareId = Number(playerData.position);
+
+        setRefreshSquares(prev => {
+          const newRefreshSquares = [...prev];
+          newRefreshSquares[currSquareId] = (prev[currSquareId] || 0) + 1;
+          return newRefreshSquares; 
+        });
       })
       .catch((error) => console.error(error));
   }

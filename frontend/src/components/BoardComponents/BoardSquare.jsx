@@ -42,18 +42,24 @@ function getsquare(squareId, setSquare, setProperty, getProperty) {
     .catch((error) => console.error(error));
 }
 
-function BoardSquare({ player, setPlayer, width, height, squareId }) {
+function BoardSquare({ player, setPlayer, width, height, squareId , refreshSquare}) {
   const [square, setSquare] = useState();
   const [property, setProperty] = useState();
 
   useEffect(() => {
     if (squareId) {
       getsquare(squareId, setSquare, setProperty, getProperty);
+      console.log("herro")
     }
-  }, [squareId]);
+  }, [squareId, refreshSquare]);
 
   return (
     <div className="boardSquare" style={{ width: width, height: height }}>
+      {square && square.name && <span>{square.name}</span>}
+      {height > width && <br></br>}
+      <div>
+        <br></br>
+      </div>
       {square && square.property && property && property.colour ? (
         <div
           className="boardSquareColour"
@@ -62,14 +68,8 @@ function BoardSquare({ player, setPlayer, width, height, squareId }) {
           }}
         ></div>
       ) : (
-        <div>
-          <br></br>
-          <br></br>
-        </div>
+        square && Number(square.price) > 0 && <span>{square.price}</span>
       )}
-      {square && square.name && <span>{square.name}</span>}
-      {height > width && <br></br>}
-      {square && Number(square.price) > 0 && <span>{square.price}</span>}
       <div className="circleContainer" style={{ width: width }}></div>
     </div>
   );

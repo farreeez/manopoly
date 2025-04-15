@@ -8,7 +8,7 @@ function getRandomDice() {
   return [Math.floor(Math.random() * 6) + 1, Math.floor(Math.random() * 6) + 1];
 }
 
-const DiceRoll = ({ rollDiceAction, diceRolls, board, player }) => {
+const DiceRoll = ({ rollDiceAction, diceRolls, board, player ,setRefreshSquares}) => {
   const [animating, setAnimating] = useState(false);
   const [currentDice, setCurrentDice] = useState([1, 1]);
   const [rerender, setRerender] = useState(false);
@@ -173,6 +173,7 @@ const DiceRoll = ({ rollDiceAction, diceRolls, board, player }) => {
               player={player}
               cardActionData={cardActionData}
               setCardActionData={setCardActionData}
+              setRefreshSquares={setRefreshSquares}
             />
           </div>
         )}
