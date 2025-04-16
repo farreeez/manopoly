@@ -13,7 +13,7 @@ function App() {
     boardId: -1,
     colour: -1,
   });
-
+  
   useEffect(() => {
     fetch("http://localhost:8080/players/checkCookie", {
       method: "GET",

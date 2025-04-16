@@ -1,5 +1,7 @@
 import "./css/HomePage.css";
-function joinBoard(player, setPlayer) {
+import { createBoard, joinBoard } from "../services/BoardServices";
+
+function goToBoard(player, setPlayer) {
   const textBox = document.getElementById("boardCodeTextBox");
   let boardCode;
 
@@ -15,56 +17,7 @@ function joinBoard(player, setPlayer) {
     return;
   }
 
-  fetch("http://localhost:8080/board/joinBoard/" + boardCode, {
-    method: "POST",
-    credentials: "include",
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Invalid Board Code.");
-      }
-
-      return response.json();
-    })
-    .then((data) => {
-
-      let newPlayer = {
-        name: player.name,
-        id: Number(player.id),
-        isLoggedIn: player.isLoggedIn,
-        boardId: Number(data.id),
-        colour: data.colour,
-      };
-      setPlayer(newPlayer);
-
-      console.log(player.boardId)
-    })
-    .catch((error) => console.error(error));
-}
-
-function createBoard(player, setPlayer) {
-  fetch("http://localhost:8080/board/createBoard", {
-    method: "POST",
-    credentials: "include",
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Could not create a new board.");
-      }
-
-      return response.json();
-    })
-    .then((data) => {
-      let newPlayer = {
-        name: player.name,
-        id: Number(player.id),
-        isLoggedIn: player.isLoggedIn,
-        boardId: Number(data.id),
-        colour: data.colour,
-      };
-      setPlayer(newPlayer);
-    })
-    .catch((error) => console.error(error));
+  joinBoard(boardCode, player, setPlayer);
 }
 
 function HomePage({ player, setPlayer }) {
@@ -76,7 +29,7 @@ function HomePage({ player, setPlayer }) {
         <button
           id="joinBoard"
           className="button"
-          onClick={() => joinBoard(player, setPlayer)}
+          onClick={() => goToBoard(player, setPlayer)}
         >
           Join Board
         </button>

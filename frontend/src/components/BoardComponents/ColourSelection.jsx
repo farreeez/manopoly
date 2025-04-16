@@ -1,28 +1,6 @@
 import "./css/ColourSelection.css";
+import { chooseColour } from "../../services/BoardServices";
 
-function chooseColour(colour, setPlayer) {
-  fetch("http://localhost:8080/board/chooseColour/" + colour.identifier, {
-    method: "POST",
-    credentials: "include",
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Could not create a new player.");
-      }
-
-      return response.json();
-    })
-    .then((data) => {
-      setPlayer({
-        name: data.name,
-        id: Number(data.id),
-        isLoggedIn: true,
-        boardId: Number(data.boardId),
-        colour: data.colour,
-      });
-    })
-    .catch((error) => console.error(error));
-}
 
 function ColourSelection({ possibleColours, takenColours, player, setPlayer }) {
   return (

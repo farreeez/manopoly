@@ -1,46 +1,7 @@
 import { useEffect, useState } from "react";
+import { getProperty } from "../../services/CardActionServices";
+import { getsquare } from "../../services/BoardServices";
 import "./css/BoardSquare.css";
-
-function getProperty(propertyId, setProperty) {
-  fetch("http://localhost:8080/cardActions/getProperty/" + propertyId, {
-    method: "get",
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("board does not exist.");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      setProperty(data);
-      console.log("hello");
-
-      if (data.colour) {
-        console.log(data.colour);
-      }
-    })
-    .catch((error) => console.error(error));
-}
-
-function getsquare(squareId, setSquare, setProperty, getProperty) {
-  fetch("http://localhost:8080/board/getBoardSquare/" + squareId, {
-    method: "GET",
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Board does not exist.");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      setSquare(data);
-
-      if (data.property) {
-        getProperty(data.id, setProperty);
-      }
-    })
-    .catch((error) => console.error(error));
-}
 
 function BoardSquare({ player, setPlayer, width, height, squareId , refreshSquare}) {
   const [square, setSquare] = useState();
@@ -49,7 +10,6 @@ function BoardSquare({ player, setPlayer, width, height, squareId , refreshSquar
   useEffect(() => {
     if (squareId) {
       getsquare(squareId, setSquare, setProperty, getProperty);
-      console.log("herro")
     }
   }, [squareId, refreshSquare]);
 

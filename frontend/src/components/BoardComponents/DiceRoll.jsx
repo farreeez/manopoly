@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import "./css/DiceRoll.css";
 import { updatePositions } from "./Board.jsx";
 import CardAction from "./CardAction";
+import { endTurn, fetchDiceData } from "../../services/BoardServices";
 
 // Function to get random dice values during animation
 function getRandomDice() {
@@ -19,47 +20,6 @@ const DiceRoll = ({ rollDiceAction, diceRolls, board, player ,setRefreshSquares}
       rollDice(board.diceRolls);
     }
   }, [rollDiceAction, diceRolls]);
-
-  function fetchDiceData() {
-    fetch("http://localhost:8080/board/rollDice", {
-      method: "POST",
-      credentials: "include",
-    })
-      .then(async (response) => {
-        if (!response.ok) {
-          const message = await response.text();
-          console.error("Error message from response:", message);
-        }
-
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data);
-        setCardActionData(data);
-      })
-      .catch((error) => console.error(error));
-  }
-
-  //find and fix the bug where the end turn button does not change correctly
-  function endTurn() {
-    fetch("http://localhost:8080/board/endTurn", {
-      method: "POST",
-      credentials: "include",
-    })
-      .then(async (response) => {
-        if (!response.ok) {
-          const message = await response.text();
-          console.error("Error message from response:", message);
-
-          // changes the rerender prop to update the scene because the end turn button is there when it shouldn't be
-          setRerender(!rerender);
-        }
-      })
-      .then((data) => {
-        console.log("should be ended.");
-      })
-      .catch((error) => console.error(error));
-  }
 
   // Start a new dice roll animation
   function rollDice(diceValues) {
@@ -158,13 +118,13 @@ const DiceRoll = ({ rollDiceAction, diceRolls, board, player ,setRefreshSquares}
             {!board.diceRolled ? (
               <button
                 className="roll-button"
-                onClick={() => fetchDiceData()}
+                onClick={() => fetchDiceData(setCardActionData)}
                 disabled={animating}
               >
                 Roll Dice
               </button>
             ) : (
-              <button className="roll-button" onClick={() => endTurn()}>
+              <button className="roll-button" onClick={() => endTurn(setRerender)}>
                 End Turn.
               </button>
             )}

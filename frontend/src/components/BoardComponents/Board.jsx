@@ -3,27 +3,8 @@ import { useEffect, useState } from "react";
 import "./css/Board.css";
 import ColourSelection from "./ColourSelection";
 import DiceRoll from "./DiceRoll";
-
-export async function getPlayerJson(playerId) {
-  try {
-    const response = await fetch(
-      `http://localhost:8080/players/getPlayer/${playerId}`,
-      {
-        method: "GET",
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("player id does not exist in function getPlayerJson.");
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error(error);
-    throw error; // Re-throw the error if you want the caller to handle it
-  }
-}
+import { getPlayerJson } from "../../services/PlayerServices";
+import { getBoard, leaveBoard } from "../../services/BoardServices";
 
 // update it so that it does not refresh the entire board.
 // make the dice roll in sync with the player movement.
@@ -75,73 +56,6 @@ function playerJoined(oldBoard, board) {
   }
 
   return false;
-}
-
-// very hacky solution should figure out a different way or think it thoroughly to make sure it works.
-// does detect dice rolls after doubles
-function isDiceRolled(oldBoard, board) {
-  if (!(oldBoard.diceRolled || board.diceRolled)) {
-    return false;
-  }
-
-  return JSON.stringify(oldBoard.diceRolls) !== JSON.stringify(board.diceRolls);
-}
-
-// function process(player) {
-//   fetch("http://localhost:8080/board/processSubs/" + player.boardId, {
-//     method: "GET",
-//   })
-//     .then((response) => {
-//       if (!response.ok) {
-
-//         throw new Error("unable to process board.");
-//       }
-//     })
-//     .then(() => {})
-//     .catch((error) => console.error(error));
-// }
-
-function leaveBoard(player, setPlayer, setBoard) {
-  fetch("http://localhost:8080/board/leaveBoard", {
-    method: "DELETE",
-    credentials: "include",
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Player does not exist (cannot leave board).");
-      }
-      return response;
-    })
-    .then(() => {
-      setPlayer({
-        name: player.name,
-        id: Number(player.id),
-        isLoggedIn: true,
-        boardId: -1,
-        colour: undefined,
-      });
-
-      setBoard(null);
-    })
-    .catch((error) => console.error(error));
-}
-
-function getBoard(player, setSquares, setBoard) {
-  fetch("http://localhost:8080/board/getBoard/" + player.boardId, {
-    method: "GET",
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Board does not exist.");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      setSquares(data.squareIds);
-      setBoard(data);
-      updatePositions(data.playerIds);
-    })
-    .catch((error) => console.error(error));
 }
 
 function Board({ player, setPlayer }) {
@@ -224,18 +138,6 @@ function Board({ player, setPlayer }) {
         >
           Leave Board
         </button>
-
-        {/* <button
-          className="button"
-          onClick={() =>
-            subscribe(player, setBoard, resubscribe, setResubscribe)
-          }
-        >
-          subscribe
-        </button>
-        <button className="button" onClick={() => process(player)}>
-          processSubs
-        </button> */}
         <h1 className="boardHeaders">Board Code: {player.boardId}</h1>
 
         <h2 className="boardHeaders">Player Money: {playerDTO.money}</h2>
