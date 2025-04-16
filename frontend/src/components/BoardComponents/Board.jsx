@@ -65,9 +65,8 @@ function Board() {
   const [resubscribe, setResubscribe] = useState(-1);
   const [refreshSquares, setRefreshSquares] = useState(new Array(40).fill(0));
   // this is different from player object in the app state as it has all of the player dto elements
-  const [playerDTO, setPlayerDTO] = useState({ money: 0 });
 
-  const { player, setPlayer, board, setBoard } = useContext(AppContext);
+  const { player, setPlayer, board, setBoard , playerDTO, setPlayerDTO} = useContext(AppContext);
 
   useEffect(() => {
     getBoard(player, setSquares, setBoard);

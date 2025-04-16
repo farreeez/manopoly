@@ -14,12 +14,17 @@ export function AppContextProvider({ children }) {
 
   const [board, setBoard] = useState();
 
+  const [playerDTO, setPlayerDTO] = useState({ money: 0 });
+
   const context = {
     player,
     setPlayer,
     board,
     setBoard,
+    playerDTO,
+    setPlayerDTO
   };
+
 
   return <AppContext.Provider value={context}>{children}</AppContext.Provider>;
 }
