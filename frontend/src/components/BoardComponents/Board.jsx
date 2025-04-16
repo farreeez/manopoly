@@ -1,10 +1,11 @@
 import BoardSquare from "./BoardSquare";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "./css/Board.css";
 import ColourSelection from "./ColourSelection";
 import DiceRoll from "./DiceRoll";
 import { getPlayerJson } from "../../services/PlayerServices";
 import { getBoard, leaveBoard } from "../../services/BoardServices";
+import { AppContext } from "../../context/AppContextProvider";
 
 // update it so that it does not refresh the entire board.
 // make the dice roll in sync with the player movement.
@@ -58,15 +59,14 @@ function playerJoined(oldBoard, board) {
   return false;
 }
 
-function Board({ player, setPlayer }) {
+function Board() {
   const [squares, setSquares] = useState([]);
-  const [board, setBoard] = useState();
   const [resubscribe, setResubscribe] = useState(-1);
-  // const [syncDiceRolls, setSyncDiceRolls] = useState(-1);
   const [refreshSquares, setRefreshSquares] = useState(new Array(40).fill(0));
-
   // this is different from player object in the app state as it has all of the player dto elements
   const [playerDTO, setPlayerDTO] = useState({ money: 0 });
+
+  const {player, setPlayer, board, setBoard} = useContext(AppContext);
 
   useEffect(() => {
     getBoard(player, setSquares, setBoard);
@@ -145,8 +145,6 @@ function Board({ player, setPlayer }) {
       <DiceRoll
         rollDiceAction={board ? board.rollDiceAction : false}
         diceRolls={board ? board.diceRolls : []}
-        board={board}
-        player={player}
         setRefreshSquares={setRefreshSquares}
       />
       {squares.length ? (
@@ -249,7 +247,6 @@ function Board({ player, setPlayer }) {
         <ColourSelection
           possibleColours={board.possibleColours}
           takenColours={board.takenColours}
-          setPlayer={setPlayer}
         />
       )}
     </div>

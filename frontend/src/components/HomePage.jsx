@@ -1,5 +1,7 @@
 import "./css/HomePage.css";
 import { createBoard, joinBoard } from "../services/BoardServices";
+import { useContext } from "react";
+import { AppContext } from "../context/AppContextProvider";
 
 function goToBoard(player, setPlayer) {
   const textBox = document.getElementById("boardCodeTextBox");
@@ -20,11 +22,16 @@ function goToBoard(player, setPlayer) {
   joinBoard(boardCode, player, setPlayer);
 }
 
-function HomePage({ player, setPlayer }) {
+function HomePage() {
+  const { player, setPlayer } = useContext(AppContext);
   return (
     <div id="homePage">
       <h1 id="greetingPlayer">Hi {player.name}!</h1>
-      <input type="text" id="boardCodeTextBox" placeholder="Enter Board Code"></input>
+      <input
+        type="text"
+        id="boardCodeTextBox"
+        placeholder="Enter Board Code"
+      ></input>
       <div id="buttonContainer">
         <button
           id="joinBoard"

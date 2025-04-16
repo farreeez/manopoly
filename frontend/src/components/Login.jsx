@@ -1,5 +1,7 @@
 import "./css/Login.css";
 import { createPlayer } from "../services/PlayerServices";
+import { useContext } from "react";
+import { AppContext } from "../context/AppContextProvider";
 
 function joinGame(setPlayer) {
   const textBox = document.getElementById("usernameInput");
@@ -20,7 +22,8 @@ function joinGame(setPlayer) {
   createPlayer(name, setPlayer);
 }
 
-function Login({ setPlayer }) {
+function Login() {
+  const {setPlayer} = useContext(AppContext);
   return (
     <div id="login">
       <input type="text" id="usernameInput" placeholder="Enter Username"></input>

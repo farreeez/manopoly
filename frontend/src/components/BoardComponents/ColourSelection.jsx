@@ -1,8 +1,10 @@
 import "./css/ColourSelection.css";
 import { chooseColour } from "../../services/BoardServices";
+import { useContext } from "react";
+import { AppContext } from "../../context/AppContextProvider";
 
-
-function ColourSelection({ possibleColours, takenColours, player, setPlayer }) {
+function ColourSelection({ possibleColours, takenColours }) {
+  const { setPlayer } = useContext(AppContext);
   return (
     <div className="modal">
       <div className="overlay">

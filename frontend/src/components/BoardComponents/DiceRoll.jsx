@@ -1,19 +1,22 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import "./css/DiceRoll.css";
 import { updatePositions } from "./Board.jsx";
 import CardAction from "./CardAction";
 import { endTurn, fetchDiceData } from "../../services/BoardServices";
+import { AppContext } from "../../context/AppContextProvider";
 
 // Function to get random dice values during animation
 function getRandomDice() {
   return [Math.floor(Math.random() * 6) + 1, Math.floor(Math.random() * 6) + 1];
 }
 
-const DiceRoll = ({ rollDiceAction, diceRolls, board, player ,setRefreshSquares}) => {
+const DiceRoll = ({ rollDiceAction, diceRolls, setRefreshSquares}) => {
   const [animating, setAnimating] = useState(false);
   const [currentDice, setCurrentDice] = useState([1, 1]);
   const [rerender, setRerender] = useState(false);
   const [cardActionData, setCardActionData] = useState(false);
+
+  const {player, board} = useContext(AppContext);
 
   useEffect(() => {
     if (diceRolls.length > 0 && rollDiceAction) {
@@ -113,7 +116,7 @@ const DiceRoll = ({ rollDiceAction, diceRolls, board, player ,setRefreshSquares}
       </div>
 
       <div>
-        {board && board.currentPlayerTurn.id === player.id && (
+        {board && board.currentPlayerTurn && board.currentPlayerTurn.id === player.id && (
           <div className="diceRollButtons">
             {!board.diceRolled ? (
               <button
