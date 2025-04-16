@@ -1,5 +1,3 @@
-import { getPlayerJson } from "./PlayerServices";
-
 export function getProperty(propertyId, setProperty) {
   fetch("http://localhost:8080/cardActions/getProperty/" + propertyId, {
     method: "get",
@@ -20,7 +18,7 @@ export function getProperty(propertyId, setProperty) {
     .catch((error) => console.error(error));
 }
 
-export function buyProperty(player, setCardActionData, setRefreshSquares) {
+export function buyProperty(setCardActionData) {
   fetch("http://localhost:8080/cardActions/buyProperty", {
     method: "POST",
     credentials: "include",
@@ -35,7 +33,6 @@ export function buyProperty(player, setCardActionData, setRefreshSquares) {
     })
     .then(async (data) => {
       setCardActionData(data);
-      const playerData = await getPlayerJson(player.id);
     })
     .catch((error) => console.error(error));
 }

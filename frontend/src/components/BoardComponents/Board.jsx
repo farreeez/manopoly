@@ -6,6 +6,7 @@ import DiceRoll from "./DiceRoll";
 import { getPlayerJson } from "../../services/PlayerServices";
 import { getBoard, leaveBoard } from "../../services/BoardServices";
 import { AppContext } from "../../context/AppContextProvider";
+import { DiceRollContextProvider } from "../../context/DiceRollContextProvider";
 
 // update it so that it does not refresh the entire board.
 // make the dice roll in sync with the player movement.
@@ -95,7 +96,8 @@ function Board() {
     if (board && board.lastBoughtPosition !== -1) {
       setRefreshSquares((prev) => {
         const newRefreshSquares = [...prev];
-        newRefreshSquares[board.lastBoughtPosition] = (prev[board.lastBoughtPosition] || 0) + 1;
+        newRefreshSquares[board.lastBoughtPosition] =
+          (prev[board.lastBoughtPosition] || 0) + 1;
         return newRefreshSquares;
       });
     }
@@ -150,11 +152,14 @@ function Board() {
 
         <h2 className="boardHeaders">Player Money: {playerDTO.money}</h2>
       </div>
-      <DiceRoll
-        rollDiceAction={board ? board.rollDiceAction : false}
-        diceRolls={board ? board.diceRolls : []}
-        setRefreshSquares={setRefreshSquares}
-      />
+      <DiceRollContextProvider>
+        <DiceRoll
+          rollDiceAction={board ? board.rollDiceAction : false}
+          diceRolls={board ? board.diceRolls : []}
+          setRefreshSquares={setRefreshSquares}
+        />
+      </DiceRollContextProvider>
+
       {squares.length ? (
         <div>
           <ul id="topRowBoardSquares">

@@ -4,19 +4,21 @@ import { updatePositions } from "./Board.jsx";
 import CardAction from "./CardAction";
 import { endTurn, fetchDiceData } from "../../services/BoardServices";
 import { AppContext } from "../../context/AppContextProvider";
+import { DiceRollContext } from "../../context/DiceRollContextProvider";
 
 // Function to get random dice values during animation
 function getRandomDice() {
   return [Math.floor(Math.random() * 6) + 1, Math.floor(Math.random() * 6) + 1];
 }
 
-const DiceRoll = ({ rollDiceAction, diceRolls, setRefreshSquares}) => {
+const DiceRoll = ({ rollDiceAction, diceRolls, setRefreshSquares }) => {
   const [animating, setAnimating] = useState(false);
   const [currentDice, setCurrentDice] = useState([1, 1]);
-  const [rerender, setRerender] = useState(false);
-  const [cardActionData, setCardActionData] = useState(false);
-
-  const {player, board} = useContext(AppContext);
+  const { player, board } = useContext(AppContext);
+  const {
+    setDisplayBuyAfterRoll,
+    setCardActionData,
+  } = useContext(DiceRollContext);
 
   useEffect(() => {
     if (diceRolls.length > 0 && rollDiceAction) {
@@ -42,6 +44,7 @@ const DiceRoll = ({ rollDiceAction, diceRolls, setRefreshSquares}) => {
         setCurrentDice(diceValues);
         setAnimating(false);
         updatePositions(board.playerIds);
+        setDisplayBuyAfterRoll(true);
       }
     }, 50);
   }
@@ -116,30 +119,30 @@ const DiceRoll = ({ rollDiceAction, diceRolls, setRefreshSquares}) => {
       </div>
 
       <div>
-        {board && board.currentPlayerTurn && board.currentPlayerTurn.id === player.id && (
-          <div className="diceRollButtons">
-            {!board.diceRolled ? (
-              <button
-                className="roll-button"
-                onClick={() => fetchDiceData(setCardActionData)}
-                disabled={animating}
-              >
-                Roll Dice
-              </button>
-            ) : (
-              <button className="roll-button" onClick={() => endTurn(setRerender)}>
-                End Turn.
-              </button>
-            )}
-            <CardAction
-              board={board}
-              player={player}
-              cardActionData={cardActionData}
-              setCardActionData={setCardActionData}
-              setRefreshSquares={setRefreshSquares}
-            />
-          </div>
-        )}
+        {board &&
+          board.currentPlayerTurn &&
+          board.currentPlayerTurn.id === player.id && (
+            <div className="diceRollButtons">
+              {!board.diceRolled ? (
+                <button
+                  className="roll-button"
+                  onClick={() => fetchDiceData(setCardActionData)}
+                  disabled={animating}
+                >
+                  Roll Dice
+                </button>
+              ) : (
+                <button className="roll-button" onClick={() => endTurn(setDisplayBuyAfterRoll)}>
+                  End Turn.
+                </button>
+              )}
+              <CardAction
+                board={board}
+                player={player}
+                setRefreshSquares={setRefreshSquares}
+              />
+            </div>
+          )}
       </div>
     </div>
   );

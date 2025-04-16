@@ -137,7 +137,7 @@ export function chooseColour(colour, setPlayer) {
     .catch((error) => console.error(error));
 }
 
-export function endTurn(setRerender) {
+export function endTurn(setDisplayBuyAfterRoll) {
   fetch("http://localhost:8080/board/endTurn", {
     method: "POST",
     credentials: "include",
@@ -146,9 +146,8 @@ export function endTurn(setRerender) {
       if (!response.ok) {
         const message = await response.text();
         console.error("Error message from response:", message);
-
-        // changes the rerender prop to update the scene because the end turn button is there when it shouldn't be
-        setRerender((prev) => !prev);
+      } else {
+        setDisplayBuyAfterRoll(false);
       }
     })
     .catch((error) => console.error(error));
