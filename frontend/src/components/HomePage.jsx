@@ -1,5 +1,9 @@
 import "./css/HomePage.css";
-function joinBoard(player, setPlayer) {
+import { createBoard, joinBoard } from "../services/BoardServices";
+import { useContext } from "react";
+import { AppContext } from "../context/AppContextProvider";
+
+function goToBoard(player, setPlayer) {
   const textBox = document.getElementById("boardCodeTextBox");
   let boardCode;
 
@@ -15,68 +19,24 @@ function joinBoard(player, setPlayer) {
     return;
   }
 
-  fetch("http://localhost:8080/board/joinBoard/" + boardCode, {
-    method: "POST",
-    credentials: "include",
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Invalid Board Code.");
-      }
-
-      return response.json();
-    })
-    .then((data) => {
-
-      let newPlayer = {
-        name: player.name,
-        id: Number(player.id),
-        isLoggedIn: player.isLoggedIn,
-        boardId: Number(data.id),
-        colour: data.colour,
-      };
-      setPlayer(newPlayer);
-
-      console.log(player.boardId)
-    })
-    .catch((error) => console.error(error));
+  joinBoard(boardCode, player, setPlayer);
 }
 
-function createBoard(player, setPlayer) {
-  fetch("http://localhost:8080/board/createBoard", {
-    method: "POST",
-    credentials: "include",
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Could not create a new board.");
-      }
-
-      return response.json();
-    })
-    .then((data) => {
-      let newPlayer = {
-        name: player.name,
-        id: Number(player.id),
-        isLoggedIn: player.isLoggedIn,
-        boardId: Number(data.id),
-        colour: data.colour,
-      };
-      setPlayer(newPlayer);
-    })
-    .catch((error) => console.error(error));
-}
-
-function HomePage({ player, setPlayer }) {
+function HomePage() {
+  const { player, setPlayer } = useContext(AppContext);
   return (
     <div id="homePage">
       <h1 id="greetingPlayer">Hi {player.name}!</h1>
-      <input type="text" id="boardCodeTextBox" placeholder="Enter Board Code"></input>
+      <input
+        type="text"
+        id="boardCodeTextBox"
+        placeholder="Enter Board Code"
+      ></input>
       <div id="buttonContainer">
         <button
           id="joinBoard"
           className="button"
-          onClick={() => joinBoard(player, setPlayer)}
+          onClick={() => goToBoard(player, setPlayer)}
         >
           Join Board
         </button>

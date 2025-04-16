@@ -1,30 +1,10 @@
 import "./css/ColourSelection.css";
+import { chooseColour } from "../../services/BoardServices";
+import { useContext } from "react";
+import { AppContext } from "../../context/AppContextProvider";
 
-function chooseColour(colour, setPlayer) {
-  fetch("http://localhost:8080/board/chooseColour/" + colour.identifier, {
-    method: "POST",
-    credentials: "include",
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Could not create a new player.");
-      }
-
-      return response.json();
-    })
-    .then((data) => {
-      setPlayer({
-        name: data.name,
-        id: Number(data.id),
-        isLoggedIn: true,
-        boardId: Number(data.boardId),
-        colour: data.colour,
-      });
-    })
-    .catch((error) => console.error(error));
-}
-
-function ColourSelection({ possibleColours, takenColours, player, setPlayer }) {
+function ColourSelection({ possibleColours, takenColours }) {
+  const { setPlayer } = useContext(AppContext);
   return (
     <div className="modal">
       <div className="overlay">

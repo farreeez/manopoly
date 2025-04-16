@@ -1,29 +1,11 @@
 import BoardSquare from "./BoardSquare";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "./css/Board.css";
 import ColourSelection from "./ColourSelection";
 import DiceRoll from "./DiceRoll";
-
-export async function getPlayerJson(playerId) {
-  try {
-    const response = await fetch(
-      `http://localhost:8080/players/getPlayer/${playerId}`,
-      {
-        method: "GET",
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("player id does not exist in function getPlayerJson.");
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error(error);
-    throw error; // Re-throw the error if you want the caller to handle it
-  }
-}
+import { getPlayerJson } from "../../services/PlayerServices";
+import { getBoard, leaveBoard } from "../../services/BoardServices";
+import { AppContext } from "../../context/AppContextProvider";
 
 // update it so that it does not refresh the entire board.
 // make the dice roll in sync with the player movement.
@@ -77,82 +59,14 @@ function playerJoined(oldBoard, board) {
   return false;
 }
 
-// very hacky solution should figure out a different way or think it thoroughly to make sure it works.
-// does detect dice rolls after doubles
-function isDiceRolled(oldBoard, board) {
-  if (!(oldBoard.diceRolled || board.diceRolled)) {
-    return false;
-  }
-
-  return JSON.stringify(oldBoard.diceRolls) !== JSON.stringify(board.diceRolls);
-}
-
-// function process(player) {
-//   fetch("http://localhost:8080/board/processSubs/" + player.boardId, {
-//     method: "GET",
-//   })
-//     .then((response) => {
-//       if (!response.ok) {
-
-//         throw new Error("unable to process board.");
-//       }
-//     })
-//     .then(() => {})
-//     .catch((error) => console.error(error));
-// }
-
-function leaveBoard(player, setPlayer, setBoard) {
-  fetch("http://localhost:8080/board/leaveBoard", {
-    method: "DELETE",
-    credentials: "include",
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Player does not exist (cannot leave board).");
-      }
-      return response;
-    })
-    .then(() => {
-      setPlayer({
-        name: player.name,
-        id: Number(player.id),
-        isLoggedIn: true,
-        boardId: -1,
-        colour: undefined,
-      });
-
-      setBoard(null);
-    })
-    .catch((error) => console.error(error));
-}
-
-function getBoard(player, setSquares, setBoard) {
-  fetch("http://localhost:8080/board/getBoard/" + player.boardId, {
-    method: "GET",
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Board does not exist.");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      setSquares(data.squareIds);
-      setBoard(data);
-      updatePositions(data.playerIds);
-    })
-    .catch((error) => console.error(error));
-}
-
-function Board({ player, setPlayer }) {
+function Board() {
   const [squares, setSquares] = useState([]);
-  const [board, setBoard] = useState();
   const [resubscribe, setResubscribe] = useState(-1);
-  // const [syncDiceRolls, setSyncDiceRolls] = useState(-1);
   const [refreshSquares, setRefreshSquares] = useState(new Array(40).fill(0));
-
   // this is different from player object in the app state as it has all of the player dto elements
   const [playerDTO, setPlayerDTO] = useState({ money: 0 });
+
+  const {player, setPlayer, board, setBoard} = useContext(AppContext);
 
   useEffect(() => {
     getBoard(player, setSquares, setBoard);
@@ -224,18 +138,6 @@ function Board({ player, setPlayer }) {
         >
           Leave Board
         </button>
-
-        {/* <button
-          className="button"
-          onClick={() =>
-            subscribe(player, setBoard, resubscribe, setResubscribe)
-          }
-        >
-          subscribe
-        </button>
-        <button className="button" onClick={() => process(player)}>
-          processSubs
-        </button> */}
         <h1 className="boardHeaders">Board Code: {player.boardId}</h1>
 
         <h2 className="boardHeaders">Player Money: {playerDTO.money}</h2>
@@ -243,8 +145,6 @@ function Board({ player, setPlayer }) {
       <DiceRoll
         rollDiceAction={board ? board.rollDiceAction : false}
         diceRolls={board ? board.diceRolls : []}
-        board={board}
-        player={player}
         setRefreshSquares={setRefreshSquares}
       />
       {squares.length ? (
@@ -347,7 +247,6 @@ function Board({ player, setPlayer }) {
         <ColourSelection
           possibleColours={board.possibleColours}
           takenColours={board.takenColours}
-          setPlayer={setPlayer}
         />
       )}
     </div>
