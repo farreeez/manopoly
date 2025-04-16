@@ -17,7 +17,6 @@ import big.manopoly.utils.Mapper;
 import jakarta.servlet.AsyncContext;
 import jakarta.servlet.http.HttpServletResponse;
 
-// TODO: consider changing AsyncContext solution to a more robust method later on (such as SseEmitter).
 public class BoardSubscriptionManager {
     private static BoardSubscriptionManager instance;
 
@@ -84,9 +83,9 @@ public class BoardSubscriptionManager {
      *
      * @param boardId the board id
      */
-    public void processSubsFor(final long boardId, BoardRepository boardRepository, boolean rollDiceAction) {
+    public void processSubsFor(final long boardId, BoardRepository boardRepository, boolean rollDiceAction, int position) {
         Board board = boardRepository.getReferenceById(boardId);
-        BoardDTO boardDTO = Mapper.toBoardDTO(board, rollDiceAction);
+        BoardDTO boardDTO = Mapper.toBoardDTO(board, rollDiceAction, position);
         THREAD_POOL.submit(() -> {
             // Get the subs which will be notified if the board with the given id is updated
             List<AsyncContext> subs = getSubsFor(boardId);

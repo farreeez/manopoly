@@ -66,7 +66,7 @@ public class BoardResource {
 
         Board board = optionalBoard.get();
 
-        BoardDTO boardDTO = Mapper.toBoardDTO(board, false);
+        BoardDTO boardDTO = Mapper.toBoardDTO(board, false, -1);
 
         return ResponseEntity.ok().body(boardDTO);
     }
@@ -135,7 +135,7 @@ public class BoardResource {
 
     @GetMapping("/processSubs/{id}")
     public ResponseEntity<?> processSubs(@PathVariable Long id) {
-        BoardSubscriptionManager.instance().processSubsFor(id, boardRepository, false);
+        BoardSubscriptionManager.instance().processSubsFor(id, boardRepository, false, -1);
         return ResponseEntity.ok().build();
     }
 

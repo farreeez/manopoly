@@ -66,7 +66,7 @@ function Board() {
   // this is different from player object in the app state as it has all of the player dto elements
   const [playerDTO, setPlayerDTO] = useState({ money: 0 });
 
-  const {player, setPlayer, board, setBoard} = useContext(AppContext);
+  const { player, setPlayer, board, setBoard } = useContext(AppContext);
 
   useEffect(() => {
     getBoard(player, setSquares, setBoard);
@@ -91,6 +91,14 @@ function Board() {
     };
 
     fetchData();
+
+    if (board && board.lastBoughtPosition !== -1) {
+      setRefreshSquares((prev) => {
+        const newRefreshSquares = [...prev];
+        newRefreshSquares[board.lastBoughtPosition] = (prev[board.lastBoughtPosition] || 0) + 1;
+        return newRefreshSquares;
+      });
+    }
   }, [board]);
 
   useEffect(() => {

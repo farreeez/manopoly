@@ -9,7 +9,7 @@ import big.manopoly.services.BoardSubscriptionManager;
 
 public class PropertyUtils {
     // this is private because I want to use it both for when you buy a property after landing on it and for trading with players.
-    private static void buyProperty(Player player, Property property, PlayerRepository playerRepository, BoardRepository boardRepository) throws Exception {
+    private static void buyProperty(Player player, Property property, PlayerRepository playerRepository, BoardRepository boardRepository, int position) throws Exception {
 
         int price = property.getPrice();
 
@@ -23,7 +23,7 @@ public class PropertyUtils {
 
         playerRepository.save(player); 
 
-        BoardSubscriptionManager.instance().processSubsFor(player.getBoardId(), boardRepository, false);
+        BoardSubscriptionManager.instance().processSubsFor(player.getBoardId(), boardRepository, false, position);
     }
 
     public static void buyPropertyFromBoard(Player player, PlayerRepository playerRepository, BoardRepository boardRepository) throws Exception {
@@ -39,6 +39,6 @@ public class PropertyUtils {
             throw new Exception("property is already owned by another player");
         }
 
-        buyProperty(player, property, playerRepository, boardRepository);
+        buyProperty(player, property, playerRepository, boardRepository, square.getPosition());
     }
 }

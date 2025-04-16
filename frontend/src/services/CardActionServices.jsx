@@ -36,13 +36,6 @@ export function buyProperty(player, setCardActionData, setRefreshSquares) {
     .then(async (data) => {
       setCardActionData(data);
       const playerData = await getPlayerJson(player.id);
-      const currSquareId = Number(playerData.position);
-
-      setRefreshSquares((prev) => {
-        const newRefreshSquares = [...prev];
-        newRefreshSquares[currSquareId] = (prev[currSquareId] || 0) + 1;
-        return newRefreshSquares;
-      });
     })
     .catch((error) => console.error(error));
 }

@@ -36,12 +36,12 @@ public class BoardServicesUtility {
         boardRepository.save(board);
         playerRepository.save(player);
 
-        BoardDTO BoardDTO = Mapper.toBoardDTO(board, false);
+        BoardDTO BoardDTO = Mapper.toBoardDTO(board, false, -1);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().replacePath("/getBoard/{id}")
                 .buildAndExpand(board.getId()).toUri();
 
-        BoardSubscriptionManager.instance().processSubsFor(board.getId(), boardRepository, false);
+        BoardSubscriptionManager.instance().processSubsFor(board.getId(), boardRepository, false, -1);
 
         return ResponseEntity.created(location)
                 .body(BoardDTO);
@@ -64,6 +64,6 @@ public class BoardServicesUtility {
         boardRepository.save(playerBoard);
         playerRepository.save(player);
 
-        BoardSubscriptionManager.instance().processSubsFor(playerBoard.getId(), boardRepository, false);
+        BoardSubscriptionManager.instance().processSubsFor(playerBoard.getId(), boardRepository, false, -1);
     }
 }

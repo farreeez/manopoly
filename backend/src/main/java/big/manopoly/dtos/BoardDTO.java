@@ -13,11 +13,14 @@ public class BoardDTO {
     private PlayerDTO currentPlayerTurn;
     private int[] diceRolls;
     private boolean rollDiceAction;
+    private int lastBoughtPosition;
 
     public BoardDTO() {
     }
 
-    public BoardDTO(Long id, List<Long> playerIds, List<String> squareIds, List<Colour> takenColours, List<Colour> possibleColours, PlayerDTO currentPlayerTurn, boolean diceRolled, int[] diceRolls, boolean rollDiceAction) {
+    public BoardDTO(Long id, List<Long> playerIds, List<String> squareIds, List<Colour> takenColours,
+            List<Colour> possibleColours, PlayerDTO currentPlayerTurn, boolean diceRolled, int[] diceRolls,
+            boolean rollDiceAction, int lastBoughtPosition) {
         this.id = id;
         this.playerIds = playerIds;
         this.squareIds = squareIds;
@@ -27,12 +30,13 @@ public class BoardDTO {
         this.diceRolled = diceRolled;
         this.diceRolls = diceRolls;
         this.rollDiceAction = rollDiceAction;
+        this.lastBoughtPosition = lastBoughtPosition;
     }
 
     public boolean isRollDiceAction() {
         return rollDiceAction;
     }
-    
+
     public boolean isDiceRolled() {
         return diceRolled;
     }
@@ -45,7 +49,7 @@ public class BoardDTO {
         return id;
     }
 
-    public int[] getDiceRolls(){
+    public int[] getDiceRolls() {
         return diceRolls;
     }
 
@@ -55,6 +59,14 @@ public class BoardDTO {
 
     public List<Colour> getPossibleColours() {
         return possibleColours;
+    }
+
+    public int getLastBoughtPosition() {
+        return lastBoughtPosition;
+    }
+
+    public void setLastBoughtPosition(int lastBoughtPosition) {
+        this.lastBoughtPosition = lastBoughtPosition;
     }
 
     public void setPossibleColours(List<Colour> possibleColours) {

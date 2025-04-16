@@ -98,7 +98,7 @@ public class Player {
         boardRepository.save(board);
         playerRepository.save(this);
 
-        BoardSubscriptionManager.instance().processSubsFor(board.getId(), boardRepository, false);
+        BoardSubscriptionManager.instance().processSubsFor(board.getId(), boardRepository, false, -1);
 
         return ResponseEntity.ok().body(Mapper.toPlayerDTO(this));
     }

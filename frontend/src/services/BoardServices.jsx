@@ -148,7 +148,7 @@ export function endTurn(setRerender) {
         console.error("Error message from response:", message);
 
         // changes the rerender prop to update the scene because the end turn button is there when it shouldn't be
-        setRerender(prev => !prev);
+        setRerender((prev) => !prev);
       }
     })
     .catch((error) => console.error(error));

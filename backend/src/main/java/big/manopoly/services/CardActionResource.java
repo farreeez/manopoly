@@ -65,7 +65,6 @@ public class CardActionResource {
 
         try {
             PropertyUtils.buyPropertyFromBoard(player, playerRepository, boardRepository);
-
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

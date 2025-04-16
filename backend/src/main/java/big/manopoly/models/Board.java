@@ -254,7 +254,7 @@ public class Board {
     public void saveBoard(BoardRepository boardRepository, boolean rollDiceAction) {
         boardRepository.save(this);
 
-        BoardSubscriptionManager.instance().processSubsFor(this.id, boardRepository, rollDiceAction);
+        BoardSubscriptionManager.instance().processSubsFor(this.id, boardRepository, rollDiceAction, -1);
     }
 
 }

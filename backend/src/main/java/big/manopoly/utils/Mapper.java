@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 import org.hibernate.Hibernate;
 
 public class Mapper {
-    public static BoardDTO toBoardDTO(Board board, boolean rollDiceAction) {
+    public static BoardDTO toBoardDTO(Board board, boolean rollDiceAction, int lastBoughtPosition) {
         return new BoardDTO(
                 board.getId(),
                 board.getPlayers().stream().map(Player::getId).collect(Collectors.toList()),
@@ -24,7 +24,8 @@ public class Mapper {
                 toPlayerDTO(board.getPlayerWithCurrentTurn()),
                 board.isDiceRolled(),
                 board.getDiceRolls(),
-                rollDiceAction);
+                rollDiceAction,
+                lastBoughtPosition);
     }
 
     public static Colour playerColourToColour(PlayerColour playerColour) {
