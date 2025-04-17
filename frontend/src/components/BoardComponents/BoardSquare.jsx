@@ -3,7 +3,9 @@ import { getProperty } from "../../services/CardActionServices";
 import { getsquare } from "../../services/BoardServices";
 import "./css/BoardSquare.css";
 
-function BoardSquare({ player, setPlayer, width, height, squareId , refreshSquare}) {
+function displayPopup() {}
+
+function BoardSquare({ width, height, squareId, refreshSquare }) {
   const [square, setSquare] = useState();
   const [property, setProperty] = useState();
 
@@ -14,7 +16,11 @@ function BoardSquare({ player, setPlayer, width, height, squareId , refreshSquar
   }, [squareId, refreshSquare]);
 
   return (
-    <div className="boardSquare" style={{ width: width, height: height }}>
+    <div
+      className="boardSquare"
+      style={{ width: width, height: height }}
+      onClick={square && square.property ? displayPopup : undefined}
+    >
       {square && square.name && <span>{square.name}</span>}
       {height > width && <br></br>}
       <div>

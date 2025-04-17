@@ -75,7 +75,6 @@ function Board() {
 
   useEffect(() => {
     subscribe();
-    console.log("testing");
   }, [resubscribe]);
 
   useEffect(() => {
