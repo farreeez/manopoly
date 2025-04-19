@@ -1,7 +1,13 @@
+import { useEffect, useContext } from "react";
+import { BoardContext } from "../../context/BoardContextProvider";
 import "./css/PropertyCard.css";
 import { X } from "lucide-react";
 
-export default function PropertyCard({ setDisplayProperty }) {
+export default function PropertyCard({ setDisplayProperty, property }) {
+  const { modalProperty, setModalProperty } = useContext(BoardContext);
+
+  useEffect(() => {}, [modalProperty]);
+
   return (
     <div className="property-modal">
       <div
@@ -24,7 +30,18 @@ export default function PropertyCard({ setDisplayProperty }) {
           >
             <X size={24} />
           </button>
-          <div className="propertyColour"></div>
+          <div className="propertyColour">{modalProperty.name}</div>
+
+          <ul className="rent-list">
+            {modalProperty.rentList.map((rent, index) => (
+              <li key={index} className="rent-price">
+                <span className="rent-text">{rent.rentPrompt}</span>
+                <span className="rent-val">${rent.rentPrice}</span>
+              </li>
+            ))}
+          </ul>
+
+
         </div>
       </div>
     </div>

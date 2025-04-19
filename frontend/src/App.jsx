@@ -6,9 +6,10 @@ import "./App.css";
 import HomePage from "./components/HomePage";
 import Board from "./components/BoardComponents/Board";
 import { AppContext } from "./context/AppContextProvider";
+import { BoardContextProvider } from "./context/BoardContextProvider";
 
 function App() {
-  const {player, setPlayer} = useContext(AppContext);
+  const { player, setPlayer } = useContext(AppContext);
 
   useEffect(() => {
     checkCookie(setPlayer);
@@ -19,12 +20,14 @@ function App() {
     <div className="App">
       {player.isLoggedIn ? (
         Number(player.boardId) === -1 ? (
-          <HomePage/>
+          <HomePage />
         ) : (
-          <Board/>
+          <BoardContextProvider>
+            <Board />
+          </BoardContextProvider>
         )
       ) : (
-        <Login/>
+        <Login />
       )}
     </div>
   );

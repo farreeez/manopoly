@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { getProperty } from "../../services/CardActionServices";
 import { getsquare } from "../../services/BoardServices";
 import "./css/BoardSquare.css";
+import { BoardContext } from "../../context/BoardContextProvider";
 
-function displayPopup(setDisplayProperty) {
-  setDisplayProperty(true);
-}
+function displayPopup(setDisplayProperty) {}
 
 function BoardSquare({
   width,
@@ -16,6 +15,7 @@ function BoardSquare({
 }) {
   const [square, setSquare] = useState();
   const [property, setProperty] = useState();
+  const { modalProperty, setModalProperty } = useContext(BoardContext);
 
   useEffect(() => {
     if (squareId) {
@@ -28,9 +28,10 @@ function BoardSquare({
       className="boardSquare"
       style={{ width: width, height: height }}
       onClick={
-        square && square.property
+        square && square.property && property
           ? () => {
-              displayPopup(setDisplayProperty);
+              setDisplayProperty(true);
+              setModalProperty(property);
             }
           : undefined
       }
@@ -40,7 +41,7 @@ function BoardSquare({
       <div>
         <br></br>
       </div>
-      {square && square.property && property && property.playerColour? (
+      {square && square.property && property && property.playerColour ? (
         <div
           className="boardSquareColour"
           style={{

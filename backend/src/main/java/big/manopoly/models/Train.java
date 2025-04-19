@@ -47,7 +47,7 @@ public class Train extends Property {
         List<RentDisplay> rentList = new ArrayList<>();
 
         for(int i = 0; i < 4; i++) {
-           RentDisplay display = new RentDisplay("Rent if " + i+1 + " stations are owned.", (int) (25 * Math.pow(2, i)));
+           RentDisplay display = new RentDisplay("Rent if " + (i+1) + " train stations are owned.", (int) (25 * Math.pow(2, i)));
            rentList.add(display); 
         }
 

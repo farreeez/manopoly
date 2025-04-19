@@ -49,3 +49,20 @@
   width: 100%;
   height: 15%; 
 }
+
+.rent-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.rent-price {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 30px;
+}
+
+.rent-price {
+  color: black;
+}
