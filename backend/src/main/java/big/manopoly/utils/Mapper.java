@@ -54,7 +54,7 @@ public class Mapper {
         Colour playerColour = property.getOwner() != null ? playerColourToColour(property.getOwner().getColour()) : null;
 
         return new PropertyDTO(property.getId(), property.getPosition(), property.getName(), boardId,
-                property.getPrice(), property.getType(), property.isMortgaged(), ownerId, property.getName(), playerColour);
+                property.getPrice(), property.getType(), property.isMortgaged(), ownerId, property.getName(), playerColour, property.getPossibleRents());
     }
 
     public static PlayerDTO toPlayerDTO(Player player) {

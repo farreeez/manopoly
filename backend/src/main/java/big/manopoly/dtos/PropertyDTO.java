@@ -1,7 +1,10 @@
 package big.manopoly.dtos;
 
+import java.util.List;
+
 import big.manopoly.models.Colour;
 import big.manopoly.utils.PropertyType;
+import big.manopoly.utils.RentDisplay;
 
 public class PropertyDTO extends BoardSquareDTO {
 
@@ -10,20 +13,30 @@ public class PropertyDTO extends BoardSquareDTO {
     private Long ownerId; // Assuming you only want the ID of the owner instead of the whole Player entity
     private String ownerName; // Owner's name (can be null if not owned)
     private Colour playerColour;
-    
+    private List<RentDisplay> rentList;
+
     // Constructor
     public PropertyDTO(String id, int position, String name, Long boardId, int price, PropertyType type,
             Boolean mortgaged, Long ownerId,
-            String ownerName, Colour playerColour) {
+            String ownerName, Colour playerColour, List<RentDisplay> rentList) {
         super(id, position, name, boardId, price, true);
         this.type = type;
         this.mortgaged = mortgaged;
         this.ownerId = ownerId;
         this.ownerName = ownerName;
         this.playerColour = playerColour;
+        this.rentList = rentList;
     }
 
     // Getters and setters
+    public List<RentDisplay> getRentList() {
+        return rentList;
+    }
+
+    public void setRentList(List<RentDisplay> rentList) {
+        this.rentList = rentList;
+    }
+
     public PropertyType getType() {
         return type;
     }

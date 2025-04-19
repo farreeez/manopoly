@@ -1,9 +1,13 @@
 package big.manopoly.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import big.manopoly.utils.PropertyType;
+import big.manopoly.utils.RentDisplay;
 import big.manopoly.utils.TrainName;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
@@ -36,6 +40,18 @@ public class Train extends Property {
         }
 
         return (int) (25 * Math.pow(2, trainCount));
+    }
+
+    @Override
+    public List<RentDisplay> getPossibleRents() {
+        List<RentDisplay> rentList = new ArrayList<>();
+
+        for(int i = 0; i < 4; i++) {
+           RentDisplay display = new RentDisplay("Rent if " + i+1 + " stations are owned.", (int) (25 * Math.pow(2, i)));
+           rentList.add(display); 
+        }
+
+        return rentList;
     }
 
     @Override

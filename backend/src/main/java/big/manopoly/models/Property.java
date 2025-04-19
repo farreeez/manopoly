@@ -1,10 +1,23 @@
 package big.manopoly.models;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import big.manopoly.utils.PropertyType;
-import jakarta.persistence.*;;
+import big.manopoly.utils.RentDisplay;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.DiscriminatorType;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.ManyToOne;
+;
 
 // all entity types are put into a single table and dtype is used to see the
 // type
@@ -55,6 +68,8 @@ public abstract class Property extends BoardSquare {
 
     // getters that calculate a variable output
     public abstract int getRent() throws Exception;
+
+    public abstract List<RentDisplay> getPossibleRents();
 
     @Override
     public abstract int getPrice();

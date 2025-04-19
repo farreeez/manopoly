@@ -1,9 +1,13 @@
 package big.manopoly.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import big.manopoly.utils.PropertyType;
+import big.manopoly.utils.RentDisplay;
 import big.manopoly.utils.UtilityName;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
@@ -17,7 +21,8 @@ public class Utility extends Property {
     }
 
     @JsonCreator
-    public Utility(@JsonProperty("board") Board board, @JsonProperty("position") int position, @JsonProperty("name") UtilityName name) {
+    public Utility(@JsonProperty("board") Board board, @JsonProperty("position") int position,
+            @JsonProperty("name") UtilityName name) {
         super(board, position, PropertyType.UTILITY, name.toString());
     }
 
@@ -56,5 +61,18 @@ public class Utility extends Property {
         UtilityName name = UtilityName.valueOf(getName());
 
         return name.getMortgagePayout();
+    }
+
+    @Override
+    public List<RentDisplay> getPossibleRents() {
+        List<RentDisplay> rentList = new ArrayList<>();
+
+        RentDisplay rentDisplay = new RentDisplay("If one utility is owned rent is 4 times the dice roll.", 0);
+        rentList.add(rentDisplay);
+
+        rentDisplay = new RentDisplay("If both utilities are owned rent is 10 times the dice roll.", 0);
+        rentList.add(rentDisplay);
+
+        return rentList;
     }
 }

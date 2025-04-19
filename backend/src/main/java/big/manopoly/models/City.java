@@ -1,5 +1,6 @@
 package big.manopoly.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -7,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import big.manopoly.utils.CityName;
 import big.manopoly.utils.PropertyType;
+import big.manopoly.utils.RentDisplay;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
@@ -21,9 +23,10 @@ public class City extends Property {
     }
 
     @JsonCreator
-    public City(@JsonProperty("board") Board board, @JsonProperty("position") int position, @JsonProperty("type") PropertyType colour,
+    public City(@JsonProperty("board") Board board, @JsonProperty("position") int position,
+            @JsonProperty("type") PropertyType colour,
             @JsonProperty("name") CityName name) {
-        super(board,position, colour, name.toString());
+        super(board, position, colour, name.toString());
         houses = 0;
     }
 
@@ -50,6 +53,32 @@ public class City extends Property {
         } else {
             return rentPrices.get(0);
         }
+    }
+
+    @Override
+    public List<RentDisplay> getPossibleRents() {
+        List<RentDisplay> rentList = new ArrayList<>();
+
+        CityName name = CityName.valueOf(getName());
+
+        List<Integer> rentPrices = name.rentPrices;
+
+        getPossibleRentsHelper(rentList, "Rent", rentPrices.get(0));
+
+        getPossibleRentsHelper(rentList, "Rent with colour set", rentPrices.get(0) * 2);
+
+        for (int i = 1; i < 5; i++) {
+            getPossibleRentsHelper(rentList, "Rent with " + i + " Houses.", rentPrices.get(i));
+        }
+
+        getPossibleRentsHelper(rentList, "Rent with one Hotel.", rentPrices.get(5));
+
+        return rentList;
+    }
+
+    private void getPossibleRentsHelper(List<RentDisplay> rentList, String rentPrompt, int rentPrice) {
+        RentDisplay display = new RentDisplay(rentPrompt, rentPrice);
+        rentList.add(display);
     }
 
     // getters
