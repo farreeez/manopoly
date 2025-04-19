@@ -7,6 +7,7 @@ import { getPlayerJson } from "../../services/PlayerServices";
 import { getBoard, leaveBoard } from "../../services/BoardServices";
 import { AppContext } from "../../context/AppContextProvider";
 import { DiceRollContextProvider } from "../../context/DiceRollContextProvider";
+import PropertyCard from "./PropertyCard";
 
 // update it so that it does not refresh the entire board.
 // make the dice roll in sync with the player movement.
@@ -64,9 +65,11 @@ function Board() {
   const [squares, setSquares] = useState([]);
   const [resubscribe, setResubscribe] = useState(-1);
   const [refreshSquares, setRefreshSquares] = useState(new Array(40).fill(0));
+  const [displayProperty, setDisplayProperty] = useState(false);
   // this is different from player object in the app state as it has all of the player dto elements
 
-  const { player, setPlayer, board, setBoard , playerDTO, setPlayerDTO} = useContext(AppContext);
+  const { player, setPlayer, board, setBoard, playerDTO, setPlayerDTO } =
+    useContext(AppContext);
 
   useEffect(() => {
     getBoard(player, setSquares, setBoard);
@@ -167,6 +170,7 @@ function Board() {
                 height={"90px"}
                 squareId={squares[0]}
                 refreshSquare={refreshSquares[0]}
+                setDisplayProperty={setDisplayProperty}
               />
             </li>
             {squares.slice(1, 10).map((square, index) => (
@@ -176,6 +180,7 @@ function Board() {
                   height={"90px"}
                   squareId={square}
                   refreshSquare={refreshSquares[index + 1]}
+                  setDisplayProperty={setDisplayProperty}
                 />
               </li>
             ))}
@@ -185,6 +190,7 @@ function Board() {
                 height={"90px"}
                 squareId={squares[10]}
                 refreshSquare={refreshSquares[10]}
+                setDisplayProperty={setDisplayProperty}
               />
             </li>
           </ul>
@@ -197,6 +203,7 @@ function Board() {
                   height={"70px"}
                   squareId={square}
                   refreshSquare={refreshSquares[index + 11]}
+                  setDisplayProperty={setDisplayProperty}
                 />
               </li>
             ))}
@@ -209,6 +216,7 @@ function Board() {
                 height={"90px"}
                 squareId={squares[30]}
                 refreshSquare={refreshSquares[30]}
+                setDisplayProperty={setDisplayProperty}
               />
             </li>
             {squares
@@ -221,6 +229,7 @@ function Board() {
                     height={"90px"}
                     squareId={square}
                     refreshSquare={refreshSquares[8 - index + 21]}
+                    setDisplayProperty={setDisplayProperty}
                   />
                 </li>
               ))}
@@ -230,6 +239,7 @@ function Board() {
                 height={"90px"}
                 squareId={squares[20]}
                 refreshSquare={refreshSquares[20]}
+                setDisplayProperty={setDisplayProperty}
               />
             </li>
           </ul>
@@ -245,6 +255,7 @@ function Board() {
                     height={"70px"}
                     squareId={square}
                     refreshSquare={refreshSquares[8 - index + 31]}
+                    setDisplayProperty={setDisplayProperty}
                   />
                 </li>
               ))}
@@ -260,6 +271,8 @@ function Board() {
           takenColours={board.takenColours}
         />
       )}
+
+      {board && displayProperty && <PropertyCard setDisplayProperty={setDisplayProperty} />}
     </div>
   );
 }

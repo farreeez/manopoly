@@ -3,9 +3,17 @@ import { getProperty } from "../../services/CardActionServices";
 import { getsquare } from "../../services/BoardServices";
 import "./css/BoardSquare.css";
 
-function displayPopup() {}
+function displayPopup(setDisplayProperty) {
+  setDisplayProperty(true);
+}
 
-function BoardSquare({ width, height, squareId, refreshSquare }) {
+function BoardSquare({
+  width,
+  height,
+  squareId,
+  refreshSquare,
+  setDisplayProperty,
+}) {
   const [square, setSquare] = useState();
   const [property, setProperty] = useState();
 
@@ -19,18 +27,24 @@ function BoardSquare({ width, height, squareId, refreshSquare }) {
     <div
       className="boardSquare"
       style={{ width: width, height: height }}
-      onClick={square && square.property ? displayPopup : undefined}
+      onClick={
+        square && square.property
+          ? () => {
+              displayPopup(setDisplayProperty);
+            }
+          : undefined
+      }
     >
       {square && square.name && <span>{square.name}</span>}
       {height > width && <br></br>}
       <div>
         <br></br>
       </div>
-      {square && square.property && property && property.colour ? (
+      {square && square.property && property && property.playerColour? (
         <div
           className="boardSquareColour"
           style={{
-            backgroundColor: `rgb(${property.colour.red},${property.colour.green},${property.colour.blue})`,
+            backgroundColor: `rgb(${property.playerColour.red},${property.playerColour.green},${property.playerColour.blue})`,
           }}
         ></div>
       ) : (

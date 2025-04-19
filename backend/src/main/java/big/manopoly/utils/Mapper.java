@@ -51,10 +51,10 @@ public class Mapper {
     public static PropertyDTO toPropertyDTO(Property property) {
         Long boardId = property.getBoard() != null ? property.getBoard().getId() : null;
         Long ownerId = property.getOwner() != null ? property.getOwner().getId() : null;
-        Colour colour = property.getOwner() != null ? playerColourToColour(property.getOwner().getColour()) : null;
+        Colour playerColour = property.getOwner() != null ? playerColourToColour(property.getOwner().getColour()) : null;
 
         return new PropertyDTO(property.getId(), property.getPosition(), property.getName(), boardId,
-                property.getPrice(), property.getType(), property.isMortgaged(), ownerId, property.getName(), colour);
+                property.getPrice(), property.getType(), property.isMortgaged(), ownerId, property.getName(), playerColour);
     }
 
     public static PlayerDTO toPlayerDTO(Player player) {

@@ -9,18 +9,18 @@ public class PropertyDTO extends BoardSquareDTO {
     private Boolean mortgaged;
     private Long ownerId; // Assuming you only want the ID of the owner instead of the whole Player entity
     private String ownerName; // Owner's name (can be null if not owned)
-    private Colour colour;
+    private Colour playerColour;
     
     // Constructor
     public PropertyDTO(String id, int position, String name, Long boardId, int price, PropertyType type,
             Boolean mortgaged, Long ownerId,
-            String ownerName, Colour colour) {
+            String ownerName, Colour playerColour) {
         super(id, position, name, boardId, price, true);
         this.type = type;
         this.mortgaged = mortgaged;
         this.ownerId = ownerId;
         this.ownerName = ownerName;
-        this.colour = colour;
+        this.playerColour = playerColour;
     }
 
     // Getters and setters
@@ -56,11 +56,11 @@ public class PropertyDTO extends BoardSquareDTO {
         this.ownerName = ownerName;
     }
 
-    public void setColour(Colour colour) {
-        this.colour = colour;
+    public void setPlayerColour(Colour colour) {
+        this.playerColour = colour;
     }
 
-    public Colour getColour() {
-        return colour;
+    public Colour getPlayerColour() {
+        return playerColour;
     }
 }
