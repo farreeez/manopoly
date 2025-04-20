@@ -6,12 +6,14 @@ import big.manopoly.dtos.PlayerDTO;
 import big.manopoly.dtos.PropertyDTO;
 import big.manopoly.models.Board;
 import big.manopoly.models.BoardSquare;
+import big.manopoly.models.City;
 import big.manopoly.models.Colour;
 import big.manopoly.models.Player;
 import big.manopoly.models.Property;
 import java.util.stream.Collectors;
 
 import org.hibernate.Hibernate;
+import org.hibernate.proxy.HibernateProxy;
 
 public class Mapper {
     public static BoardDTO toBoardDTO(Board board, boolean rollDiceAction, int lastBoughtPosition) {
@@ -49,12 +51,20 @@ public class Mapper {
     }
 
     public static PropertyDTO toPropertyDTO(Property property) {
+        if (property instanceof HibernateProxy) {
+            property = (Property) ((HibernateProxy) property).getHibernateLazyInitializer().getImplementation();
+        }
+
         Long boardId = property.getBoard() != null ? property.getBoard().getId() : null;
         Long ownerId = property.getOwner() != null ? property.getOwner().getId() : null;
-        Colour playerColour = property.getOwner() != null ? playerColourToColour(property.getOwner().getColour()) : null;
+        Colour playerColour = property.getOwner() != null ? playerColourToColour(property.getOwner().getColour())
+                : null;
+        int houseCost = property instanceof City ? ((City) property).getHouseCost() : 0;
 
         return new PropertyDTO(property.getId(), property.getPosition(), property.getName(), boardId,
-                property.getPrice(), property.getType(), property.isMortgaged(), ownerId, property.getName(), playerColour, property.getPossibleRents());
+                property.getPrice(), property.getType(), property.isMortgaged(), ownerId, property.getName(),
+                playerColour, property.getPossibleRents(), property.getMortgagePayout(), property.getMortgageCost(),
+                houseCost);
     }
 
     public static PlayerDTO toPlayerDTO(Player player) {

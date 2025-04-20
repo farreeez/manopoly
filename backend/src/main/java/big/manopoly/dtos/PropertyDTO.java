@@ -14,11 +14,15 @@ public class PropertyDTO extends BoardSquareDTO {
     private String ownerName; // Owner's name (can be null if not owned)
     private Colour playerColour;
     private List<RentDisplay> rentList;
+    private int mortgagePayout;
+    private int mortgageRepayment;
+    private int houseCost;
 
     // Constructor
     public PropertyDTO(String id, int position, String name, Long boardId, int price, PropertyType type,
             Boolean mortgaged, Long ownerId,
-            String ownerName, Colour playerColour, List<RentDisplay> rentList) {
+            String ownerName, Colour playerColour, List<RentDisplay> rentList, int mortgagePayout,
+            int mortgageRepayment, int houseCost) {
         super(id, position, name, boardId, price, true);
         this.type = type;
         this.mortgaged = mortgaged;
@@ -26,9 +30,36 @@ public class PropertyDTO extends BoardSquareDTO {
         this.ownerName = ownerName;
         this.playerColour = playerColour;
         this.rentList = rentList;
+        this.mortgagePayout = mortgagePayout;
+        this.mortgageRepayment = mortgageRepayment;
+        this.houseCost = houseCost;
     }
 
     // Getters and setters
+    public int getHouseCost() {
+        return houseCost;
+    }
+
+    public void setHouseCost(int houseCost) {
+        this.houseCost = houseCost;
+    }
+
+    public int getMortgageRepayment() {
+        return mortgageRepayment;
+    }
+
+    public void setMortgageRepayment(int mortgageRepayment) {
+        this.mortgageRepayment = mortgageRepayment;
+    }
+
+    public int getMortgagePayout() {
+        return mortgagePayout;
+    }
+
+    public void setMortgagePayout(int mortgagePayout) {
+        this.mortgagePayout = mortgagePayout;
+    }
+
     public List<RentDisplay> getRentList() {
         return rentList;
     }

@@ -17,7 +17,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.ManyToOne;
-;
 
 // all entity types are put into a single table and dtype is used to see the
 // type
@@ -40,7 +39,6 @@ public abstract class Property extends BoardSquare {
     }
 
     @JsonCreator
-    //TODO include @JsonProperty("board") Board board,
     public Property(@JsonProperty("board") Board board ,@JsonProperty("position") int position, @JsonProperty("type") PropertyType type, @JsonProperty("name") String name) {
         super(board, position, name);
         this.type = type;
@@ -49,7 +47,6 @@ public abstract class Property extends BoardSquare {
     }
 
     // getters with setters.
-
     public boolean isMortgaged() {
         return mortgaged;
     }
