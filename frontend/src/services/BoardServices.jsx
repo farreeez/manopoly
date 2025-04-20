@@ -61,6 +61,7 @@ export function getBoard(player, setSquares, setBoard) {
       return response.json();
     })
     .then((data) => {
+      console.log(data.squareIds)
       setSquares(data.squareIds);
       setBoard(data);
       updatePositions(data.playerIds);

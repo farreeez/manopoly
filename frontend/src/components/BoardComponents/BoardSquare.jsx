@@ -4,8 +4,6 @@ import { getsquare } from "../../services/BoardServices";
 import "./css/BoardSquare.css";
 import { BoardContext } from "../../context/BoardContextProvider";
 
-function displayPopup(setDisplayProperty) {}
-
 function BoardSquare({
   width,
   height,

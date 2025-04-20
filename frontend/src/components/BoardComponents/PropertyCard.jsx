@@ -43,6 +43,24 @@ export default function PropertyCard({ setDisplayProperty, property }) {
               </li>
             ))}
 
+            {modalProperty.houseCost > 0 && (
+              <div className="houses-indicator">
+                {[...Array(4)].map((_, i) => (
+                  <div
+                    key={i}
+                    className={`house ${
+                      i < modalProperty.houses ? "active" : ""
+                    }`}
+                  ></div>
+                ))}
+                <div
+                  className={`house ${
+                    modalProperty.houses === 5 ? "hotel" : ""
+                  }`}
+                ></div>
+              </div>
+            )}
+
             <li key="price" className="rent-price">
               <span className="rent-text">Property Price</span>
               <span className="rent-val">${modalProperty.price}</span>
@@ -53,14 +71,14 @@ export default function PropertyCard({ setDisplayProperty, property }) {
                 <span className="rent-text">
                   Mortgage for ${modalProperty.mortgagePayout}.
                 </span>
-                <button className="rent-val">Mortgage Property</button>
+                <button className="button">Mortgage Property</button>
               </li>
             ) : (
               <li key="unmortgage" className="rent-price">
                 <span className="rent-text">
                   Unmortgage for ${modalProperty.mortgageRepayment}.
                 </span>
-                <button className="rent-val">Unmortgage Property</button>
+                <button className="button">Unmortgage Property</button>
               </li>
             )}
 
@@ -69,7 +87,7 @@ export default function PropertyCard({ setDisplayProperty, property }) {
                 <span className="rent-text">
                   Buy House for ${modalProperty.houseCost}.
                 </span>
-                <button className="rent-val">Buy House</button>
+                <button className="button">Buy House</button>
               </li>
             )}
 
@@ -78,7 +96,7 @@ export default function PropertyCard({ setDisplayProperty, property }) {
                 <span className="rent-text">
                   Sell House for ${modalProperty.houseCost / 2}.
                 </span>
-                <button className="rent-val">Sell House</button>
+                <button className="button">Sell House</button>
               </li>
             )}
           </ul>

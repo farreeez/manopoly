@@ -1,3 +1,6 @@
+/* PropertyCard.css - Enhanced Monopoly styling */
+
+/* Modal backdrop styling */
 .property-modal,
 .property-overlay {
   width: 100vw;
@@ -11,10 +14,11 @@
 }
 
 .property-overlay {
-  background: rgba(44, 62, 80, 0.3);
-  backdrop-filter: blur(1px);
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
 }
 
+/* Modal content styling */
 .property-modal-content {
   display: flex;
   flex-direction: column;
@@ -23,46 +27,162 @@
   left: 50%;
   transform: translate(-50%, -50%);
   background: white;
-  box-shadow: var(--box-shadow); /* Consistent shadow */
-  width: 600px; 
-  height: 700px; 
-  padding: 0px 0px;
-  border-width: 0px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  width: 380px;
+  max-height: 85vh;
+  border-radius: 12px;
   overflow: hidden;
+  font-family: "Arial", sans-serif;
 }
 
+/* Close button styling */
 .close-button {
   position: absolute;
-  right: 8px;
-  top: 8px;
+  right: 10px;
+  top: 10px;
   color: white;
-  background: transparent;
-  border-color: transparent;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  z-index: 10;
 }
 
 .close-button:hover {
-  color: #e5e7eb;
+  background: rgba(255, 255, 255, 0.3);
 }
 
+/* Property title/color bar */
 .propertyColour {
-  background-color: black;
   width: 100%;
-  height: 15%; 
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  background-color: black;
+  font-weight: bold;
+  font-size: 1.4rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
 }
 
+/* Rent list styling */
 .rent-list {
   list-style: none;
-  padding: 0;
+  padding: 10px 0;
   margin: 0;
+  overflow-y: auto;
 }
 
 .rent-price {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 30px;
+  padding: 12px 20px;
+  border-bottom: 1px solid #f0f0f0;
+  color: #333;
+  transition: background-color 0.2s;
 }
 
-.rent-price {
-  color: black;
+.rent-price:last-child {
+  border-bottom: none;
+}
+
+.rent-price:hover {
+  background-color: #f9f9f9;
+}
+
+.rent-text {
+  font-weight: 500;
+}
+
+.rent-val {
+  font-weight: bold;
+}
+
+/* Button styling */
+.rent-val button {
+  background-color: #ff0000;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+/* Different button colors for different actions */
+.rent-price:nth-last-child(3) button {
+  background-color: #d32f2f; /* Mortgage - Red */
+}
+
+.rent-price:nth-last-child(3) button:hover {
+  background-color: #b71c1c;
+}
+
+.rent-price:nth-last-child(2) button {
+  background-color: #1976d2; /* Buy House - Blue */
+}
+
+.rent-price:nth-last-child(2) button:hover {
+  background-color: #0d47a1;
+}
+
+.rent-price:last-child button {
+  background-color: #ff9800; /* Sell House - Orange */
+}
+
+.rent-price:last-child button:hover {
+  background-color: #ef6c00;
+}
+
+/* For the unmortgage button - Green */
+.rent-price button.unmortgage-button {
+  background-color: #388e3c;
+}
+
+.rent-price button.unmortgage-button:hover {
+  background-color: #2e7d32;
+}
+
+/* Button hover and active states */
+.rent-val button:hover {
+  transform: translateY(-1px);
+}
+
+.rent-val button:active {
+  transform: translateY(1px);
+}
+
+/* Houses indicator (add these classes to your JSX as needed) */
+.houses-indicator {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  margin: 15px 0;
+  padding: 0 20px;
+}
+
+.house {
+  width: 25px;
+  height: 25px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+}
+
+.house.active {
+  background-color: #4caf50; /* Green for houses */
+}
+
+.house.hotel {
+  background-color: #f44336; /* Red for hotel */
 }

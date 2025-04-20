@@ -46,7 +46,7 @@ public class Mapper {
 
         boolean isProperty = boardSquare instanceof Property;
 
-        return new BoardSquareDTO(boardSquare.getId(), boardSquare.getPosition(), boardSquare.getName(),
+        return new BoardSquareDTO(boardSquare.getId(), boardSquare.getPosition(), boardSquare.getName().replace("_", " "),
                 boardId, boardSquare.getPrice(), isProperty);
     }
 
@@ -57,12 +57,13 @@ public class Mapper {
 
         Long boardId = property.getBoard() != null ? property.getBoard().getId() : null;
         Long ownerId = property.getOwner() != null ? property.getOwner().getId() : null;
+        String ownerName = property.getOwner() != null ? property.getOwner().getName() : null;
         Colour playerColour = property.getOwner() != null ? playerColourToColour(property.getOwner().getColour())
                 : null;
         int houseCost = property instanceof City ? ((City) property).getHouseCost() : 0;
 
-        return new PropertyDTO(property.getId(), property.getPosition(), property.getName(), boardId,
-                property.getPrice(), property.getType(), property.isMortgaged(), ownerId, property.getName(),
+        return new PropertyDTO(property.getId(), property.getPosition(), property.getName().replace("_", " "), boardId,
+                property.getPrice(), property.getType(), property.isMortgaged(), ownerId, ownerName,
                 playerColour, property.getPossibleRents(), property.getMortgagePayout(), property.getMortgageCost(),
                 houseCost);
     }

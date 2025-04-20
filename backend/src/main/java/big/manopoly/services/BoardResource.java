@@ -113,8 +113,10 @@ public class BoardResource {
         BoardSquare square;
 
         try {
+            System.out.println(id);
             square = boardSqRepository.getReferenceById(id);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.notFound().build();
         }
 

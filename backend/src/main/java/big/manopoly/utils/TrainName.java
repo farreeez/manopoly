@@ -1,10 +1,10 @@
 package big.manopoly.utils;
 
 public enum TrainName {
-    TRAIN1(),
-    TRAIN2(),
-    TRAIN3(),
-    TRAIN4();
+    Berlin_Hauptbahnhof(),
+    Tokyo_Station(),
+    Grand_Central_Terminal(),
+    Gare_du_Nord();
 
     public final int propertyPrice;
 
