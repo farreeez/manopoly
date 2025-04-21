@@ -34,7 +34,7 @@ Manopoly is a web-based multiplayer implementation of the Monopoly board game. I
 
 ### Prerequisites
 - Node.js and npm
-- Java Development Kit (JDK) 11 or higher
+- Java Development Kit (JDK) 17 or higher
 - Maven
 
 ### Frontend Setup
