@@ -4,14 +4,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Service;
 
 import big.manopoly.data.BoardRepository;
 import big.manopoly.data.BoardSquareRepository;
@@ -28,36 +21,27 @@ import big.manopoly.utils.TileActions;
 import jakarta.servlet.AsyncContext;
 import jakarta.servlet.http.HttpServletRequest;
 
-@RestController
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
-@RequestMapping("/board")
-public class BoardResource {
-
+@Service
+public class BoardService {
     private final BoardRepository boardRepository;
     private final PlayerRepository playerRepository;
     private final BoardSquareRepository boardSqRepository;
 
     @Autowired
-    public BoardResource(BoardRepository boardRepository, PlayerRepository playerRepository,
+    public BoardService(BoardRepository boardRepository, PlayerRepository playerRepository,
             BoardSquareRepository boardSquareRepository) {
         this.boardRepository = boardRepository;
         this.playerRepository = playerRepository;
         this.boardSqRepository = boardSquareRepository;
     }
 
-    @PostMapping("/createBoard")
-    public ResponseEntity<?> createBoard(@CookieValue(value = "playerId", defaultValue = "") String cookie) {
-        if (cookie.isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
-
+    public ResponseEntity<?> createBoard(String cookie) {
         Board board = new Board();
 
         return BoardServicesUtility.addPlayerFromCookie(cookie, board, playerRepository, boardRepository);
     }
 
-    @GetMapping("/getBoard/{id}")
-    public ResponseEntity<?> getBoard(@PathVariable Long id) {
+    public ResponseEntity<?> getBoard(Long id) {
         Optional<Board> optionalBoard = boardRepository.findById(id);
 
         if (!optionalBoard.isPresent()) {
@@ -71,13 +55,7 @@ public class BoardResource {
         return ResponseEntity.ok().body(boardDTO);
     }
 
-    @PostMapping("/joinBoard/{id}")
-    public ResponseEntity<?> joinBoard(@CookieValue(value = "playerId", defaultValue = "") String cookie,
-            @PathVariable Long id) {
-        if (cookie.isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
-
+    public ResponseEntity<?> joinBoard(String cookie, Long id) {
         Board board;
         try {
             board = boardRepository.getReferenceById(id);
@@ -88,12 +66,7 @@ public class BoardResource {
         return BoardServicesUtility.addPlayerFromCookie(cookie, board, playerRepository, boardRepository);
     }
 
-    @DeleteMapping("/leaveBoard")
-    public ResponseEntity<?> leaveBoard(@CookieValue(value = "playerId", defaultValue = "") String cookie) {
-        if (cookie.isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
-
+    public ResponseEntity<?> leaveBoard(String cookie) {
         Player player;
 
         try {
@@ -108,12 +81,10 @@ public class BoardResource {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/getBoardSquare/{id}")
-    public ResponseEntity<?> getBoardSquare(@PathVariable String id) {
+    public ResponseEntity<?> getBoardSquare(String id) {
         BoardSquare square;
 
         try {
-            System.out.println(id);
             square = boardSqRepository.getReferenceById(id);
         } catch (Exception e) {
             e.printStackTrace();
@@ -125,29 +96,18 @@ public class BoardResource {
         return ResponseEntity.ok().body(squareDTO);
     }
 
-    @GetMapping("/subscribeToBoard/{id}")
-    public void subscribeToBoard(
-            @PathVariable Long id, HttpServletRequest request) {
-
-        System.out.println("subscribed");
+    public void subscribeToBoard(Long id, HttpServletRequest request) {
         AsyncContext sub = request.startAsync();
         sub.setTimeout(1800000);
         BoardSubscriptionManager.instance().addSubscription(id, sub);
     }
 
-    @GetMapping("/processSubs/{id}")
-    public ResponseEntity<?> processSubs(@PathVariable Long id) {
+    public ResponseEntity<?> processSubs(Long id) {
         BoardSubscriptionManager.instance().processSubsFor(id, boardRepository, false, -1);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/chooseColour/{colourId}")
-    public ResponseEntity<?> chooseColour(@CookieValue(value = "playerId", defaultValue = "") String cookie,
-            @PathVariable int colourId) {
-        if (cookie.isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
-
+    public ResponseEntity<?> chooseColour(String cookie, int colourId) {
         Player player;
 
         try {
@@ -160,16 +120,11 @@ public class BoardResource {
         return player.setColour(colourId, boardRepository, playerRepository);
     }
 
-    @PostMapping("/rollDice")
-    public ResponseEntity<?> rollDice(@CookieValue(value = "playerId", defaultValue = "") String cookie) throws Exception {
-        if (cookie.isEmpty()) {
-            return ResponseEntity.badRequest().body("player cookie is empty.");
-        }
-
+    public ResponseEntity<?> rollDice(String playerIdCookie) throws Exception {
         Player player;
 
         try {
-            Long playerId = Long.valueOf(cookie);
+            Long playerId = Long.valueOf(playerIdCookie);
             player = playerRepository.getReferenceById(playerId);
         } catch (NumberFormatException e) {
             return ResponseEntity.badRequest().body("Invalid playerId cookie value");
@@ -190,24 +145,17 @@ public class BoardResource {
         }
 
         int[] diceRolls = board.movePlayer();
-
         TileActionDTO action = TileActions.conductTileAction(player, board, diceRolls);
-
         board.saveBoard(boardRepository, true);
 
         return ResponseEntity.ok().body(action);
     }
 
-    @PostMapping("/endTurn")
-    public ResponseEntity<?> endTurn(@CookieValue(value = "playerId", defaultValue = "") String cookie) {
-        if (cookie.isEmpty()) {
-            return ResponseEntity.badRequest().body("player cookie is empty.");
-        }
-
+    public ResponseEntity<?> endTurn(String playerIdCookie) {
         Player player;
 
         try {
-            Long playerId = Long.valueOf(cookie);
+            Long playerId = Long.valueOf(playerIdCookie);
             player = playerRepository.getReferenceById(playerId);
         } catch (NumberFormatException e) {
             return ResponseEntity.badRequest().body("Invalid playerId cookie value");
@@ -228,7 +176,6 @@ public class BoardResource {
         }
 
         board.saveBoard(boardRepository, false);
-
         return ResponseEntity.ok().build();
     }
 }

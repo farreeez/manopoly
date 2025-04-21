@@ -1,12 +1,12 @@
 package big.manopoly;
 
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import big.manopoly.data.PlayerRepository;
 import big.manopoly.data.BoardRepository;
+import big.manopoly.data.PlayerRepository;
 
 @SpringBootApplication
 public class ManopolyApplication {
