@@ -2,37 +2,38 @@ import { useEffect, useContext } from "react";
 import { BoardContext } from "../../context/BoardContextProvider";
 import "./css/PropertyCard.css";
 import { X } from "lucide-react";
+import { AppContext } from "../../context/AppContextProvider";
 
-export default function PropertyCard({ setDisplayProperty, property }) {
-  const { modalProperty, setModalProperty } = useContext(BoardContext);
+export default function PropertyCard({ setDisplayProperty }) {
+  const { modalProperty } = useContext(BoardContext);
+  const { player } = useContext(AppContext);
+
+  // Check if player owns the property
+  const isOwner = modalProperty.ownerId && modalProperty.ownerId === player.id;
 
   useEffect(() => {
-    console.log(modalProperty);
-    console.log(modalProperty.houseCost);
-  }, [modalProperty]);
+    console.log("Modal Property:", modalProperty);
+    console.log("House Cost:", modalProperty.houseCost);
+    console.log("Player:", player);
+  }, [modalProperty, player]);
 
   return (
     <div className="property-modal">
       <div
         className="property-overlay"
-        onClick={() => {
-          setDisplayProperty(false);
-        }}
+        onClick={() => setDisplayProperty(false)}
       >
         <div
           className="property-modal-content"
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
+          onClick={(e) => e.stopPropagation()}
         >
           <button
-            onClick={() => {
-              setDisplayProperty(false);
-            }}
+            onClick={() => setDisplayProperty(false)}
             className="close-button"
           >
             <X size={24} />
           </button>
+
           <div className="propertyColour">{modalProperty.name}</div>
 
           <ul className="rent-list">
@@ -71,14 +72,21 @@ export default function PropertyCard({ setDisplayProperty, property }) {
                 <span className="rent-text">
                   Mortgage for ${modalProperty.mortgagePayout}.
                 </span>
-                <button className="button">Mortgage Property</button>
+                <button className="button" disabled={!isOwner}>
+                  Mortgage Property
+                </button>
               </li>
             ) : (
               <li key="unmortgage" className="rent-price">
                 <span className="rent-text">
                   Unmortgage for ${modalProperty.mortgageRepayment}.
                 </span>
-                <button className="button">Unmortgage Property</button>
+                <button
+                  className="button unmortgage-button"
+                  disabled={!isOwner}
+                >
+                  Unmortgage Property
+                </button>
               </li>
             )}
 
@@ -87,7 +95,9 @@ export default function PropertyCard({ setDisplayProperty, property }) {
                 <span className="rent-text">
                   Buy House for ${modalProperty.houseCost}.
                 </span>
-                <button className="button">Buy House</button>
+                <button className="button" disabled={!isOwner}>
+                  Buy House
+                </button>
               </li>
             )}
 
@@ -96,7 +106,12 @@ export default function PropertyCard({ setDisplayProperty, property }) {
                 <span className="rent-text">
                   Sell House for ${modalProperty.houseCost / 2}.
                 </span>
-                <button className="button">Sell House</button>
+                <button
+                  className="button"
+                  disabled={!isOwner || modalProperty.houses === 0}
+                >
+                  Sell House
+                </button>
               </li>
             )}
           </ul>

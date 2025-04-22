@@ -61,11 +61,20 @@ public class Mapper {
         Colour playerColour = property.getOwner() != null ? playerColourToColour(property.getOwner().getColour())
                 : null;
         int houseCost = property instanceof City ? ((City) property).getHouseCost() : 0;
+        int houses = property instanceof City ? ((City) property).getHouses() : 0;
+
+        boolean setOwned = false;
+        if(property.getOwner() != null && property instanceof City) {
+            Player owner = property.getOwner();
+
+            City city = (City) property;
+            setOwned = owner.doesOwnSet(city.getType());
+        }
 
         return new PropertyDTO(property.getId(), property.getPosition(), property.getName().replace("_", " "), boardId,
                 property.getPrice(), property.getType(), property.isMortgaged(), ownerId, ownerName,
                 playerColour, property.getPossibleRents(), property.getMortgagePayout(), property.getMortgageCost(),
-                houseCost);
+                houseCost, houses, setOwned);
     }
 
     public static PlayerDTO toPlayerDTO(Player player) {

@@ -1,5 +1,4 @@
 /* PropertyCard.css - Enhanced Monopoly styling */
-
 /* Modal backdrop styling */
 .property-modal,
 .property-overlay {
@@ -108,62 +107,51 @@
   font-weight: bold;
 }
 
-/* Button styling */
-.rent-val button {
-  background-color: #ff0000;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.2s, transform 0.1s;
+/* Disabled state for all buttons - this is important to override global styles */
+button:disabled,
+.button:disabled {
+  background-color: #cccccc !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+  box-shadow: none !important;
+  opacity: 0.7;
 }
 
 /* Different button colors for different actions */
-.rent-price:nth-last-child(3) button {
+.rent-price:nth-last-child(3) .button {
   background-color: #d32f2f; /* Mortgage - Red */
 }
 
-.rent-price:nth-last-child(3) button:hover {
+.rent-price:nth-last-child(3) .button:hover:not(:disabled) {
   background-color: #b71c1c;
 }
 
-.rent-price:nth-last-child(2) button {
+.rent-price:nth-last-child(2) .button {
   background-color: #1976d2; /* Buy House - Blue */
 }
 
-.rent-price:nth-last-child(2) button:hover {
+.rent-price:nth-last-child(2) .button:hover:not(:disabled) {
   background-color: #0d47a1;
 }
 
-.rent-price:last-child button {
+.rent-price:last-child .button {
   background-color: #ff9800; /* Sell House - Orange */
 }
 
-.rent-price:last-child button:hover {
+.rent-price:last-child .button:hover:not(:disabled) {
   background-color: #ef6c00;
 }
 
 /* For the unmortgage button - Green */
-.rent-price button.unmortgage-button {
+.button.unmortgage-button {
   background-color: #388e3c;
 }
 
-.rent-price button.unmortgage-button:hover {
+.button.unmortgage-button:hover:not(:disabled) {
   background-color: #2e7d32;
 }
 
-/* Button hover and active states */
-.rent-val button:hover {
-  transform: translateY(-1px);
-}
-
-.rent-val button:active {
-  transform: translateY(1px);
-}
-
-/* Houses indicator (add these classes to your JSX as needed) */
+/* Houses indicator */
 .houses-indicator {
   display: flex;
   justify-content: center;

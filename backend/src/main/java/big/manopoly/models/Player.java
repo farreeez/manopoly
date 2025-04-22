@@ -1,14 +1,21 @@
 package big.manopoly.models;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.springframework.http.ResponseEntity;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import big.manopoly.data.BoardRepository;
 import big.manopoly.data.PlayerRepository;
 import big.manopoly.services.BoardSubscriptionManager;
 import big.manopoly.utils.Mapper;
 import big.manopoly.utils.PlayerColour;
 import big.manopoly.utils.PropertyType;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -19,8 +26,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import java.util.*;
-import org.springframework.http.ResponseEntity;
 
 @Entity
 public class Player {
@@ -56,10 +61,10 @@ public class Player {
         this.position = new Position();
     }
 
-    public boolean doesOwnSet(PropertyType colour) {
-        List<Property> citySet = getSet(colour);
+    public boolean doesOwnSet(PropertyType propertyType) {
+        List<Property> citySet = getSet(propertyType);
 
-        return citySet.size() == colour.propertyCount;
+        return citySet.size() == propertyType.propertyCount;
     }
 
     public List<Property> getSet(PropertyType type) {
