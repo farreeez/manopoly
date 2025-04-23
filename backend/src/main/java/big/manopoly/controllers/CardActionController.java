@@ -36,4 +36,15 @@ public class CardActionController {
     public ResponseEntity<?> getProperty(@PathVariable String id) {
         return cardActionService.getProperty(id);
     }
+
+
+    @PostMapping("/mortgageProperty/{propertyId}")
+    public ResponseEntity<?> mortgageProperty(@CookieValue(value = "playerId", defaultValue = "") String cookie, @PathVariable String propertyId) {
+        if (cookie.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+        System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+
+        return cardActionService.mortgageProperty(propertyId, cookie);
+    }
 }

@@ -3,9 +3,10 @@ import { BoardContext } from "../../context/BoardContextProvider";
 import "./css/PropertyCard.css";
 import { X } from "lucide-react";
 import { AppContext } from "../../context/AppContextProvider";
+import { mortgageProperty } from "../../services/CardActionServices";
 
-function mortgageProperty() {
-
+function applyMortgage(propertyId) {
+  mortgageProperty(propertyId);
 }
 
 export default function PropertyCard({ setDisplayProperty }) {
@@ -77,7 +78,7 @@ export default function PropertyCard({ setDisplayProperty }) {
                   Mortgage for ${modalProperty.mortgagePayout}.
                 </span>
                 <button className="button" disabled={!isOwner && !modalProperty.houseBuiltOnSet} onClick={() => {
-                  mortgageProperty();
+                  applyMortgage(modalProperty.id);
                 }}>
                   Mortgage Property
                 </button>

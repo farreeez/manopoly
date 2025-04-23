@@ -229,4 +229,8 @@ public class Player {
         money -= price;
     }
 
+    public void addMoney(int price) {
+        money += price;
+    }
+
 }
