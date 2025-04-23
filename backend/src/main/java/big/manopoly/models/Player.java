@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.hibernate.Hibernate;
 import org.springframework.http.ResponseEntity;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -49,7 +50,7 @@ public class Player {
 
     private Integer money;
 
-    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.PERSIST)
     private Set<Property> properties = new HashSet<>();
 
     private Boolean free;
@@ -71,7 +72,9 @@ public class Player {
         List<Property> cityList = getList(propertyType);
 
         for (int i = 0; i < cityList.size(); i++) {
-            City city = (City) cityList.get(i);
+            Property property = (Property) Hibernate.unproxy(cityList.get(i));
+
+            City city = (City) property;
 
             if(city.getHouses() > 0) {
                 return true;

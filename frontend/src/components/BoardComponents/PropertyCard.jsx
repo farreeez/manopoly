@@ -101,7 +101,7 @@ export default function PropertyCard({ setDisplayProperty }) {
                 <span className="rent-text">
                   Buy House for ${modalProperty.houseCost}.
                 </span>
-                <button className="button" disabled={!isOwner}>
+                <button className="button" disabled={!isOwner || !modalProperty.setOwned}>
                   Buy House
                 </button>
               </li>
