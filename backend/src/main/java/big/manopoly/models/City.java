@@ -98,7 +98,7 @@ public class City extends Property {
 
         houses++;
 
-        List<Property> citySet = owner.getSet(this.type);
+        List<Property> citySet = owner.getList(this.type);
 
         for (Property property : citySet) {
             City city = (City) property;

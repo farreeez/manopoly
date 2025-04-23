@@ -21,6 +21,7 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -35,6 +36,7 @@ public class Player {
 
     private String name;
 
+    
     @Enumerated(EnumType.STRING)
     private PlayerColour colour;
 
@@ -47,7 +49,7 @@ public class Player {
 
     private Integer money;
 
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private Set<Property> properties = new HashSet<>();
 
     private Boolean free;
@@ -61,13 +63,31 @@ public class Player {
         this.position = new Position();
     }
 
+    public boolean isHouseBuiltOnSet(PropertyType propertyType) {
+        if (!doesOwnSet(propertyType)) {
+            return false;
+        }
+
+        List<Property> cityList = getList(propertyType);
+
+        for (int i = 0; i < cityList.size(); i++) {
+            City city = (City) cityList.get(i);
+
+            if(city.getHouses() > 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public boolean doesOwnSet(PropertyType propertyType) {
-        List<Property> citySet = getSet(propertyType);
+        List<Property> citySet = getList(propertyType);
 
         return citySet.size() == propertyType.propertyCount;
     }
 
-    public List<Property> getSet(PropertyType type) {
+    public List<Property> getList(PropertyType type) {
         List<Property> set = properties.stream().filter(p -> {
             return p.getType() == type;
         }).toList();
@@ -75,8 +95,9 @@ public class Player {
         return set;
     }
 
-    public ResponseEntity<?> setColour(int colourId, BoardRepository boardRepository, PlayerRepository playerRepository) {
-        if(board == null) {
+    public ResponseEntity<?> setColour(int colourId, BoardRepository boardRepository,
+            PlayerRepository playerRepository) {
+        if (board == null) {
             return ResponseEntity.badRequest().body("This player is not in a board and thus cannot take a colour");
         }
 
@@ -88,11 +109,11 @@ public class Player {
             return ResponseEntity.badRequest().body("invalid colour id.");
         }
 
-        if(board.getTakenColours().contains(colour)) {
+        if (board.getTakenColours().contains(colour)) {
             return ResponseEntity.badRequest().body("Colour is already taken.");
         }
 
-        if(this.colour != null) {
+        if (this.colour != null) {
             return ResponseEntity.badRequest().body("This player already has a colour");
         }
 
@@ -121,7 +142,7 @@ public class Player {
     }
 
     public Long getBoardId() {
-        if(board == null) {
+        if (board == null) {
             return Long.valueOf(-1);
         } else {
             return board.getId();
@@ -142,7 +163,7 @@ public class Player {
 
     @JsonIgnore
     public BoardSquare getCurrentBoardSquare() throws Exception {
-        if(board == null) {
+        if (board == null) {
             Exception e = new Exception("player is trying to access its current board square without being on a board");
             e.printStackTrace();
             throw e;
@@ -198,7 +219,9 @@ public class Player {
         this.position = new Position();
     }
 
-    // this does not handle the money being lower than the price to account for a scenario where the balance goes negative (player owes rent to another player).
+    // this does not handle the money being lower than the price to account for a
+    // scenario where the balance goes negative (player owes rent to another
+    // player).
     public void pay(int price) {
         money -= price;
     }

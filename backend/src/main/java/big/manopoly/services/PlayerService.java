@@ -20,25 +20,25 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Service
 public class PlayerService {
-    
+
     private final PlayerRepository repository;
-    
+
     @Autowired
     public PlayerService(PlayerRepository repository) {
         this.repository = repository;
     }
-    
+
     public ResponseEntity<?> createPlayer(String name, HttpServletResponse response)
             throws JsonProcessingException {
         Player newPlayer = new Player();
         newPlayer.setName(name);
         newPlayer = repository.save(newPlayer);
-        
+
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .replacePath("/getPlayer/{id}")
                 .buildAndExpand(newPlayer.getId())
                 .toUri();
-        
+
         ResponseCookie cookie = ResponseCookie.from("playerId")
                 .value(newPlayer.getId().toString())
                 .maxAge(Duration.ofMinutes(360))
@@ -46,12 +46,12 @@ public class PlayerService {
                 .secure(true)
                 .path("/")
                 .build();
-        
+
         return ResponseEntity.created(location)
                 .header("Set-Cookie", cookie.toString())
                 .body(newPlayer);
     }
-    
+
     public ResponseEntity<?> checkCookie(String cookie) {
         if (cookie.length() > 0) {
             try {
@@ -59,18 +59,20 @@ public class PlayerService {
                 Player player = repository.getReferenceById(id);
                 return ResponseEntity.ok().body(Mapper.toPlayerDTO(player));
             } catch (NumberFormatException e) {
+                e.printStackTrace();
                 return ResponseEntity.badRequest().body("Invalid playerId cookie format");
             } catch (Exception e) {
+                e.printStackTrace();
                 return ResponseEntity.notFound().build();
             }
         } else {
             return ResponseEntity.ok().body(cookie);
         }
     }
-    
+
     public ResponseEntity<?> getPlayer(Long id) {
         Optional<Player> optionalPlayer = repository.findById(id);
-        
+
         if (optionalPlayer.isPresent()) {
             Player player = optionalPlayer.get();
             PlayerDTO playerDTO = Mapper.toPlayerDTO(player);

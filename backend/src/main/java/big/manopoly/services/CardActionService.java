@@ -37,6 +37,7 @@ public class CardActionService {
             Long playerId = Long.valueOf(playerIdCookie);
             player = playerRepository.getReferenceById(playerId);
         } catch (NumberFormatException e) {
+            e.printStackTrace();
             return ResponseEntity.badRequest().body("Invalid playerId cookie value");
         }
         
@@ -54,6 +55,7 @@ public class CardActionService {
         try {
             PropertyUtils.buyPropertyFromBoard(player, playerRepository, boardRepository);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.badRequest().body(e.getMessage());
         }
         
@@ -61,6 +63,7 @@ public class CardActionService {
         try {
             actionDTO = TileActions.conductTileAction(player, board, board.getDiceRolls());
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.badRequest().body(e.getMessage());
         }
         
@@ -72,6 +75,7 @@ public class CardActionService {
         try {
             property = propertyRepository.getReferenceById(id);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.notFound().build();
         }
         

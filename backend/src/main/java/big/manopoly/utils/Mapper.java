@@ -10,6 +10,7 @@ import big.manopoly.models.City;
 import big.manopoly.models.Colour;
 import big.manopoly.models.Player;
 import big.manopoly.models.Property;
+
 import java.util.stream.Collectors;
 
 import org.hibernate.Hibernate;
@@ -64,17 +65,17 @@ public class Mapper {
         int houses = property instanceof City ? ((City) property).getHouses() : 0;
 
         boolean setOwned = false;
-        if(property.getOwner() != null && property instanceof City) {
-            Player owner = property.getOwner();
+        boolean houseBuiltOnSet = false;
 
-            City city = (City) property;
-            setOwned = owner.doesOwnSet(city.getType());
+        if(property.getOwner() != null) {
+            setOwned = property.getOwner().doesOwnSet(property.getType()); 
+            houseBuiltOnSet = property.getOwner().isHouseBuiltOnSet(property.getType());
         }
 
         return new PropertyDTO(property.getId(), property.getPosition(), property.getName().replace("_", " "), boardId,
                 property.getPrice(), property.getType(), property.isMortgaged(), ownerId, ownerName,
                 playerColour, property.getPossibleRents(), property.getMortgagePayout(), property.getMortgageCost(),
-                houseCost, houses, setOwned);
+                houseCost, houses, setOwned, houseBuiltOnSet);
     }
 
     public static PlayerDTO toPlayerDTO(Player player) {

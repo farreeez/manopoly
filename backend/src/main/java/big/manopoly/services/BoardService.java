@@ -60,6 +60,7 @@ public class BoardService {
         try {
             board = boardRepository.getReferenceById(id);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.notFound().build();
         }
 
@@ -73,6 +74,7 @@ public class BoardService {
             Long playerId = Long.valueOf(cookie);
             player = playerRepository.getReferenceById(playerId);
         } catch (NumberFormatException e) {
+            e.printStackTrace();
             return ResponseEntity.badRequest().body("Invalid playerId cookie value");
         }
 
@@ -114,6 +116,7 @@ public class BoardService {
             Long playerId = Long.valueOf(cookie);
             player = playerRepository.getReferenceById(playerId);
         } catch (NumberFormatException e) {
+            e.printStackTrace();
             return ResponseEntity.badRequest().body("Invalid playerId cookie value");
         }
 
@@ -127,6 +130,7 @@ public class BoardService {
             Long playerId = Long.valueOf(playerIdCookie);
             player = playerRepository.getReferenceById(playerId);
         } catch (NumberFormatException e) {
+            e.printStackTrace();
             return ResponseEntity.badRequest().body("Invalid playerId cookie value");
         }
 
@@ -158,6 +162,7 @@ public class BoardService {
             Long playerId = Long.valueOf(playerIdCookie);
             player = playerRepository.getReferenceById(playerId);
         } catch (NumberFormatException e) {
+            e.printStackTrace();
             return ResponseEntity.badRequest().body("Invalid playerId cookie value");
         }
 

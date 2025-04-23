@@ -35,7 +35,7 @@ public class Utility extends Property {
         // Implement this once the board implementation is finished
         int roll = 4;
 
-        int utilityCount = this.owner.getSet(type).size();
+        int utilityCount = this.owner.getList(type).size();
 
         UtilityName name = UtilityName.valueOf(getName());
 

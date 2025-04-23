@@ -4,6 +4,10 @@ import "./css/PropertyCard.css";
 import { X } from "lucide-react";
 import { AppContext } from "../../context/AppContextProvider";
 
+function mortgageProperty() {
+
+}
+
 export default function PropertyCard({ setDisplayProperty }) {
   const { modalProperty } = useContext(BoardContext);
   const { player } = useContext(AppContext);
@@ -72,7 +76,9 @@ export default function PropertyCard({ setDisplayProperty }) {
                 <span className="rent-text">
                   Mortgage for ${modalProperty.mortgagePayout}.
                 </span>
-                <button className="button" disabled={!isOwner}>
+                <button className="button" disabled={!isOwner && !modalProperty.houseBuiltOnSet} onClick={() => {
+                  mortgageProperty();
+                }}>
                   Mortgage Property
                 </button>
               </li>
