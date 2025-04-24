@@ -3,10 +3,14 @@ import { BoardContext } from "../../context/BoardContextProvider";
 import "./css/PropertyCard.css";
 import { X } from "lucide-react";
 import { AppContext } from "../../context/AppContextProvider";
-import { getProperty, mortgageProperty } from "../../services/CardActionServices";
+import { getProperty, mortgageProperty , demortgageProperty} from "../../services/CardActionServices";
 
 function applyMortgage(propertyId) {
   mortgageProperty(propertyId);
+}
+
+function applyDemortgage(propertyId) {
+  demortgageProperty(propertyId);
 }
 
 export default function PropertyCard({ setDisplayProperty }) {
@@ -95,6 +99,9 @@ export default function PropertyCard({ setDisplayProperty }) {
                 <button
                   className="button unmortgage-button"
                   disabled={!isOwner}
+                  onClick={() => {
+                    applyDemortgage(modalProperty.id);
+                  }}
                 >
                   Unmortgage Property
                 </button>

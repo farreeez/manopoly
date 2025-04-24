@@ -1,6 +1,5 @@
 package big.manopoly.services;
 
-import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -99,7 +98,7 @@ public class CardActionService {
 
         if (board == null) {
             return ResponseEntity.badRequest()
-                    .body("player cannot buy the property as they are not currently in a game.");
+                    .body("player cannot mortgage the property as they are not currently in a game.");
         }
 
         Property property;
@@ -129,6 +128,60 @@ public class CardActionService {
         property.setMortgaged(true);
 
         player.addMoney(property.getMortgagePayout());
+
+        playerRepository.save(player);
+        propertyRepository.save(property);
+
+        BoardSubscriptionManager.instance().processSubsFor(board.getId(), boardRepository,false, -1);
+
+        return ResponseEntity.ok().build();
+    }
+
+    public ResponseEntity<?> demortgageProperty(String propertyId, String playerIdCookie) {
+        Player player;
+
+        try {
+            Long playerId = Long.valueOf(playerIdCookie);
+            player = playerRepository.getReferenceById(playerId);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("Invalid playerId cookie value");
+        }
+
+        Board board = player.getBoard();
+
+        if (board == null) {
+            return ResponseEntity.badRequest()
+                    .body("player cannot demortgage the property as they are not currently in a game.");
+        }
+
+        Property property;
+        try {
+            property = propertyRepository.getReferenceById(propertyId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.notFound().build();
+        }
+
+        if (property.getOwner() == null || (property.getOwner() != player)) {
+            return ResponseEntity.badRequest().body("property is not owned by the player.");
+        }
+        
+        if (player.isHouseBuiltOnSet(property.getType())) {
+            return ResponseEntity.badRequest().body("cannot demortgage property as houses are built on the set.");
+        } 
+
+        if (board.getPlayerWithCurrentTurn() != player) {
+            return ResponseEntity.badRequest().body("cannot demortgage the property as it is not the player's current turn.");
+        }
+
+        if (!property.isMortgaged()) {
+            return ResponseEntity.badRequest().body("cannot demortgage property as it is not mortgaged.");
+        }
+
+        property.setMortgaged(false);
+
+        player.pay(property.getMortgageCost());
 
         playerRepository.save(player);
         propertyRepository.save(property);

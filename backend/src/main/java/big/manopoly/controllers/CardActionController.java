@@ -46,4 +46,14 @@ public class CardActionController {
 
         return cardActionService.mortgageProperty(propertyId, cookie);
     }
+
+    @PostMapping("/demortgageProperty/{propertyId}")
+    public ResponseEntity<?> demortgageProperty(@CookieValue(value = "playerId", defaultValue = "") String cookie, @PathVariable String propertyId) {
+        if (cookie.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return cardActionService.demortgageProperty(propertyId, cookie);
+    }
+    
 }

@@ -50,3 +50,17 @@ export function mortgageProperty(propertyId) {
     })
     .catch((error) => console.error(error));
 }
+
+export function demortgageProperty(propertyId) {
+  fetch(`http://localhost:8080/cardActions/demortgageProperty/${propertyId}`, {
+    method: "POST",
+    credentials: "include",
+  })
+    .then(async (response) => {
+      if (!response.ok) {
+        const message = await response.text();
+        console.error("error with demortgaging property:", message);
+      }
+    })
+    .catch((error) => console.error(error));
+}
