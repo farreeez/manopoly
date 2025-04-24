@@ -3,15 +3,15 @@ import { BoardContext } from "../../context/BoardContextProvider";
 import "./css/PropertyCard.css";
 import { X } from "lucide-react";
 import { AppContext } from "../../context/AppContextProvider";
-import { mortgageProperty } from "../../services/CardActionServices";
+import { getProperty, mortgageProperty } from "../../services/CardActionServices";
 
 function applyMortgage(propertyId) {
   mortgageProperty(propertyId);
 }
 
 export default function PropertyCard({ setDisplayProperty }) {
-  const { modalProperty } = useContext(BoardContext);
-  const { player } = useContext(AppContext);
+  const { modalProperty , setModalProperty} = useContext(BoardContext);
+  const { player , board} = useContext(AppContext);
 
   // Check if player owns the property
   const isOwner = modalProperty.ownerId && modalProperty.ownerId === player.id;
@@ -21,6 +21,10 @@ export default function PropertyCard({ setDisplayProperty }) {
     console.log("House Cost:", modalProperty.houseCost);
     console.log("Player:", player);
   }, [modalProperty, player]);
+
+  useEffect(() => {
+    getProperty(modalProperty.id, setModalProperty);
+  }, [board])
 
   return (
     <div className="property-modal">

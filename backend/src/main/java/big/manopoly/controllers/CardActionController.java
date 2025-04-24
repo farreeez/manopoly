@@ -43,7 +43,6 @@ public class CardActionController {
         if (cookie.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
-        System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
 
         return cardActionService.mortgageProperty(propertyId, cookie);
     }

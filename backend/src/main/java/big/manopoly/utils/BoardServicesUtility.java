@@ -11,6 +11,7 @@ import java.net.URI;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+// move this to service file.
 public class BoardServicesUtility {
     public static ResponseEntity<?> addPlayerFromCookie(String cookie, Board board, PlayerRepository playerRepository,
             BoardRepository boardRepository) {

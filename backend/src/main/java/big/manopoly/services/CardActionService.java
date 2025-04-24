@@ -130,8 +130,11 @@ public class CardActionService {
 
         player.addMoney(property.getMortgagePayout());
 
-        System.out.println("SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS");
-        //TODO PERSIST DATABASE
+        playerRepository.save(player);
+        propertyRepository.save(property);
+
+        BoardSubscriptionManager.instance().processSubsFor(board.getId(), boardRepository,false, -1);
+
         return ResponseEntity.ok().build();
     }
 }

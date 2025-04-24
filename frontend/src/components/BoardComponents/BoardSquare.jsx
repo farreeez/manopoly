@@ -13,7 +13,7 @@ function BoardSquare({
 }) {
   const [square, setSquare] = useState();
   const [property, setProperty] = useState();
-  const { modalProperty, setModalProperty } = useContext(BoardContext);
+  const { setModalProperty } = useContext(BoardContext);
 
   useEffect(() => {
     if (squareId) {
