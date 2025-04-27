@@ -1,5 +1,10 @@
 package big.manopoly.utils;
 
+import java.util.stream.Collectors;
+
+import org.hibernate.Hibernate;
+import org.hibernate.proxy.HibernateProxy;
+
 import big.manopoly.dtos.BoardDTO;
 import big.manopoly.dtos.BoardSquareDTO;
 import big.manopoly.dtos.PlayerDTO;
@@ -10,11 +15,6 @@ import big.manopoly.models.City;
 import big.manopoly.models.Colour;
 import big.manopoly.models.Player;
 import big.manopoly.models.Property;
-
-import java.util.stream.Collectors;
-
-import org.hibernate.Hibernate;
-import org.hibernate.proxy.HibernateProxy;
 
 public class Mapper {
     public static BoardDTO toBoardDTO(Board board, boolean rollDiceAction, int lastBoughtPosition) {
@@ -67,7 +67,7 @@ public class Mapper {
         boolean setOwned = false;
         boolean houseBuiltOnSet = false;
 
-        if(property.getOwner() != null) {
+        if(property.getOwner() != null && property instanceof City) {
             setOwned = property.getOwner().doesOwnSet(property.getType()); 
             houseBuiltOnSet = property.getOwner().isHouseBuiltOnSet(property.getType());
         }

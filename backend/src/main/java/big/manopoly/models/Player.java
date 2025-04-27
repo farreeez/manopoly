@@ -22,7 +22,6 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -85,6 +84,10 @@ public class Player {
     }
 
     public boolean doesOwnSet(PropertyType propertyType) {
+        if(propertyType.equals(PropertyType.UTILITY) || propertyType.equals(PropertyType.TRAIN)) {
+            return false;
+        }
+
         List<Property> citySet = getList(propertyType);
 
         return citySet.size() == propertyType.propertyCount;
