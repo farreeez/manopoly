@@ -10,21 +10,26 @@ import {
   checkIfSetIsMortgaged,
   doesPropertyHaveHotel,
 } from "../../services/CardActionServices";
+import { getPlayerJson } from "../../services/PlayerServices";
 
 export default function PropertyCard({ setDisplayProperty }) {
   // a boolean property used to check if any properties on the modalProperty's set have been mortgaged.
   const [ isSetMortgaged, setIsSetMortgaged ] = useState(false);
   const [ hasHotel, setHasHotel ] = useState(false);
 
+
   const { modalProperty, setModalProperty } = useContext(BoardContext);
   const { player, board } = useContext(AppContext);
 
   // Check if player owns the property
-  const isOwner = modalProperty.ownerId && modalProperty.ownerId === player.id;
+  const currentTurn = board.currentPlayerTurn.id == player.id;
+  const isOwner = modalProperty.ownerId && modalProperty.ownerId === player.id 
+  const canModifyProperty = isOwner && currentTurn;
 
   useEffect(() => {
     checkIfSetIsMortgaged(modalProperty.id, setIsSetMortgaged);
     doesPropertyHaveHotel(modalProperty.id, setHasHotel);
+    console.log(board);
   }, [modalProperty])
 
   useEffect(() => {
@@ -94,7 +99,7 @@ export default function PropertyCard({ setDisplayProperty }) {
                 </span>
                 <button
                   className="button"
-                  disabled={!isOwner && !modalProperty.houseBuiltOnSet}
+                  disabled={!canModifyProperty && !modalProperty.houseBuiltOnSet}
                   onClick={() => {
                     mortgageProperty(modalProperty.id);
                   }}
@@ -109,7 +114,7 @@ export default function PropertyCard({ setDisplayProperty }) {
                 </span>
                 <button
                   className="button unmortgage-button"
-                  disabled={!isOwner}
+                  disabled={!canModifyProperty}
                   onClick={() => {
                     demortgageProperty(modalProperty.id);
                   }}
@@ -126,7 +131,7 @@ export default function PropertyCard({ setDisplayProperty }) {
                 </span>
                 <button
                   className="button"
-                  disabled={!isOwner || !modalProperty.setOwned || isSetMortgaged || hasHotel}
+                  disabled={!canModifyProperty || !modalProperty.setOwned || isSetMortgaged || hasHotel}
                 >
                   Buy House
                 </button>
@@ -140,7 +145,7 @@ export default function PropertyCard({ setDisplayProperty }) {
                 </span>
                 <button
                   className="button"
-                  disabled={!isOwner || modalProperty.houses === 0}
+                  disabled={!canModifyProperty || modalProperty.houses === 0}
                 >
                   Sell House
                 </button>
