@@ -82,9 +82,12 @@ export function checkIfSetIsMortgaged(propertyId, setIsSetMortgaged) {
 }
 
 export function doesPropertyHaveHotel(propertyId, setHasHotel) {
-  fetch("http://localhost:8080/cardActions/doesPropertyHaveHotel/" + propertyId, {
-    method: "GET",
-  })
+  fetch(
+    "http://localhost:8080/cardActions/doesPropertyHaveHotel/" + propertyId,
+    {
+      method: "GET",
+    }
+  )
     .then((response) => {
       if (!response.ok) {
         throw new Error("Property not found.");
@@ -97,3 +100,17 @@ export function doesPropertyHaveHotel(propertyId, setHasHotel) {
     .catch((error) => console.error(error));
 }
 
+export function buyHouse(propertyId) {
+  fetch("http://localhost:8080/cardActions/buyHouse/" + propertyId, {
+    method: "POST",
+    credentials: "include",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return response.text().then(text => {
+          throw new Error(`Cannot buy house: ${text}`);
+        });
+      }
+    })
+    .catch((error) => console.error(error));
+}

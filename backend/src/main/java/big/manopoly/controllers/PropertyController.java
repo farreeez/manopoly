@@ -66,4 +66,13 @@ public class PropertyController {
         return cardActionService.doesPropertyHaveHotel(id);
     }
 
+    @PostMapping("/buyHouse/{propertyId}")
+    public ResponseEntity<?> buyHouse(@CookieValue(value = "playerId", defaultValue = "") String cookie, @PathVariable String propertyId) {
+        if (cookie.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return cardActionService.buyHouse(propertyId, cookie);
+    }
+
 }

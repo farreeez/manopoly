@@ -9,6 +9,7 @@ import {
   demortgageProperty,
   checkIfSetIsMortgaged,
   doesPropertyHaveHotel,
+  buyHouse,
 } from "../../services/CardActionServices";
 import { getPlayerJson } from "../../services/PlayerServices";
 
@@ -16,7 +17,6 @@ export default function PropertyCard({ setDisplayProperty }) {
   // a boolean property used to check if any properties on the modalProperty's set have been mortgaged.
   const [ isSetMortgaged, setIsSetMortgaged ] = useState(false);
   const [ hasHotel, setHasHotel ] = useState(false);
-
 
   const { modalProperty, setModalProperty } = useContext(BoardContext);
   const { player, board } = useContext(AppContext);
@@ -29,7 +29,6 @@ export default function PropertyCard({ setDisplayProperty }) {
   useEffect(() => {
     checkIfSetIsMortgaged(modalProperty.id, setIsSetMortgaged);
     doesPropertyHaveHotel(modalProperty.id, setHasHotel);
-    console.log(board);
   }, [modalProperty])
 
   useEffect(() => {
@@ -132,6 +131,9 @@ export default function PropertyCard({ setDisplayProperty }) {
                 <button
                   className="button"
                   disabled={!canModifyProperty || !modalProperty.setOwned || isSetMortgaged || hasHotel}
+                  onClick={() => {
+                    buyHouse(modalProperty.id);
+                  }}
                 >
                   Buy House
                 </button>
