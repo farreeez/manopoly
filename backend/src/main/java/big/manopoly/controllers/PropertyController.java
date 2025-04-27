@@ -10,17 +10,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import big.manopoly.services.CardActionService;
+import big.manopoly.services.PropertyService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RequestMapping("/cardActions")
-public class CardActionController {
+public class PropertyController {
     
-    private final CardActionService cardActionService;
+    private final PropertyService cardActionService;
     
     @Autowired
-    public CardActionController(CardActionService cardActionService) {
+    public PropertyController(PropertyService cardActionService) {
         this.cardActionService = cardActionService;
     }
     
@@ -55,5 +55,9 @@ public class CardActionController {
 
         return cardActionService.demortgageProperty(propertyId, cookie);
     }
-    
+
+    @GetMapping("/isSetMortgaged/{id}")
+    public ResponseEntity<?> isSetMortgaged(@PathVariable String id) {
+        return cardActionService.isSetMortgaged(id);
+    }
 }

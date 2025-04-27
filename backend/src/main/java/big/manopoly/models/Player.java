@@ -68,7 +68,7 @@ public class Player {
             return false;
         }
 
-        List<Property> cityList = getList(propertyType);
+        List<Property> cityList = getCityList(propertyType);
 
         for (int i = 0; i < cityList.size(); i++) {
             Property property = (Property) Hibernate.unproxy(cityList.get(i));
@@ -88,12 +88,12 @@ public class Player {
             return false;
         }
 
-        List<Property> citySet = getList(propertyType);
+        List<Property> cityList = getCityList(propertyType);
 
-        return citySet.size() == propertyType.propertyCount;
+        return cityList.size() == propertyType.propertyCount;
     }
 
-    public List<Property> getList(PropertyType type) {
+    public List<Property> getCityList(PropertyType type) {
         List<Property> set = properties.stream().filter(p -> {
             return p.getType() == type;
         }).toList();

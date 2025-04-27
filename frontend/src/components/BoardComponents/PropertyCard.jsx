@@ -1,9 +1,14 @@
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
 import { BoardContext } from "../../context/BoardContextProvider";
 import "./css/PropertyCard.css";
 import { X } from "lucide-react";
 import { AppContext } from "../../context/AppContextProvider";
-import { getProperty, mortgageProperty , demortgageProperty} from "../../services/CardActionServices";
+import {
+  getProperty,
+  mortgageProperty,
+  demortgageProperty,
+  checkIfSetIsMortgaged,
+} from "../../services/CardActionServices";
 
 function applyMortgage(propertyId) {
   mortgageProperty(propertyId);
@@ -14,11 +19,18 @@ function applyDemortgage(propertyId) {
 }
 
 export default function PropertyCard({ setDisplayProperty }) {
-  const { modalProperty , setModalProperty} = useContext(BoardContext);
-  const { player , board} = useContext(AppContext);
+  // a boolean property used to check if any properties on the modalProperty's set have been mortgaged.
+  const { isSetMortgaged, setIsSetMortgaged } = useState(false);
+
+  const { modalProperty, setModalProperty } = useContext(BoardContext);
+  const { player, board } = useContext(AppContext);
 
   // Check if player owns the property
   const isOwner = modalProperty.ownerId && modalProperty.ownerId === player.id;
+
+  useEffect(() => {
+    checkIfSetIsMortgaged(modalProperty.id, setIsSetMortgaged);
+  }, [modalProperty])
 
   useEffect(() => {
     console.log("Modal Property:", modalProperty);
@@ -28,7 +40,7 @@ export default function PropertyCard({ setDisplayProperty }) {
 
   useEffect(() => {
     getProperty(modalProperty.id, setModalProperty);
-  }, [board])
+  }, [board]);
 
   return (
     <div className="property-modal">
@@ -85,9 +97,13 @@ export default function PropertyCard({ setDisplayProperty }) {
                 <span className="rent-text">
                   Mortgage for ${modalProperty.mortgagePayout}.
                 </span>
-                <button className="button" disabled={!isOwner && !modalProperty.houseBuiltOnSet} onClick={() => {
-                  applyMortgage(modalProperty.id);
-                }}>
+                <button
+                  className="button"
+                  disabled={!isOwner && !modalProperty.houseBuiltOnSet}
+                  onClick={() => {
+                    applyMortgage(modalProperty.id);
+                  }}
+                >
                   Mortgage Property
                 </button>
               </li>
@@ -113,7 +129,10 @@ export default function PropertyCard({ setDisplayProperty }) {
                 <span className="rent-text">
                   Buy House for ${modalProperty.houseCost}.
                 </span>
-                <button className="button" disabled={!isOwner || !modalProperty.setOwned}>
+                <button
+                  className="button"
+                  disabled={!isOwner || !modalProperty.setOwned || isSetMortgaged}
+                >
                   Buy House
                 </button>
               </li>

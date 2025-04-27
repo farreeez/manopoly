@@ -33,7 +33,7 @@ public class Train extends Property {
         }
 
         // get the number of trains owned by the user.
-        int trainCount = this.owner.getList(type).size() - 1;
+        int trainCount = this.owner.getCityList(type).size() - 1;
 
         if (trainCount < 0) {
             throw new Exception("owner doesnt have trains (at getRent function in big.manopoly.models.Train.java)");

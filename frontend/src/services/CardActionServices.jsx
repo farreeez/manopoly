@@ -1,6 +1,6 @@
 export function getProperty(propertyId, setProperty) {
   fetch("http://localhost:8080/cardActions/getProperty/" + propertyId, {
-    method: "get",
+    method: "GET",
   })
     .then((response) => {
       if (!response.ok) {
@@ -61,6 +61,23 @@ export function demortgageProperty(propertyId) {
         const message = await response.text();
         console.error("error with demortgaging property:", message);
       }
+    })
+    .catch((error) => console.error(error));
+}
+
+//TODO complete once endpoint is made.
+export function checkIfSetIsMortgaged(propertyId, setIsSetMortgaged) {
+  fetch("http://localhost:8080/cardActions/isSetMortgaged/" + propertyId, {
+    method: "GET",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      setIsSetMortgaged(data);
     })
     .catch((error) => console.error(error));
 }

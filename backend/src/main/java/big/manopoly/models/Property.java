@@ -39,10 +39,12 @@ public abstract class Property extends BoardSquare {
     }
 
     @JsonCreator
-    public Property(@JsonProperty("board") Board board ,@JsonProperty("position") int position, @JsonProperty("type") PropertyType type, @JsonProperty("name") String name) {
+    public Property(@JsonProperty("board") Board board, @JsonProperty("position") int position,
+            @JsonProperty("type") PropertyType type, @JsonProperty("name") String name) {
         super(board, position, name);
         this.type = type;
-        // after the : the board id is inputed to identify different properties with the same name across different boards
+        // after the : the board id is inputed to identify different properties with the
+        // same name across different boards
         this.id = name + ":" + board.getId();
     }
 

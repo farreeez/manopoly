@@ -1,5 +1,7 @@
 package big.manopoly.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -17,14 +19,14 @@ import big.manopoly.utils.PropertyUtils;
 import big.manopoly.utils.TileActions;
 
 @Service
-public class CardActionService {
+public class PropertyService {
 
     private final BoardRepository boardRepository;
     private final PlayerRepository playerRepository;
     private final PropertyRepository propertyRepository;
 
     @Autowired
-    public CardActionService(BoardRepository boardRepository, PlayerRepository playerRepository,
+    public PropertyService(BoardRepository boardRepository, PlayerRepository playerRepository,
             PropertyRepository propertyRepository) {
         this.boardRepository = boardRepository;
         this.playerRepository = playerRepository;
@@ -161,5 +163,32 @@ public class CardActionService {
 
     public ResponseEntity<?> demortgageProperty(String propertyId, String playerIdCookie) {
         return handleMortgageOperation(propertyId, playerIdCookie, false);
+    }
+
+    public ResponseEntity<?> isSetMortgaged(String id) {
+        Property property;
+
+        try {
+            property = propertyRepository.getReferenceById(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.notFound().build();
+        }
+
+        List<Property> propertySet = propertyRepository.findByTypeAndBoard(property.getType(), property.getBoard());
+
+        boolean isSetComplete = propertySet.size() == property.getType().propertyCount;
+
+        if(!isSetComplete) {
+            return ResponseEntity.badRequest().body("number of propeties does not equal the expected amount.");
+        }
+
+        for(int i = 0; i < propertySet.size(); i++) {
+            if(propertySet.get(i).isMortgaged()){
+                return ResponseEntity.ok().body(true);
+            }
+        }
+
+        return ResponseEntity.ok().body(false);
     }
 }
