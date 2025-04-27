@@ -86,29 +86,12 @@ public class City extends Property {
         return houses;
     }
 
-    public boolean addHouse() {
-        // TODO money stuff
-        if (houses == 5 || owner == null) {
-            return false;
-        }
-
-        if (!owner.doesOwnSet(this.type)) {
-            return false;
-        }
-
+    public void addHouse() {
         houses++;
+    }
 
-        List<Property> citySet = owner.getCityList(this.type);
-
-        for (Property property : citySet) {
-            City city = (City) property;
-            if (houses > (city.houses + 1)) {
-                houses--;
-                return false;
-            }
-        }
-
-        return true;
+    public void removeHouse() {
+        houses--;
     }
 
     @Override

@@ -114,3 +114,18 @@ export function buyHouse(propertyId) {
     })
     .catch((error) => console.error(error));
 }
+
+export function sellHouse(propertyId) {
+  fetch("http://localhost:8080/cardActions/sellHouse/" + propertyId, {
+    method: "POST",
+    credentials: "include",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return response.text().then(text => {
+          throw new Error(`Cannot sell house: ${text}`);
+        });
+      }
+    })
+    .catch((error) => console.error(error));
+}

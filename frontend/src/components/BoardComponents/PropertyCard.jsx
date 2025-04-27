@@ -10,8 +10,8 @@ import {
   checkIfSetIsMortgaged,
   doesPropertyHaveHotel,
   buyHouse,
+  sellHouse,
 } from "../../services/CardActionServices";
-import { getPlayerJson } from "../../services/PlayerServices";
 
 export default function PropertyCard({ setDisplayProperty }) {
   // a boolean property used to check if any properties on the modalProperty's set have been mortgaged.
@@ -148,6 +148,9 @@ export default function PropertyCard({ setDisplayProperty }) {
                 <button
                   className="button"
                   disabled={!canModifyProperty || modalProperty.houses === 0}
+                  onClick={() => {
+                    sellHouse(modalProperty.id);
+                  }}
                 >
                   Sell House
                 </button>

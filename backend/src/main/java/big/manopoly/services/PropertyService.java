@@ -192,13 +192,21 @@ public class PropertyService {
         return ResponseEntity.ok().body(isSetMortgagedHelper(property));
     }
 
-    public boolean doesPropertyHaveHotelHelper(Property property) {
+    private boolean doesPropertyHaveHotelHelper(Property property) {
+        return doesPropertyHaveNHouses(property, 5);
+    }
+
+    private boolean doesPropertyHaveHouses(Property property) {
+        return doesPropertyHaveNHouses(property, 0);
+    }
+
+    private boolean doesPropertyHaveNHouses(Property property, int n) {
         property = (Property) Hibernate.unproxy(property);
 
         if (property instanceof City) {
             City city = (City) property;
 
-            return city.getHouses() >= 5;
+            return city.getHouses() == n;
         }
 
         return false;
@@ -240,7 +248,7 @@ public class PropertyService {
         return !(largestHouseCount > smallestHouseCount + 1);
     }
 
-    private boolean areHousesEvenToBuy(Property property) {
+    private boolean areHousesEvenToBuyOrSell(Property property, boolean isBuy) {
         List<Property> propertySet = propertyRepository.findByTypeAndBoard(property.getType(), property.getBoard());
 
         City currentCity = (City) Hibernate.unproxy(property);
@@ -251,7 +259,11 @@ public class PropertyService {
 
             int houseCount = city.getHouses();
 
-            if (houseCount < currHouses) {
+            if (houseCount < currHouses && isBuy) {
+                return false;
+            }
+
+            if (houseCount > currHouses && !isBuy) {
                 return false;
             }
         }
@@ -259,7 +271,7 @@ public class PropertyService {
         return true;
     }
 
-    public ResponseEntity<?> buyHouse(String propertyId, String playerIdCookie) {
+    public ResponseEntity<?> houseHelper(String propertyId, String playerIdCookie, boolean buyHouse) {
         Player player;
 
         try {
@@ -275,8 +287,10 @@ public class PropertyService {
             return ResponseEntity.badRequest().build();
         }
 
+        String buyOrSell = buyHouse ? "buy" : "sell";
+
         if (!board.getPlayerWithCurrentTurn().equals(player)) {
-            return ResponseEntity.badRequest().body("Cannot build a property when it is not the player's turn.");
+            return ResponseEntity.badRequest().body("Cannot" + buyOrSell + "a housewhen it is not the player's turn.");
         }
 
         Property property;
@@ -291,16 +305,12 @@ public class PropertyService {
 
         if (!(property instanceof City)) {
             return ResponseEntity.badRequest()
-                    .body("The property should be of type city for the player to be able to build a house on it.");
+                    .body("The property should be of type city for the player to be able to" + buyOrSell
+                            + "a house on it.");
         }
 
         if (!areHousesEven(property)) {
             return ResponseEntity.badRequest().body("Houses are unevenly built on this set.");
-        }
-
-        if (!areHousesEvenToBuy(property)) {
-            return ResponseEntity.badRequest().body(
-                    "Cannot buy a house on this city as it will make the distribution of houses uneven on this set.");
         }
 
         boolean hasSet = player.doesOwnSet(property.getType());
@@ -311,22 +321,56 @@ public class PropertyService {
 
         if (isSetMortgagedHelper(property)) {
             return ResponseEntity.badRequest()
-                    .body("one of the properties is mortgaged the player cannot build on this set.");
+                    .body("one of the properties is mortgaged the player cannot " + buyOrSell + " a house on this set.");
         }
 
+        if (!areHousesEvenToBuyOrSell(property, buyHouse)) {
+            return ResponseEntity.badRequest().body(
+                    "Cannot " + buyOrSell
+                            + " a house on this city as it will make the distribution of houses uneven on this set.");
+        }
+
+        if (buyHouse) {
+            return buyHouse(property, board, player);
+        } else {
+            return sellHouse(property, board, player);
+        }
+    }
+
+    private ResponseEntity<?> buyHouse(Property property, Board board, Player player) {
         if (doesPropertyHaveHotelHelper(property)) {
             return ResponseEntity.badRequest().body("the property already has the maximum number of houses allowed.");
         }
 
         City city = (City) Hibernate.unproxy(property);
-        
-        if(player.getMoney() < city.getHouseCost()) {
-            return ResponseEntity.badRequest().body("player cannot afford this property.");
+
+        if (player.getMoney() < city.getHouseCost()) {
+            return ResponseEntity.badRequest().body("player cannot afford buying this house.");
         }
 
         player.pay(city.getHouseCost());
 
         city.addHouse();
+
+        playerRepository.save(player);
+        propertyRepository.save(property);
+
+        BoardSubscriptionManager.instance().processSubsFor(board.getId(), boardRepository, false, -1);
+
+        return ResponseEntity.ok().build();
+    }
+
+    private ResponseEntity<?> sellHouse(Property property, Board board, Player player) {
+
+        if (doesPropertyHaveHouses(property)) {
+            return ResponseEntity.badRequest().body("the property has no houses to sell.");
+        }
+
+        City city = (City) Hibernate.unproxy(property);
+
+        player.addMoney(city.getHouseCost()/2);
+
+        city.removeHouse();
 
         playerRepository.save(player);
         propertyRepository.save(property);

@@ -72,7 +72,15 @@ public class PropertyController {
             return ResponseEntity.badRequest().build();
         }
 
-        return cardActionService.buyHouse(propertyId, cookie);
+        return cardActionService.houseHelper(propertyId, cookie, true);
     }
 
+    @PostMapping("/sellHouse/{propertyId}")
+    public ResponseEntity<?> sellHouse(@CookieValue(value = "playerId", defaultValue = "") String cookie, @PathVariable String propertyId) {
+        if (cookie.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return cardActionService.houseHelper(propertyId, cookie, false);
+    }
 }
