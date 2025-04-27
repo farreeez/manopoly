@@ -16,14 +16,14 @@ import big.manopoly.services.PropertyService;
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RequestMapping("/cardActions")
 public class PropertyController {
-    
+
     private final PropertyService cardActionService;
-    
+
     @Autowired
     public PropertyController(PropertyService cardActionService) {
         this.cardActionService = cardActionService;
     }
-    
+
     @PostMapping("/buyProperty")
     public ResponseEntity<?> buyProperty(@CookieValue(value = "playerId", defaultValue = "") String cookie) {
         if (cookie.isEmpty()) {
@@ -31,15 +31,15 @@ public class PropertyController {
         }
         return cardActionService.buyProperty(cookie);
     }
-    
+
     @GetMapping("/getProperty/{id}")
     public ResponseEntity<?> getProperty(@PathVariable String id) {
         return cardActionService.getProperty(id);
     }
 
-
     @PostMapping("/mortgageProperty/{propertyId}")
-    public ResponseEntity<?> mortgageProperty(@CookieValue(value = "playerId", defaultValue = "") String cookie, @PathVariable String propertyId) {
+    public ResponseEntity<?> mortgageProperty(@CookieValue(value = "playerId", defaultValue = "") String cookie,
+            @PathVariable String propertyId) {
         if (cookie.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
@@ -48,7 +48,8 @@ public class PropertyController {
     }
 
     @PostMapping("/demortgageProperty/{propertyId}")
-    public ResponseEntity<?> demortgageProperty(@CookieValue(value = "playerId", defaultValue = "") String cookie, @PathVariable String propertyId) {
+    public ResponseEntity<?> demortgageProperty(@CookieValue(value = "playerId", defaultValue = "") String cookie,
+            @PathVariable String propertyId) {
         if (cookie.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
@@ -67,7 +68,8 @@ public class PropertyController {
     }
 
     @PostMapping("/buyHouse/{propertyId}")
-    public ResponseEntity<?> buyHouse(@CookieValue(value = "playerId", defaultValue = "") String cookie, @PathVariable String propertyId) {
+    public ResponseEntity<?> buyHouse(@CookieValue(value = "playerId", defaultValue = "") String cookie,
+            @PathVariable String propertyId) {
         if (cookie.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
@@ -76,11 +78,17 @@ public class PropertyController {
     }
 
     @PostMapping("/sellHouse/{propertyId}")
-    public ResponseEntity<?> sellHouse(@CookieValue(value = "playerId", defaultValue = "") String cookie, @PathVariable String propertyId) {
+    public ResponseEntity<?> sellHouse(@CookieValue(value = "playerId", defaultValue = "") String cookie,
+            @PathVariable String propertyId) {
         if (cookie.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
 
         return cardActionService.houseHelper(propertyId, cookie, false);
+    }
+
+    @GetMapping("/getOwnerColour/{propertyId}")
+    public ResponseEntity<?> getPropertyColour(@PathVariable String propertyId) {
+        return cardActionService.getPropertyColour(propertyId);
     }
 }

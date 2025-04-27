@@ -107,7 +107,7 @@ export function buyHouse(propertyId) {
   })
     .then((response) => {
       if (!response.ok) {
-        return response.text().then(text => {
+        return response.text().then((text) => {
           throw new Error(`Cannot buy house: ${text}`);
         });
       }
@@ -122,10 +122,26 @@ export function sellHouse(propertyId) {
   })
     .then((response) => {
       if (!response.ok) {
-        return response.text().then(text => {
+        return response.text().then((text) => {
           throw new Error(`Cannot sell house: ${text}`);
         });
       }
+    })
+    .catch((error) => console.error(error));
+}
+
+export function getOwnerColour(propertyId, setOwnerColour) {
+  fetch("http://localhost:8080/cardActions/getOwnerColour/" + propertyId, {
+    method: "GET",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("could not get owner colour.");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      setOwnerColour(data);
     })
     .catch((error) => console.error(error));
 }

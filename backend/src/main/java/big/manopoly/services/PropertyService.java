@@ -14,6 +14,7 @@ import big.manopoly.dtos.PropertyDTO;
 import big.manopoly.dtos.TileActionDTO;
 import big.manopoly.models.Board;
 import big.manopoly.models.City;
+import big.manopoly.models.Colour;
 import big.manopoly.models.Player;
 import big.manopoly.models.Property;
 import big.manopoly.utils.Mapper;
@@ -378,5 +379,23 @@ public class PropertyService {
         BoardSubscriptionManager.instance().processSubsFor(board.getId(), boardRepository, false, -1);
 
         return ResponseEntity.ok().build();
+    }
+
+    public ResponseEntity<?> getPropertyColour(String propertyId) {
+        Property property;
+        try {
+            property = propertyRepository.getReferenceById(propertyId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.notFound().build();
+        }
+
+        Player player = property.getOwner();
+
+        if(player == null) {
+            return ResponseEntity.ok().body(new Colour(0,0,0,-1));
+        }
+
+        return ResponseEntity.ok().body(Mapper.playerColourToColour(player.getColour()));
     }
 }
