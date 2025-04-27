@@ -60,4 +60,10 @@ public class PropertyController {
     public ResponseEntity<?> isSetMortgaged(@PathVariable String id) {
         return cardActionService.isSetMortgaged(id);
     }
+
+    @GetMapping("/doesPropertyHaveHotel/{id}")
+    public ResponseEntity<?> doesPropertyHaveHotel(@PathVariable String id) {
+        return cardActionService.doesPropertyHaveHotel(id);
+    }
+
 }

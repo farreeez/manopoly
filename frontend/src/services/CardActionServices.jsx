@@ -65,14 +65,13 @@ export function demortgageProperty(propertyId) {
     .catch((error) => console.error(error));
 }
 
-//TODO complete once endpoint is made.
 export function checkIfSetIsMortgaged(propertyId, setIsSetMortgaged) {
   fetch("http://localhost:8080/cardActions/isSetMortgaged/" + propertyId, {
     method: "GET",
   })
     .then((response) => {
       if (!response.ok) {
-        throw new Error("");
+        throw new Error("Trouble checking if property is mortgaged.");
       }
       return response.json();
     })
@@ -81,3 +80,20 @@ export function checkIfSetIsMortgaged(propertyId, setIsSetMortgaged) {
     })
     .catch((error) => console.error(error));
 }
+
+export function doesPropertyHaveHotel(propertyId, setHasHotel) {
+  fetch("http://localhost:8080/cardActions/doesPropertyHaveHotel/" + propertyId, {
+    method: "GET",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Property not found.");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      setHasHotel(data);
+    })
+    .catch((error) => console.error(error));
+}
+

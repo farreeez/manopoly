@@ -2,6 +2,7 @@ package big.manopoly.services;
 
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import big.manopoly.data.PropertyRepository;
 import big.manopoly.dtos.PropertyDTO;
 import big.manopoly.dtos.TileActionDTO;
 import big.manopoly.models.Board;
+import big.manopoly.models.City;
 import big.manopoly.models.Player;
 import big.manopoly.models.Property;
 import big.manopoly.utils.Mapper;
@@ -179,14 +181,37 @@ public class PropertyService {
 
         boolean isSetComplete = propertySet.size() == property.getType().propertyCount;
 
-        if(!isSetComplete) {
+        if (!isSetComplete) {
             return ResponseEntity.badRequest().body("number of propeties does not equal the expected amount.");
         }
 
-        for(int i = 0; i < propertySet.size(); i++) {
-            if(propertySet.get(i).isMortgaged()){
+        for (int i = 0; i < propertySet.size(); i++) {
+            if (propertySet.get(i).isMortgaged()) {
                 return ResponseEntity.ok().body(true);
             }
+        }
+
+        return ResponseEntity.ok().body(false);
+    }
+
+    public ResponseEntity<?> doesPropertyHaveHotel(String id) {
+        Property property;
+
+        try {
+            property = propertyRepository.getReferenceById(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.notFound().build();
+        }
+
+        property = (Property) Hibernate.unproxy(property);
+
+        if (property instanceof City) {
+            City city = (City) property;
+
+            boolean hasHotel = city.getHouses() >= 5;
+
+            return ResponseEntity.ok().body(hasHotel);
         }
 
         return ResponseEntity.ok().body(false);

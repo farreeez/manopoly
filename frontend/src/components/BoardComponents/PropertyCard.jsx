@@ -8,19 +8,13 @@ import {
   mortgageProperty,
   demortgageProperty,
   checkIfSetIsMortgaged,
+  doesPropertyHaveHotel,
 } from "../../services/CardActionServices";
-
-function applyMortgage(propertyId) {
-  mortgageProperty(propertyId);
-}
-
-function applyDemortgage(propertyId) {
-  demortgageProperty(propertyId);
-}
 
 export default function PropertyCard({ setDisplayProperty }) {
   // a boolean property used to check if any properties on the modalProperty's set have been mortgaged.
-  const { isSetMortgaged, setIsSetMortgaged } = useState(false);
+  const [ isSetMortgaged, setIsSetMortgaged ] = useState(false);
+  const [ hasHotel, setHasHotel ] = useState(false);
 
   const { modalProperty, setModalProperty } = useContext(BoardContext);
   const { player, board } = useContext(AppContext);
@@ -30,6 +24,7 @@ export default function PropertyCard({ setDisplayProperty }) {
 
   useEffect(() => {
     checkIfSetIsMortgaged(modalProperty.id, setIsSetMortgaged);
+    doesPropertyHaveHotel(modalProperty.id, setHasHotel);
   }, [modalProperty])
 
   useEffect(() => {
@@ -101,7 +96,7 @@ export default function PropertyCard({ setDisplayProperty }) {
                   className="button"
                   disabled={!isOwner && !modalProperty.houseBuiltOnSet}
                   onClick={() => {
-                    applyMortgage(modalProperty.id);
+                    mortgageProperty(modalProperty.id);
                   }}
                 >
                   Mortgage Property
@@ -116,7 +111,7 @@ export default function PropertyCard({ setDisplayProperty }) {
                   className="button unmortgage-button"
                   disabled={!isOwner}
                   onClick={() => {
-                    applyDemortgage(modalProperty.id);
+                    demortgageProperty(modalProperty.id);
                   }}
                 >
                   Unmortgage Property
@@ -131,7 +126,7 @@ export default function PropertyCard({ setDisplayProperty }) {
                 </span>
                 <button
                   className="button"
-                  disabled={!isOwner || !modalProperty.setOwned || isSetMortgaged}
+                  disabled={!isOwner || !modalProperty.setOwned || isSetMortgaged || hasHotel}
                 >
                   Buy House
                 </button>
