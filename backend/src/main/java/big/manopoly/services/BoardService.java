@@ -150,6 +150,8 @@ public class BoardService {
 
         int[] diceRolls = board.movePlayer();
         TileActionDTO action = TileActions.conductTileAction(player, board, diceRolls);
+
+        playerRepository.save(player);
         board.saveBoard(boardRepository, true);
 
         return ResponseEntity.ok().body(action);

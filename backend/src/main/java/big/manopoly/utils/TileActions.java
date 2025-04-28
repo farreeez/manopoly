@@ -5,6 +5,7 @@ import big.manopoly.dtos.TileActionDTO;
 import big.manopoly.models.Board;
 import big.manopoly.models.BoardSquare;
 import big.manopoly.models.IncomeTax;
+import big.manopoly.models.Jail;
 import big.manopoly.models.NotProperty;
 import big.manopoly.models.Player;
 import big.manopoly.models.Property;
@@ -20,6 +21,8 @@ public class TileActions {
         } else if (square instanceof IncomeTax) {
             IncomeTax incomeTax = (IncomeTax) square;
             return conductIncomeTaxAction(player, board, incomeTax, diceRolls);
+        } else if (square instanceof Jail) {
+            return conductJailAction(player,board, diceRolls);
         } else if (square instanceof NotProperty) {
             NotProperty notProperty = (NotProperty) square;
             return conductNonPropertyAction(player, board, notProperty, diceRolls);
@@ -74,6 +77,18 @@ public class TileActions {
     public static TileActionDTO conductIncomeTaxAction(Player player, Board board, IncomeTax incomeTax,
             int[] diceRolls) {
         player.pay(incomeTax.getTax(player.getMoney()));
+
+        return new TileActionDTO(diceRolls);
+    }
+
+    public static TileActionDTO conductJailAction(Player player, Board board, int[] diceRolls) throws Exception {
+        //TODO jail stuff.
+        player.setFree(false);
+        player.getPosition().add(20);
+
+        if(!board.endTurn()){
+            throw new Exception("player could not end turn after being jailed.");
+        }
 
         return new TileActionDTO(diceRolls);
     }

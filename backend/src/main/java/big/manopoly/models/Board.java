@@ -97,7 +97,7 @@ public class Board {
             new City(this, 27, PropertyType.YELLOW, CityName.Melbourne), // Yellow 2 (fixed spelling)
             new Utility(this, 28, UtilityName.WATER), // Water Works
             new City(this, 29, PropertyType.YELLOW, CityName.Sydney), // Yellow 3
-            new NotProperty(this, 30, "Go to Jail"), // Go to Jail
+            new Jail(this, 30, "Go to Jail"), // Go to Jail
             new City(this, 31, PropertyType.GREEN, CityName.Christchurch), // Green 1
             new City(this, 32, PropertyType.GREEN, CityName.Wellington), // Green 2
             new NotProperty(this, 33, "Community Chest"), // Community Chest
@@ -239,7 +239,8 @@ public class Board {
 
         Player player = players.get(currentTurn);
 
-        player.getPosition().add(squaresMoved);
+        // player.getPosition().add(squaresMoved);
+        player.getPosition().add(30);
 
         // allows player to keep rolling if there is a double
         // TODO: handle triple doubles.
