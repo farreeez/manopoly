@@ -76,8 +76,5 @@ The game currently implements core Monopoly functionality with the following fea
 
 - [ ] Chance and Community Chest cards
 - [ ] Property trading between players
-- [ ] Building houses and hotels
 - [ ] Jail mechanics
 - [ ] Bankruptcy handling
-- [ ] Game statistics and history
-- [ ] Enhanced animations and UI improvements
