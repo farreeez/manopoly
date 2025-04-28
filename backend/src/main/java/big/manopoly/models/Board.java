@@ -71,7 +71,7 @@ public class Board {
             new City(this, 1, PropertyType.BROWN, CityName.Cairo), // Brown 1
             new NotProperty(this, 2, "Community Chest"), // Community Chest
             new City(this, 3, PropertyType.BROWN, CityName.Alexandria), // Brown 2
-            new NotProperty(this, 4, "Income Tax"), // Income Tax
+            new IncomeTax(this, 4, "Income Tax", true), // Income Tax
             new Train(this, 5, TrainName.Grand_Central_Terminal), // Train 1
             new City(this, 6, PropertyType.LIGHT_BLUE, CityName.Athens), // Light Blue 1
             new NotProperty(this, 7, "Chance"), // Chance
@@ -105,7 +105,7 @@ public class Board {
             new Train(this, 35, TrainName.Gare_du_Nord), // Train 4
             new NotProperty(this, 36, "Chance"), // Chance
             new City(this, 37, PropertyType.DARK_BLUE, CityName.Stockholm), // Dark Blue 1
-            new NotProperty(this, 38, "Luxury Tax"), // Luxury Tax
+            new IncomeTax(this, 38, "Luxury Tax", false), // Luxury Tax
             new City(this, 39, PropertyType.DARK_BLUE, CityName.Malmö) // Dark Blue 2
         );
     }
