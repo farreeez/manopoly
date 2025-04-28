@@ -67,46 +67,46 @@ public class Board {
         }
 
         squares = Arrays.asList(
-            new NotProperty(this, 0, "GO"), // GO
-            new City(this, 1, PropertyType.BROWN, CityName.Cairo), // Brown 1
-            new NotProperty(this, 2, "Community Chest"), // Community Chest
-            new City(this, 3, PropertyType.BROWN, CityName.Alexandria), // Brown 2
-            new IncomeTax(this, 4, "Income Tax", true), // Income Tax
-            new Train(this, 5, TrainName.Grand_Central_Terminal), // Train 1
-            new City(this, 6, PropertyType.LIGHT_BLUE, CityName.Athens), // Light Blue 1
-            new NotProperty(this, 7, "Chance"), // Chance
-            new City(this, 8, PropertyType.LIGHT_BLUE, CityName.Mykonos), // Light Blue 2
-            new City(this, 9, PropertyType.LIGHT_BLUE, CityName.Olympia), // Light Blue 3
-            new NotProperty(this, 10, "Jail"), // Jail
-            new City(this, 11, PropertyType.PINK, CityName.Kyoto), // Pink 1
-            new Utility(this, 12, UtilityName.ELECTRIC), // Electric Company
-            new City(this, 13, PropertyType.PINK, CityName.Osaka), // Pink 2
-            new City(this, 14, PropertyType.PINK, CityName.Tokyo), // Pink 3
-            new Train(this, 15, TrainName.Tokyo_Station), // Train 2
-            new City(this, 16, PropertyType.ORANGE, CityName.Texas), // Orange 1
-            new NotProperty(this, 17, "Community Chest"), // Community Chest
-            new City(this, 18, PropertyType.ORANGE, CityName.Washington), // Orange 2
-            new City(this, 19, PropertyType.ORANGE, CityName.California), // Orange 3
-            new NotProperty(this, 20, "Free Parking"), // Free Parking
-            new City(this, 21, PropertyType.RED, CityName.Shenzhen), // Red 1
-            new NotProperty(this, 22, "Chance"), // Chance
-            new City(this, 23, PropertyType.RED, CityName.Beijing), // Red 2
-            new City(this, 24, PropertyType.RED, CityName.Shanghai), // Red 3
-            new Train(this, 25, TrainName.Berlin_Hauptbahnhof), // Train 3
-            new City(this, 26, PropertyType.YELLOW, CityName.Brisbane), // Yellow 1
-            new City(this, 27, PropertyType.YELLOW, CityName.Melbourne), // Yellow 2 (fixed spelling)
-            new Utility(this, 28, UtilityName.WATER), // Water Works
-            new City(this, 29, PropertyType.YELLOW, CityName.Sydney), // Yellow 3
-            new Jail(this, 30, "Go to Jail"), // Go to Jail
-            new City(this, 31, PropertyType.GREEN, CityName.Christchurch), // Green 1
-            new City(this, 32, PropertyType.GREEN, CityName.Wellington), // Green 2
-            new NotProperty(this, 33, "Community Chest"), // Community Chest
-            new City(this, 34, PropertyType.GREEN, CityName.Auckland), // Green 3
-            new Train(this, 35, TrainName.Gare_du_Nord), // Train 4
-            new NotProperty(this, 36, "Chance"), // Chance
-            new City(this, 37, PropertyType.DARK_BLUE, CityName.Stockholm), // Dark Blue 1
-            new IncomeTax(this, 38, "Luxury Tax", false), // Luxury Tax
-            new City(this, 39, PropertyType.DARK_BLUE, CityName.Malmö) // Dark Blue 2
+                new NotProperty(this, 0, "GO"), // GO
+                new City(this, 1, PropertyType.BROWN, CityName.Cairo), // Brown 1
+                new NotProperty(this, 2, "Community Chest"), // Community Chest
+                new City(this, 3, PropertyType.BROWN, CityName.Alexandria), // Brown 2
+                new IncomeTax(this, 4, "Income Tax", true), // Income Tax
+                new Train(this, 5, TrainName.Grand_Central_Terminal), // Train 1
+                new City(this, 6, PropertyType.LIGHT_BLUE, CityName.Athens), // Light Blue 1
+                new NotProperty(this, 7, "Chance"), // Chance
+                new City(this, 8, PropertyType.LIGHT_BLUE, CityName.Mykonos), // Light Blue 2
+                new City(this, 9, PropertyType.LIGHT_BLUE, CityName.Olympia), // Light Blue 3
+                new NotProperty(this, 10, "Jail"), // Jail
+                new City(this, 11, PropertyType.PINK, CityName.Kyoto), // Pink 1
+                new Utility(this, 12, UtilityName.ELECTRIC), // Electric Company
+                new City(this, 13, PropertyType.PINK, CityName.Osaka), // Pink 2
+                new City(this, 14, PropertyType.PINK, CityName.Tokyo), // Pink 3
+                new Train(this, 15, TrainName.Tokyo_Station), // Train 2
+                new City(this, 16, PropertyType.ORANGE, CityName.Texas), // Orange 1
+                new NotProperty(this, 17, "Community Chest"), // Community Chest
+                new City(this, 18, PropertyType.ORANGE, CityName.Washington), // Orange 2
+                new City(this, 19, PropertyType.ORANGE, CityName.California), // Orange 3
+                new NotProperty(this, 20, "Free Parking"), // Free Parking
+                new City(this, 21, PropertyType.RED, CityName.Shenzhen), // Red 1
+                new NotProperty(this, 22, "Chance"), // Chance
+                new City(this, 23, PropertyType.RED, CityName.Beijing), // Red 2
+                new City(this, 24, PropertyType.RED, CityName.Shanghai), // Red 3
+                new Train(this, 25, TrainName.Berlin_Hauptbahnhof), // Train 3
+                new City(this, 26, PropertyType.YELLOW, CityName.Brisbane), // Yellow 1
+                new City(this, 27, PropertyType.YELLOW, CityName.Melbourne), // Yellow 2 (fixed spelling)
+                new Utility(this, 28, UtilityName.WATER), // Water Works
+                new City(this, 29, PropertyType.YELLOW, CityName.Sydney), // Yellow 3
+                new Jail(this, 30, "Go to Jail"), // Go to Jail
+                new City(this, 31, PropertyType.GREEN, CityName.Christchurch), // Green 1
+                new City(this, 32, PropertyType.GREEN, CityName.Wellington), // Green 2
+                new NotProperty(this, 33, "Community Chest"), // Community Chest
+                new City(this, 34, PropertyType.GREEN, CityName.Auckland), // Green 3
+                new Train(this, 35, TrainName.Gare_du_Nord), // Train 4
+                new NotProperty(this, 36, "Chance"), // Chance
+                new City(this, 37, PropertyType.DARK_BLUE, CityName.Stockholm), // Dark Blue 1
+                new IncomeTax(this, 38, "Luxury Tax", false), // Luxury Tax
+                new City(this, 39, PropertyType.DARK_BLUE, CityName.Malmö) // Dark Blue 2
         );
     }
 
@@ -201,7 +201,7 @@ public class Board {
             player.setBoard(this);
             player.resetPosition();
             players.add(player);
-            player.setFree(null);
+            player.setFree(true);
             player.setMoney(1500);
             return true;
         }
@@ -239,12 +239,27 @@ public class Board {
 
         Player player = players.get(currentTurn);
 
-        // player.getPosition().add(squaresMoved);
-        player.getPosition().add(30);
+        if (player.getJailCounter() >= 3) {
+            player.setFree(true);
+            player.resetJailCounter();
+        }
 
-        // allows player to keep rolling if there is a double
-        // TODO: handle triple doubles.
-        diceRolled = !(firstDice == secondDice);
+        if (player.isFree()) {
+            player.getPosition().add(squaresMoved);
+
+            // allows player to keep rolling if there is a double
+            // TODO: handle triple doubles.
+            diceRolled = !(firstDice == secondDice);
+        } else {
+            player.setJailCounter(player.getJailCounter() + 1);
+
+            if (firstDice == secondDice) {
+                player.setFree(true);
+                player.resetJailCounter();
+
+                player.getPosition().add(squaresMoved);
+            }
+        }
 
         diceRolls[0] = firstDice;
         diceRolls[1] = secondDice;

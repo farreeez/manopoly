@@ -82,8 +82,8 @@ public class TileActions {
     }
 
     public static TileActionDTO conductJailAction(Player player, Board board, int[] diceRolls) throws Exception {
-        //TODO jail stuff.
         player.setFree(false);
+        player.resetJailCounter();
         player.getPosition().add(20);
 
         if(!board.endTurn()){

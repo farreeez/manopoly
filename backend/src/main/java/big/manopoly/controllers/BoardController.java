@@ -89,6 +89,7 @@ public class BoardController {
         if (cookie.isEmpty()) {
             return ResponseEntity.badRequest().body("player cookie is empty.");
         }
+
         return boardService.rollDice(cookie);
     }
 

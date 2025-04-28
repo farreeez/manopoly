@@ -35,7 +35,6 @@ public class Player {
     private Long id;
 
     private String name;
-
     
     @Enumerated(EnumType.STRING)
     private PlayerColour colour;
@@ -49,6 +48,8 @@ public class Player {
 
     private Integer money;
 
+    private Integer jailCounter;
+
     @OneToMany(cascade = CascadeType.PERSIST)
     private Set<Property> properties = new HashSet<>();
 
@@ -57,10 +58,14 @@ public class Player {
     @JsonCreator
     public Player(@JsonProperty("position") Position position) {
         this.position = position;
+        this.free = true;
+        this.jailCounter = 0;
     }
 
     public Player() {
         this.position = new Position();
+        this.free = true;
+        this.jailCounter = 0;
     }
 
     public boolean isHouseBuiltOnSet(PropertyType propertyType) {
@@ -155,6 +160,10 @@ public class Player {
         }
     }
 
+    public int getJailCounter() {
+        return jailCounter;
+    }
+
     public Board getBoard() {
         return board;
     }
@@ -179,7 +188,11 @@ public class Player {
     }
 
     public Boolean isFree() {
-        return free;
+        return this.free;
+    }
+
+    public void setJailCounter(int jailCounter) {
+        this.jailCounter = jailCounter;
     }
 
     public void setBoard(Board board) {
@@ -234,6 +247,10 @@ public class Player {
 
     public void addMoney(int price) {
         money += price;
+    }
+
+    public void resetJailCounter() {
+        jailCounter = 0;
     }
 
 }

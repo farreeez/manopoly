@@ -1,7 +1,8 @@
 import { buyProperty } from "../../services/CardActionServices";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { DiceRollContext } from "../../context/DiceRollContextProvider";
 import { AppContext } from "../../context/AppContextProvider";
+import { getPlayerJson } from "../../services/PlayerServices";
 
 function CardAction({ board, player, setRefreshSquares }) {
   const { displayBuyAfterRoll, cardActionData, setCardActionData } =
@@ -9,12 +10,21 @@ function CardAction({ board, player, setRefreshSquares }) {
 
   const { playerDTO, setPlayerDTO } = useContext(AppContext);
 
+  useEffect(() => {
+    const updatePlayerDTO = async () => {
+      setPlayerDTO(await getPlayerJson(player.id));
+    };
+
+    updatePlayerDTO();
+  }, []);
+
   return (
     <div>
       {board &&
         displayBuyAfterRoll &&
         board.currentPlayerTurn.id === player.id &&
-        cardActionData.propertyPurcahseAction && (
+        cardActionData.propertyPurcahseAction &&
+        playerDTO.free && (
           <button
             onClick={() => buyProperty(setCardActionData)}
             className="roll-button"
@@ -23,6 +33,10 @@ function CardAction({ board, player, setRefreshSquares }) {
             buy for {cardActionData.price}
           </button>
         )}
+
+      {board && board.currentPlayerTurn.id === player.id && !playerDTO.free && (
+        <button className="roll-button">Pay 50$</button>
+      )}
     </div>
   );
 }
