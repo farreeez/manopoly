@@ -1,7 +1,5 @@
 package big.manopoly.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -11,6 +9,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import big.manopoly.services.PlayerService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -42,4 +42,10 @@ public class PlayerController {
     public ResponseEntity<?> getPlayer(@PathVariable Long id) {
         return playerService.getPlayer(id);
     }
+
+    @PostMapping("/payJailFine")
+    public ResponseEntity<?> payJailFine(@CookieValue(value = "playerId", defaultValue = "") String cookie) {
+        return playerService.payJailFine(cookie);
+    }
+
 }

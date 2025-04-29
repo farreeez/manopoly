@@ -239,13 +239,9 @@ public class Board {
 
         Player player = players.get(currentTurn);
 
-        if (player.getJailCounter() >= 3) {
-            player.setFree(true);
-            player.resetJailCounter();
-        }
-
         if (player.isFree()) {
-            player.getPosition().add(squaresMoved);
+            // player.getPosition().add(squaresMoved);
+            player.getPosition().add(30);
 
             // allows player to keep rolling if there is a double
             // TODO: handle triple doubles.
@@ -258,6 +254,11 @@ public class Board {
                 player.resetJailCounter();
 
                 player.getPosition().add(squaresMoved);
+            }
+
+            if (player.getJailCounter() >= 3) {
+                player.setFree(true);
+                player.resetJailCounter();
             }
         }
 

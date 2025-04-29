@@ -82,3 +82,18 @@ export function checkCookie(setPlayer) {
     })
     .catch((error) => console.error(error));
 }
+
+export function payJailFine() {
+  fetch("http://localhost:8080/players/payJailFine" , {
+    method: "POST",
+    credentials: "include",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return response.text().then((text) => {
+          throw new Error(`Cannot pay jail fine: ${text}`);
+        });
+      }
+    })
+    .catch((error) => console.error(error));
+}
