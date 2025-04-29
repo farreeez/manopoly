@@ -24,6 +24,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 @Entity
 public class Board {
     @Id
@@ -49,12 +51,15 @@ public class Board {
 
     private boolean diceRolled;
 
+    private int doubleCount;
+
     @ElementCollection
     private int[] diceRolls;
 
     public Board() {
         diceRolled = false;
         currentTurn = 0;
+        doubleCount = 0;
 
         possibleColours = Arrays.asList(PlayerColour.values());
         diceRolls = new int[2];
@@ -209,12 +214,6 @@ public class Board {
 
     // iterates current turn to roll dice if the dice has been rolled
     public boolean endTurn() {
-        // returns false and does not iterate if the dice has not been rolled for the
-        // previous turn
-        if (!diceRolled) {
-            return false;
-        }
-
         currentTurn++;
         diceRolled = false;
 
@@ -232,8 +231,10 @@ public class Board {
 
         Random random = new Random(System.currentTimeMillis());
 
-        int firstDice = random.nextInt(6) + 1;
-        int secondDice = random.nextInt(6) + 1;
+        // int firstDice = random.nextInt(6) + 1;
+        // int secondDice = random.nextInt(6) + 1;
+        int firstDice = 2;
+        int secondDice = 2;
 
         int squaresMoved = firstDice + secondDice;
 
@@ -241,11 +242,20 @@ public class Board {
 
         if (player.isFree()) {
             // player.getPosition().add(squaresMoved);
-            player.getPosition().add(30);
 
             // allows player to keep rolling if there is a double
             // TODO: handle triple doubles.
             diceRolled = !(firstDice == secondDice);
+
+            if (firstDice == secondDice) {
+                doubleCount++;
+
+                if (doubleCount >= 3) {
+                    player.setFree(false);
+                    doubleCount = 0;
+                }
+
+            }
         } else {
             player.setJailCounter(player.getJailCounter() + 1);
 
@@ -254,6 +264,9 @@ public class Board {
                 player.resetJailCounter();
 
                 player.getPosition().add(squaresMoved);
+
+            } else {
+                doubleCount = 0;
             }
 
             if (player.getJailCounter() >= 3) {
