@@ -24,8 +24,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-
 @Entity
 public class Board {
     @Id
@@ -231,17 +229,15 @@ public class Board {
 
         Random random = new Random(System.currentTimeMillis());
 
-        // int firstDice = random.nextInt(6) + 1;
-        // int secondDice = random.nextInt(6) + 1;
-        int firstDice = 2;
-        int secondDice = 2;
+        int firstDice = random.nextInt(6) + 1;
+        int secondDice = random.nextInt(6) + 1;
 
         int squaresMoved = firstDice + secondDice;
 
         Player player = players.get(currentTurn);
 
         if (player.isFree()) {
-            // player.getPosition().add(squaresMoved);
+            player.getPosition().add(squaresMoved);
 
             // allows player to keep rolling if there is a double
             // TODO: handle triple doubles.
@@ -255,7 +251,10 @@ public class Board {
                     doubleCount = 0;
                 }
 
+            } else {
+                doubleCount = 0;
             }
+
         } else {
             player.setJailCounter(player.getJailCounter() + 1);
 
@@ -272,6 +271,8 @@ public class Board {
             if (player.getJailCounter() >= 3) {
                 player.setFree(true);
                 player.resetJailCounter();
+
+                doubleCount = 0;
             }
         }
 
