@@ -254,7 +254,6 @@ public class Board {
             } else {
                 doubleCount = 0;
             }
-
         } else {
             player.setJailCounter(player.getJailCounter() + 1);
 

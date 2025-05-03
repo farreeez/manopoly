@@ -4,6 +4,7 @@ import big.manopoly.dtos.CardPurchaseActionDTO;
 import big.manopoly.dtos.TileActionDTO;
 import big.manopoly.models.Board;
 import big.manopoly.models.BoardSquare;
+import big.manopoly.models.Card;
 import big.manopoly.models.IncomeTax;
 import big.manopoly.models.Jail;
 import big.manopoly.models.NotProperty;
@@ -22,7 +23,7 @@ public class TileActions {
             IncomeTax incomeTax = (IncomeTax) square;
             return conductIncomeTaxAction(player, board, incomeTax, diceRolls);
         } else if (square instanceof Jail) {
-            return conductJailAction(player,board, diceRolls);
+            return conductJailAction(player, board, diceRolls);
         } else if (square instanceof NotProperty) {
             NotProperty notProperty = (NotProperty) square;
             return conductNonPropertyAction(player, board, notProperty, diceRolls);
@@ -31,6 +32,16 @@ public class TileActions {
                     "BoardSquare of invalid class type in conduct tile action in big.manopoly.utils.TileActions.java");
         }
 
+    }
+
+    private static TileActionDTO conductCardAction(Player player, Board board, Card card, int[] diceRolls) {
+        // TODO Auto-generated method stub
+        card.action(player);
+
+        // do something with message
+        System.out.println(card.getCardMessage());
+
+        return new TileActionDTO(diceRolls);
     }
 
     public static TileActionDTO conductPropertyAction(Player player, Board board, Property property, int[] diceRolls)
@@ -86,7 +97,7 @@ public class TileActions {
         player.resetJailCounter();
         player.getPosition().add(20);
 
-        if(!board.endTurn()){
+        if (!board.endTurn()) {
             throw new Exception("player could not end turn after being jailed.");
         }
 
