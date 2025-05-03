@@ -5,9 +5,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import big.manopoly.models.Card;
 import big.manopoly.models.Player;
-import jakarta.persistence.Embeddable;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 
-@Embeddable
+@Entity
+@DiscriminatorValue("PayMoneyPerHouseCard")
+// a card for when the player has to pay for the number of houses and hotels that they own.
 public class PayMoneyPerHouseCard extends Card {
     private int moneyOwed;
     private int costPerHouse;
@@ -19,12 +22,10 @@ public class PayMoneyPerHouseCard extends Card {
 
     @JsonCreator
     public PayMoneyPerHouseCard(@JsonProperty("message") String message,
-            @JsonProperty("ofTypeChance") Boolean ofTypeChance,
             @JsonProperty("moneyOwed") int moneyOwed,
             @JsonProperty("costPerHouse") int costPerHouse,
             @JsonProperty("costPerHotel") int costPerHotel) {
-        super(ofTypeChance, message);
-        this.ofTypeChance = ofTypeChance;
+        super(message);
         this.message = message;
         this.moneyOwed = moneyOwed;
         this.costPerHotel = costPerHotel;

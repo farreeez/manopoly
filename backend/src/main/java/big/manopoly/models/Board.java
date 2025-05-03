@@ -7,8 +7,11 @@ import big.manopoly.utils.PlayerColour;
 import big.manopoly.utils.PropertyType;
 import big.manopoly.utils.TrainName;
 import big.manopoly.utils.UtilityName;
+import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -54,6 +57,16 @@ public class Board {
     @ElementCollection
     private int[] diceRolls;
 
+    @Embedded
+    @AttributeOverride(name = "currentCardIndex", 
+        column = @Column(name = "chance_card_index"))
+    private ChancePile chancePile;
+
+    @Embedded
+    @AttributeOverride(name = "currentCardIndex", 
+        column = @Column(name = "community_chest_card_index"))
+    private ChestPile chestPile;
+    
     public Board() {
         diceRolled = false;
         currentTurn = 0;
@@ -61,6 +74,9 @@ public class Board {
 
         possibleColours = Arrays.asList(PlayerColour.values());
         diceRolls = new int[2];
+
+        chestPile = new ChestPile();
+        chancePile = new ChancePile();
     }
 
     @PostPersist
@@ -72,12 +88,12 @@ public class Board {
         squares = Arrays.asList(
                 new NotProperty(this, 0, "GO"), // GO
                 new City(this, 1, PropertyType.BROWN, CityName.Cairo), // Brown 1
-                new NotProperty(this, 2, "Community Chest"), // Community Chest
+                new ChestSquare(this, 2, "Community Chest"), // Community Chest
                 new City(this, 3, PropertyType.BROWN, CityName.Alexandria), // Brown 2
                 new IncomeTax(this, 4, "Income Tax", true), // Income Tax
                 new Train(this, 5, TrainName.Grand_Central_Terminal), // Train 1
                 new City(this, 6, PropertyType.LIGHT_BLUE, CityName.Athens), // Light Blue 1
-                new NotProperty(this, 7, "Chance"), // Chance
+                new ChanceSquare(this, 7, "Chance"), // Chance
                 new City(this, 8, PropertyType.LIGHT_BLUE, CityName.Mykonos), // Light Blue 2
                 new City(this, 9, PropertyType.LIGHT_BLUE, CityName.Olympia), // Light Blue 3
                 new NotProperty(this, 10, "Jail"), // Jail
@@ -87,12 +103,12 @@ public class Board {
                 new City(this, 14, PropertyType.PINK, CityName.Tokyo), // Pink 3
                 new Train(this, 15, TrainName.Tokyo_Station), // Train 2
                 new City(this, 16, PropertyType.ORANGE, CityName.Texas), // Orange 1
-                new NotProperty(this, 17, "Community Chest"), // Community Chest
+                new ChestSquare(this, 17, "Community Chest"), // Community Chest
                 new City(this, 18, PropertyType.ORANGE, CityName.Washington), // Orange 2
                 new City(this, 19, PropertyType.ORANGE, CityName.California), // Orange 3
                 new NotProperty(this, 20, "Free Parking"), // Free Parking
                 new City(this, 21, PropertyType.RED, CityName.Shenzhen), // Red 1
-                new NotProperty(this, 22, "Chance"), // Chance
+                new ChanceSquare(this, 22, "Chance"), // Chance
                 new City(this, 23, PropertyType.RED, CityName.Beijing), // Red 2
                 new City(this, 24, PropertyType.RED, CityName.Shanghai), // Red 3
                 new Train(this, 25, TrainName.Berlin_Hauptbahnhof), // Train 3
@@ -103,10 +119,10 @@ public class Board {
                 new Jail(this, 30, "Go to Jail"), // Go to Jail
                 new City(this, 31, PropertyType.GREEN, CityName.Christchurch), // Green 1
                 new City(this, 32, PropertyType.GREEN, CityName.Wellington), // Green 2
-                new NotProperty(this, 33, "Community Chest"), // Community Chest
+                new ChestSquare(this, 33, "Community Chest"), // Community Chest
                 new City(this, 34, PropertyType.GREEN, CityName.Auckland), // Green 3
                 new Train(this, 35, TrainName.Gare_du_Nord), // Train 4
-                new NotProperty(this, 36, "Chance"), // Chance
+                new ChanceSquare(this, 36, "Chance"), // Chance
                 new City(this, 37, PropertyType.DARK_BLUE, CityName.Stockholm), // Dark Blue 1
                 new IncomeTax(this, 38, "Luxury Tax", false), // Luxury Tax
                 new City(this, 39, PropertyType.DARK_BLUE, CityName.Malmö) // Dark Blue 2

@@ -1,41 +1,41 @@
 package big.manopoly.models;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
+import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.DiscriminatorType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 
-@MappedSuperclass
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "Card", discriminatorType = DiscriminatorType.STRING)
 public abstract class Card {
     @Id
-    protected String id;
-
-    protected Boolean ofTypeChance;
+    @GeneratedValue
+    protected Long id;
 
     protected String message;
 
     public Card() {
     }
 
-    @JsonCreator
-    public Card(@JsonProperty("ofTypeChance") Boolean ofTypeChance, @JsonProperty("message") String message) {
-        String cardType = ofTypeChance ? "Chance" : "Chest";
-
-        id = cardType + ":" + message;
+    public Card(String message) {
+        this.message = message;
     }
 
     public abstract void action(Player player);
 
-    public String getId() {
-        return id;
-    }
-
-    public Boolean isOfTypeChance() {
-        return ofTypeChance;
-    }
-
     public String getCardMessage() {
         return message;
+    }
+
+    public void setCardMessage(String message) {
+        this.message = message;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

@@ -5,23 +5,22 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import big.manopoly.models.Card;
 import big.manopoly.models.Player;
-import big.manopoly.models.Position;
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.Embedded;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 
-@Embeddable
+@Entity
+@DiscriminatorValue("GoToCard")
+// a card for when a player is instructed to go to a certain property or square.
 public class GoToCard extends Card {
-    @Embedded
-    private Position targetSquare;
+    private Integer targetSquare;
 
     public GoToCard () {
         super();
     }
 
     @JsonCreator
-    public GoToCard (@JsonProperty("message") String message, @JsonProperty("ofTypeChance") Boolean ofTypeChance, @JsonProperty("target") Position target) {
-        super(ofTypeChance, message);
-        this.ofTypeChance = ofTypeChance;
+    public GoToCard (@JsonProperty("message") String message, @JsonProperty("target") Integer target) {
+        super(message);
         this.message = message;
         this.targetSquare = target;
     }

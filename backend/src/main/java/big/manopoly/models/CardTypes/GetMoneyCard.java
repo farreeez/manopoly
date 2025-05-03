@@ -5,9 +5,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import big.manopoly.models.Card;
 import big.manopoly.models.Player;
-import jakarta.persistence.Embeddable;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 
-@Embeddable
+@Entity
+@DiscriminatorValue("GetMoneyCard")
+// a card used for chance and chest card where the player has to get money from 
+// the bank or the players fromOtherPlayers specifies which one it is.
 public class GetMoneyCard extends Card {
     private int moneyOwed;
     private Boolean fromOtherPlayers;
@@ -17,10 +21,9 @@ public class GetMoneyCard extends Card {
     }
 
     @JsonCreator
-    public GetMoneyCard(@JsonProperty("message") String message, @JsonProperty("ofTypeChance") Boolean ofTypeChance,
+    public GetMoneyCard(@JsonProperty("message") String message,
             @JsonProperty("moneyOwed") int moneyOwed, @JsonProperty("fromOtherPlayers") Boolean fromOtherPlayers) {
-        super(ofTypeChance, message);
-        this.ofTypeChance = ofTypeChance;
+        super(message);
         this.message = message;
         this.moneyOwed = moneyOwed;
         this.fromOtherPlayers = fromOtherPlayers;

@@ -5,9 +5,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import big.manopoly.models.Card;
 import big.manopoly.models.Player;
-import jakarta.persistence.Embeddable;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 
-@Embeddable
+@Entity
+@DiscriminatorValue("GetOutOfJailCard")
 public class GetOutOfJailCard extends Card {
 
     public GetOutOfJailCard() {
@@ -15,10 +17,8 @@ public class GetOutOfJailCard extends Card {
     }
 
     @JsonCreator
-    public GetOutOfJailCard(@JsonProperty("message") String message,
-            @JsonProperty("ofTypeChance") Boolean ofTypeChance) {
-        super(ofTypeChance, message);
-        this.ofTypeChance = ofTypeChance;
+    public GetOutOfJailCard(@JsonProperty("message") String message) {
+        super(message);
         this.message = message;
     }
 

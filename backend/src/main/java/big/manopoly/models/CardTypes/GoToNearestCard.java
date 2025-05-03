@@ -6,12 +6,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import big.manopoly.models.Card;
 import big.manopoly.models.Player;
 import big.manopoly.utils.PropertyType;
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.Embedded;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
-@Embeddable
+@Entity
+@DiscriminatorValue("GoToNearestCard")
+// a card used for when a player has to go to the nearest kind of a property.
 public class GoToNearestCard extends Card {
-    @Embedded
+    @Enumerated(EnumType.STRING)
     private PropertyType targetType;
 
     public GoToNearestCard() {
@@ -19,10 +23,9 @@ public class GoToNearestCard extends Card {
     }
 
     @JsonCreator
-    public GoToNearestCard(@JsonProperty("message") String message, @JsonProperty("ofTypeChance") Boolean ofTypeChance,
+    public GoToNearestCard(@JsonProperty("message") String message,
             @JsonProperty("targetType") PropertyType targetType) {
-        super(ofTypeChance, message);
-        this.ofTypeChance = ofTypeChance;
+        super(message);
         this.message = message;
         this.targetType = targetType;
     }
