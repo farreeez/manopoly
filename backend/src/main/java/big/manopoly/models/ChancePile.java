@@ -18,7 +18,7 @@ public class ChancePile extends CardPile {
         cards.add(new GetMoneyCard("Bank pays you dividend of $50", 50, false));
         cards.add(new GoToCard("Advance to Shanghai.", 24));
         cards.add(new PayMoneyPerHouseCard(
-                "Make General Repairs on all your property. Pay $25 for each house, $100 for each hotel", 0, 25,
+                "Make General Repairs on all your property. Pay $25 for each house, $100 for each hotel", 25,
                 100));
         cards.add(new GetOutOfJailCard("Get out of jail free"));
         cards.add(new GoToCard("Advance to Malmö", 39));

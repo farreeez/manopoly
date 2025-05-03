@@ -1,10 +1,16 @@
 package big.manopoly.utils;
 
+import big.manopoly.data.BoardRepository;
+import big.manopoly.data.PlayerRepository;
 import big.manopoly.dtos.CardPurchaseActionDTO;
 import big.manopoly.dtos.TileActionDTO;
 import big.manopoly.models.Board;
 import big.manopoly.models.BoardSquare;
 import big.manopoly.models.Card;
+import big.manopoly.models.ChancePile;
+import big.manopoly.models.ChanceSquare;
+import big.manopoly.models.ChestPile;
+import big.manopoly.models.ChestSquare;
 import big.manopoly.models.IncomeTax;
 import big.manopoly.models.Jail;
 import big.manopoly.models.NotProperty;
@@ -14,7 +20,8 @@ import big.manopoly.models.Property;
 public class TileActions {
     // checks if the tile landed on is a property or not and the allocates it
     // accordingly
-    public static TileActionDTO conductTileAction(Player player, Board board, int[] diceRolls) throws Exception {
+    public static TileActionDTO conductTileAction(Player player, Board board, int[] diceRolls,
+            BoardRepository boardRepository, PlayerRepository playerRepository) throws Exception {
         BoardSquare square = board.getSquares().get(player.getPosition().getPosition());
         if (square instanceof Property) {
             Property property = (Property) square;
@@ -24,6 +31,14 @@ public class TileActions {
             return conductIncomeTaxAction(player, board, incomeTax, diceRolls);
         } else if (square instanceof Jail) {
             return conductJailAction(player, board, diceRolls);
+        } else if (square instanceof ChanceSquare) {
+            ChancePile chancePile = board.getChancePile();
+            Card card = chancePile.getCard();
+            return conductCardAction(player, board, card, diceRolls, boardRepository, playerRepository);
+        } else if (square instanceof ChestSquare) {
+            ChestPile chestPile = board.getChestPile();
+            Card card = chestPile.getCard();
+            return conductCardAction(player, board, card, diceRolls, boardRepository, playerRepository);
         } else if (square instanceof NotProperty) {
             NotProperty notProperty = (NotProperty) square;
             return conductNonPropertyAction(player, board, notProperty, diceRolls);
@@ -34,9 +49,9 @@ public class TileActions {
 
     }
 
-    private static TileActionDTO conductCardAction(Player player, Board board, Card card, int[] diceRolls) {
-        // TODO Auto-generated method stub
-        card.action(player);
+    private static TileActionDTO conductCardAction(Player player, Board board, Card card, int[] diceRolls,
+            BoardRepository boardRepository, PlayerRepository playerRepository) {
+        card.action(player, boardRepository, playerRepository);
 
         // do something with message
         System.out.println(card.getCardMessage());

@@ -23,7 +23,7 @@ public class ChestPile extends CardPile {
         cards.add(new PayMoneyCard("Doctor's fee - Pay $50", 50, false));
         cards.add(new GetMoneyCard("Receive for services $25", 25, false));
         cards.add(new PayMoneyCard("Pay school tax of $150", 150, false));
-        cards.add(new PayMoneyPerHouseCard("You are assessed for street repairs - $40 per house - $115 per hotel", 0, 40, 115));
+        cards.add(new PayMoneyPerHouseCard("You are assessed for street repairs - $40 per house - $115 per hotel", 40, 115));
         cards.add(new GetMoneyCard("Christmas fund matures - Collect $100", 100, false));
     }
 }

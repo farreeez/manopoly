@@ -66,7 +66,7 @@ public class PropertyService {
 
         TileActionDTO actionDTO;
         try {
-            actionDTO = TileActions.conductTileAction(player, board, board.getDiceRolls());
+            actionDTO = TileActions.conductTileAction(player, board, board.getDiceRolls(), boardRepository, playerRepository);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -322,7 +322,8 @@ public class PropertyService {
 
         if (isSetMortgagedHelper(property)) {
             return ResponseEntity.badRequest()
-                    .body("one of the properties is mortgaged the player cannot " + buyOrSell + " a house on this set.");
+                    .body("one of the properties is mortgaged the player cannot " + buyOrSell
+                            + " a house on this set.");
         }
 
         if (!areHousesEvenToBuyOrSell(property, buyHouse)) {
@@ -369,7 +370,7 @@ public class PropertyService {
 
         City city = (City) Hibernate.unproxy(property);
 
-        player.addMoney(city.getHouseCost()/2);
+        player.addMoney(city.getHouseCost() / 2);
 
         city.removeHouse();
 
@@ -392,8 +393,8 @@ public class PropertyService {
 
         Player player = property.getOwner();
 
-        if(player == null) {
-            return ResponseEntity.ok().body(new Colour(0,0,0,-1));
+        if (player == null) {
+            return ResponseEntity.ok().body(new Colour(0, 0, 0, -1));
         }
 
         return ResponseEntity.ok().body(Mapper.playerColourToColour(player.getColour()));

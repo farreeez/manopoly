@@ -149,7 +149,7 @@ public class BoardService {
         }
 
         int[] diceRolls = board.movePlayer();
-        TileActionDTO action = TileActions.conductTileAction(player, board, diceRolls);
+        TileActionDTO action = TileActions.conductTileAction(player, board, diceRolls, boardRepository, playerRepository);
 
         playerRepository.save(player);
         board.saveBoard(boardRepository, true);

@@ -1,5 +1,7 @@
 package big.manopoly.models;
 
+import big.manopoly.data.BoardRepository;
+import big.manopoly.data.PlayerRepository;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorType;
 import jakarta.persistence.Entity;
@@ -25,7 +27,7 @@ public abstract class Card {
         this.message = message;
     }
 
-    public abstract void action(Player player);
+    public abstract void action(Player player, BoardRepository boardRepository, PlayerRepository playerRepository);
 
     public String getCardMessage() {
         return message;

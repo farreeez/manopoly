@@ -42,7 +42,7 @@ public class Board {
     @Enumerated(EnumType.STRING)
     private List<PlayerColour> possibleColours;
 
-    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Player> players = new LinkedList<>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -171,6 +171,14 @@ public class Board {
 
     public BoardSquare getBoardSquare(Position position) throws Exception {
         return squares.get(position.getPosition());
+    }
+
+    public ChancePile getChancePile() {
+        return chancePile;
+    }
+
+    public ChestPile getChestPile() {
+        return chestPile;
     }
 
     // TODO: maybe also deal with the logic of giving the player their colour and
