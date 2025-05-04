@@ -7,9 +7,8 @@ import big.manopoly.dtos.TileActionDTO;
 import big.manopoly.models.Board;
 import big.manopoly.models.BoardSquare;
 import big.manopoly.models.Card;
-import big.manopoly.models.ChancePile;
+import big.manopoly.models.CardPile;
 import big.manopoly.models.ChanceSquare;
-import big.manopoly.models.ChestPile;
 import big.manopoly.models.ChestSquare;
 import big.manopoly.models.IncomeTax;
 import big.manopoly.models.Jail;
@@ -32,12 +31,12 @@ public class TileActions {
         } else if (square instanceof Jail) {
             return conductJailAction(player, board, diceRolls);
         } else if (square instanceof ChanceSquare) {
-            ChancePile chancePile = board.getChancePile();
-            Card card = chancePile.getCard();
+            CardPile cardPile = board.getCardPile();
+            Card card = cardPile.getCard();
             return conductCardAction(player, board, card, diceRolls, boardRepository, playerRepository);
         } else if (square instanceof ChestSquare) {
-            ChestPile chestPile = board.getChestPile();
-            Card card = chestPile.getCard();
+            CardPile cardPile = board.getCardPile();
+            Card card = cardPile.getCard();
             return conductCardAction(player, board, card, diceRolls, boardRepository, playerRepository);
         } else if (square instanceof NotProperty) {
             NotProperty notProperty = (NotProperty) square;
@@ -51,7 +50,7 @@ public class TileActions {
 
     private static TileActionDTO conductCardAction(Player player, Board board, Card card, int[] diceRolls,
             BoardRepository boardRepository, PlayerRepository playerRepository) {
-        card.action(player, boardRepository, playerRepository);
+        card.action(player);
 
         // do something with message
         System.out.println(card.getCardMessage());

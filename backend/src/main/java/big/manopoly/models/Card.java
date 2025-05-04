@@ -27,7 +27,7 @@ public abstract class Card {
         this.message = message;
     }
 
-    public abstract void action(Player player, BoardRepository boardRepository, PlayerRepository playerRepository);
+    public abstract void action(Player player);
 
     public String getCardMessage() {
         return message;

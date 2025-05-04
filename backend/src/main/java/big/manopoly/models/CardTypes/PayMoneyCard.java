@@ -34,10 +34,9 @@ public class PayMoneyCard extends Card {
     }
 
     @Override
-    public void action(Player player, BoardRepository boardRepository, PlayerRepository playerRepository) {
+    public void action(Player player) {
         if (!fromOtherPlayers) {
             player.pay(moneyOwed);
-            playerRepository.save(player);
             return;
         }
 
@@ -58,7 +57,5 @@ public class PayMoneyCard extends Card {
         }
 
         player.pay(totalMoney);
-
-        boardRepository.save(board);
     }
 }

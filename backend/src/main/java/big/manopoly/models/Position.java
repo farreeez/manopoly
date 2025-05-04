@@ -21,4 +21,8 @@ public class Position {
 
         position = (position + squares) % maxPosition;
     }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
 }

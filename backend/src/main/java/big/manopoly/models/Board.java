@@ -7,9 +7,7 @@ import big.manopoly.utils.PlayerColour;
 import big.manopoly.utils.PropertyType;
 import big.manopoly.utils.TrainName;
 import big.manopoly.utils.UtilityName;
-import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -58,14 +56,7 @@ public class Board {
     private int[] diceRolls;
 
     @Embedded
-    @AttributeOverride(name = "currentCardIndex", 
-        column = @Column(name = "chance_card_index"))
-    private ChancePile chancePile;
-
-    @Embedded
-    @AttributeOverride(name = "currentCardIndex", 
-        column = @Column(name = "community_chest_card_index"))
-    private ChestPile chestPile;
+    private CardPile cardPile;
     
     public Board() {
         diceRolled = false;
@@ -75,8 +66,7 @@ public class Board {
         possibleColours = Arrays.asList(PlayerColour.values());
         diceRolls = new int[2];
 
-        chestPile = new ChestPile();
-        chancePile = new ChancePile();
+        cardPile = new CardPile(); 
     }
 
     @PostPersist
@@ -173,13 +163,10 @@ public class Board {
         return squares.get(position.getPosition());
     }
 
-    public ChancePile getChancePile() {
-        return chancePile;
+    public CardPile getCardPile() {
+        return cardPile;
     }
 
-    public ChestPile getChestPile() {
-        return chestPile;
-    }
 
     // TODO: maybe also deal with the logic of giving the player their colour and
     // taking it away in the methods below
@@ -262,6 +249,10 @@ public class Board {
 
         if (player.isFree()) {
             player.getPosition().add(squaresMoved);
+
+            // if(!(player.getPosition().getPosition() == 2)) {
+            //     player.getPosition().add(2);
+            // }
 
             // allows player to keep rolling if there is a double
             // TODO: handle triple doubles.

@@ -39,7 +39,7 @@ public class PayMoneyPerHouseCard extends Card {
     }
 
     @Override
-    public void action(Player player, BoardRepository boardRepository, PlayerRepository playerRepository) {
+    public void action(Player player) {
         List<Property> properties = new ArrayList<>(player.getProperties());
 
         int houseCount = 0;
@@ -55,7 +55,7 @@ public class PayMoneyPerHouseCard extends Card {
             if(houseNumber == 5) {
                 hotelCount++;
             } else {
-                houseCount++;
+                houseCount += houseNumber;
             }
         }
 

@@ -3,8 +3,6 @@ package big.manopoly.models.CardTypes;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import big.manopoly.data.BoardRepository;
-import big.manopoly.data.PlayerRepository;
 import big.manopoly.models.Card;
 import big.manopoly.models.Player;
 import jakarta.persistence.DiscriminatorValue;
@@ -25,9 +23,9 @@ public class GoToJailCard extends Card {
     }
 
     @Override
-    public void action(Player player, BoardRepository boardRepository, PlayerRepository playerRepository) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'action'");
+    public void action(Player player) {
+        player.setFree(false);
+        player.resetJailCounter();
+        player.getPosition().setPosition(10);
     }
-
 }

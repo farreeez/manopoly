@@ -5,8 +5,6 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import big.manopoly.data.BoardRepository;
-import big.manopoly.data.PlayerRepository;
 import big.manopoly.models.Board;
 import big.manopoly.models.Card;
 import big.manopoly.models.Player;
@@ -35,10 +33,9 @@ public class GetMoneyCard extends Card {
     }
 
     @Override
-    public void action(Player player, BoardRepository boardRepository, PlayerRepository playerRepository) {
+    public void action(Player player) {
         if (!fromOtherPlayers) {
             player.addMoney(moneyOwed);
-            playerRepository.save(player);
             return;
         }
 
@@ -59,7 +56,5 @@ public class GetMoneyCard extends Card {
         }
 
         player.addMoney(totalMoney);
-
-        boardRepository.save(board);
     }
 }
