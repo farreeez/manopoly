@@ -28,12 +28,22 @@ public class GoToCard extends Card {
     @Override
     public void action(Player player) {
         int currentPlayerPosition = player.getPosition().getPosition();
-        if (targetSquare >= currentPlayerPosition) {
-            player.getPosition().add(targetSquare - currentPlayerPosition);
+
+        if(targetSquare < 0) {
+            player.getPosition().setPosition(currentPlayerPosition - 3);
             return;
         }
 
-        int difference = 40 - currentPlayerPosition + targetSquare;
+        goToTargetSquare(player, currentPlayerPosition, currentPlayerPosition);
+    }
+
+    public static void goToTargetSquare(Player player, int currentPlayerPosition, int targetPosition) {
+        if (targetPosition >= currentPlayerPosition) {
+            player.getPosition().add(targetPosition - currentPlayerPosition);
+            return;
+        }
+
+        int difference = 40 - currentPlayerPosition + targetPosition;
 
         player.getPosition().add(difference);
     }

@@ -159,8 +159,12 @@ public class Board {
         return players.get(currentTurn);
     }
 
-    public BoardSquare getBoardSquare(Position position) throws Exception {
+    public BoardSquare getBoardSquare(Position position) {
         return squares.get(position.getPosition());
+    }
+
+    public BoardSquare getBoardSquare(int position) {
+        return squares.get(position);
     }
 
     public CardPile getCardPile() {
@@ -250,8 +254,8 @@ public class Board {
         if (player.isFree()) {
             // player.getPosition().add(squaresMoved);
 
-            if(!(player.getPosition().getPosition() == 7)) {
-                player.getPosition().add(7);
+            if(!(player.getPosition().getPosition() == 36)) {
+                player.getPosition().add(36);
             }
 
             // allows player to keep rolling if there is a double

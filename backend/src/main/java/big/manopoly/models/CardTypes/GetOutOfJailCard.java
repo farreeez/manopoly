@@ -24,8 +24,7 @@ public class GetOutOfJailCard extends Card {
 
     @Override
     public void action(Player player) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'action'");
+        player.incrementGetOutOfJailCard();
     }
 
 }

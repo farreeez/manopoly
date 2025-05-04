@@ -35,7 +35,7 @@ public class Player {
     private Long id;
 
     private String name;
-    
+
     @Enumerated(EnumType.STRING)
     private PlayerColour colour;
 
@@ -55,17 +55,21 @@ public class Player {
 
     private Boolean free;
 
+    private int getOutOfJailCards;
+
     @JsonCreator
     public Player(@JsonProperty("position") Position position) {
         this.position = position;
         this.free = true;
         this.jailCounter = 0;
+        this.getOutOfJailCards = 0;
     }
 
     public Player() {
         this.position = new Position();
         this.free = true;
         this.jailCounter = 0;
+        this.getOutOfJailCards = 0;
     }
 
     public boolean isHouseBuiltOnSet(PropertyType propertyType) {
@@ -80,7 +84,7 @@ public class Player {
 
             City city = (City) property;
 
-            if(city.getHouses() > 0) {
+            if (city.getHouses() > 0) {
                 return true;
             }
         }
@@ -89,7 +93,7 @@ public class Player {
     }
 
     public boolean doesOwnSet(PropertyType propertyType) {
-        if(propertyType.equals(PropertyType.UTILITY) || propertyType.equals(PropertyType.TRAIN)) {
+        if (propertyType.equals(PropertyType.UTILITY) || propertyType.equals(PropertyType.TRAIN)) {
             return false;
         }
 
@@ -251,6 +255,14 @@ public class Player {
 
     public void resetJailCounter() {
         jailCounter = 0;
+    }
+
+    public void decrementGetOutOfJailCard() {
+        getOutOfJailCards--;
+    }
+
+    public void incrementGetOutOfJailCard() {
+        getOutOfJailCards++;
     }
 
 }
