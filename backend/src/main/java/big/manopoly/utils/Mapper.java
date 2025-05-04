@@ -87,6 +87,7 @@ public class Mapper {
                 player.getPosition(),
                 player.getBoardId(), player.getMoney(),
                 player.getProperties().stream().map(Mapper::toPropertyDTO).collect(Collectors.toSet()),
-                player.isFree());
+                player.isFree(),
+                player.getJailCards());
     }
 }

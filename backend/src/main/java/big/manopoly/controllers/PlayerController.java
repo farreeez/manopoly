@@ -48,4 +48,9 @@ public class PlayerController {
         return playerService.payJailFine(cookie);
     }
 
+    @PostMapping("/useGetOutOfJailCard")
+    public ResponseEntity<?> useGetOutOfJailCard(@CookieValue(value = "playerId", defaultValue = "") String cookie) {
+        return playerService.useGetOutOfJailCard(cookie);
+    }
+
 }

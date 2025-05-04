@@ -2,7 +2,7 @@ import { buyProperty } from "../../services/CardActionServices";
 import { useContext, useEffect } from "react";
 import { DiceRollContext } from "../../context/DiceRollContextProvider";
 import { AppContext } from "../../context/AppContextProvider";
-import { getPlayerJson , payJailFine} from "../../services/PlayerServices";
+import { getPlayerJson , payJailFine, getOutOfJailCard} from "../../services/PlayerServices";
 
 function CardAction({ board, player, setRefreshSquares }) {
   const { displayBuyAfterRoll, cardActionData, setCardActionData } =
@@ -19,7 +19,7 @@ function CardAction({ board, player, setRefreshSquares }) {
   }, [board]);
 
   return (
-    <div>
+    <div className="diceRollButtons">
       {board &&
         displayBuyAfterRoll &&
         board.currentPlayerTurn.id === player.id &&
@@ -34,9 +34,15 @@ function CardAction({ board, player, setRefreshSquares }) {
           </button>
         )}
 
-      {board && board.currentPlayerTurn.id === player.id && !playerDTO.free && (
+      {board && board.currentPlayerTurn.id === player.id && !playerDTO.free && playerDTO.money >= 50 && (
         <button className="roll-button" onClick={() => payJailFine()}>
           Pay 50$
+        </button>
+      )}
+
+      {board && board.currentPlayerTurn.id === player.id && !playerDTO.free && playerDTO.getOutOfJailCards > 0  && (
+        <button className="roll-button" onClick={() => getOutOfJailCard()}>
+          Get Out of Jail Card. 
         </button>
       )}
     </div>

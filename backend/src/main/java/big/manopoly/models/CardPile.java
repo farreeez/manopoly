@@ -90,8 +90,6 @@ public class CardPile {
             chanceIndex = 15;
         }
 
-        chanceIndex = 16;
-
         Card card = cards.get(chanceIndex);
 
         chanceIndex++;

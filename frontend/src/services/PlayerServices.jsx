@@ -97,3 +97,18 @@ export function payJailFine() {
     })
     .catch((error) => console.error(error));
 }
+
+export function getOutOfJailCard() {
+  fetch("http://localhost:8080/players/useGetOutOfJailCard" , {
+    method: "POST",
+    credentials: "include",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return response.text().then((text) => {
+          throw new Error(`Cannot use jail card: ${text}`);
+        });
+      }
+    })
+    .catch((error) => console.error(error));
+}

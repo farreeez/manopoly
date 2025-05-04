@@ -45,7 +45,6 @@ public class TileActions {
             throw new Error(
                     "BoardSquare of invalid class type in conduct tile action in big.manopoly.utils.TileActions.java");
         }
-
     }
 
     private static TileActionDTO conductCardAction(Player player, Board board, Card card, int[] diceRolls,

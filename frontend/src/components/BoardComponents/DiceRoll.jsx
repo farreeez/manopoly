@@ -15,10 +15,8 @@ const DiceRoll = ({ rollDiceAction, diceRolls, setRefreshSquares }) => {
   const [animating, setAnimating] = useState(false);
   const [currentDice, setCurrentDice] = useState([1, 1]);
   const { player, board } = useContext(AppContext);
-  const {
-    setDisplayBuyAfterRoll,
-    setCardActionData,
-  } = useContext(DiceRollContext);
+  const { setDisplayBuyAfterRoll, setCardActionData } =
+    useContext(DiceRollContext);
 
   useEffect(() => {
     if (diceRolls.length > 0 && rollDiceAction) {
@@ -132,7 +130,10 @@ const DiceRoll = ({ rollDiceAction, diceRolls, setRefreshSquares }) => {
                   Roll Dice
                 </button>
               ) : (
-                <button className="roll-button" onClick={() => endTurn(setDisplayBuyAfterRoll)}>
+                <button
+                  className="roll-button"
+                  onClick={() => endTurn(setDisplayBuyAfterRoll)}
+                >
                   End Turn.
                 </button>
               )}

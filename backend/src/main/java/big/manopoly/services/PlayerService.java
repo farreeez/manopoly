@@ -96,26 +96,65 @@ public class PlayerService {
             e.printStackTrace();
             return ResponseEntity.badRequest().body("Invalid playerId cookie value");
         }
-        
+
         Board board = player.getBoard();
 
         if (board == null) {
-            return ResponseEntity.badRequest().body("player cannot end the turn as they have no board.");
+            return ResponseEntity.badRequest().body("player cannot pay the fine as they have no board.");
         }
 
-        if(player.isFree()) {
+        if (player.isFree()) {
             return ResponseEntity.badRequest().body("Player cannot pay jail fine as they are already free.");
         }
 
-        if(!board.getPlayerWithCurrentTurn().equals(player)) {
+        if (!board.getPlayerWithCurrentTurn().equals(player)) {
             return ResponseEntity.badRequest().body("Player cannot pay jail fine as it is not their turn.");
         }
 
-        if(player.getMoney() < 50) {
+        if (player.getMoney() < 50) {
             return ResponseEntity.badRequest().body("Player cannot afford to pay the fine.");
         }
 
         player.pay(50);
+        player.setFree(true);
+        player.resetJailCounter();
+
+        playerRepository.save(player);
+
+        board.saveBoard(boardRepository, false);
+        return ResponseEntity.ok().build();
+    }
+
+    public ResponseEntity<?> useGetOutOfJailCard(String playerIdCookie) {
+        Player player;
+
+        try {
+            Long playerId = Long.valueOf(playerIdCookie);
+            player = playerRepository.getReferenceById(playerId);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("Invalid playerId cookie value");
+        }
+
+        Board board = player.getBoard();
+
+        if (board == null) {
+            return ResponseEntity.badRequest().body("player cannot use the jail card as they have no board.");
+        }
+
+        if (player.isFree()) {
+            return ResponseEntity.badRequest().body("Player cannot use the jail card as they are already free.");
+        }
+
+        if (!board.getPlayerWithCurrentTurn().equals(player)) {
+            return ResponseEntity.badRequest().body("Player cannot use the jail card as it is not their turn.");
+        }
+
+        if (player.getJailCards() <= 0) {
+            return ResponseEntity.badRequest().body("The player has no jail cards.");
+        }
+
+        player.decrementGetOutOfJailCard();
         player.setFree(true);
         player.resetJailCounter();
 

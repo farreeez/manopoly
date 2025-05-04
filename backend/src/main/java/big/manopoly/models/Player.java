@@ -265,4 +265,8 @@ public class Player {
         getOutOfJailCards++;
     }
 
+    public int getJailCards() {
+        return getOutOfJailCards;
+    }
+
 }

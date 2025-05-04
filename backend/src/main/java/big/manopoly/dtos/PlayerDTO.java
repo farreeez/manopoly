@@ -1,8 +1,9 @@
 package big.manopoly.dtos;
 
+import java.util.Set;
+
 import big.manopoly.models.Colour;
 import big.manopoly.models.Position;
-import java.util.Set;
 
 public class PlayerDTO {
     private Long id;
@@ -13,9 +14,10 @@ public class PlayerDTO {
     private Integer money;
     private Set<PropertyDTO> properties;  // Set of properties the player owns
     private Boolean free;
+    private int getOutOfJailCards;
 
     // Constructor that takes all the necessary fields
-    public PlayerDTO(Long id, String name, Colour colour, Position position, Long boardId, Integer money, Set<PropertyDTO> properties, Boolean free) {
+    public PlayerDTO(Long id, String name, Colour colour, Position position, Long boardId, Integer money, Set<PropertyDTO> properties, Boolean free, int getOutOfJailCards) {
         this.id = id;
         this.name = name;
         this.colour = colour;
@@ -24,6 +26,7 @@ public class PlayerDTO {
         this.money = money;
         this.properties = properties;
         this.free = free;
+        this.getOutOfJailCards = getOutOfJailCards;
     }
 
     // Getters and setters for all the fields
@@ -89,5 +92,13 @@ public class PlayerDTO {
 
     public void setFree(Boolean free) {
         this.free = free;
+    }
+
+    public int getGetOutOfJailCards() {
+        return getOutOfJailCards;
+    }
+
+    public void setGetOutOfJailCards(int getOutOfJailCards) {
+        this.getOutOfJailCards = getOutOfJailCards;
     }
 }
