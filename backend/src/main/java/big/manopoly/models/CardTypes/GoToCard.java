@@ -14,12 +14,12 @@ import jakarta.persistence.Entity;
 public class GoToCard extends Card {
     private Integer targetSquare;
 
-    public GoToCard () {
+    public GoToCard() {
         super();
     }
 
     @JsonCreator
-    public GoToCard (@JsonProperty("message") String message, @JsonProperty("target") Integer target) {
+    public GoToCard(@JsonProperty("message") String message, @JsonProperty("target") Integer target) {
         super(message);
         this.message = message;
         this.targetSquare = target;
@@ -27,8 +27,15 @@ public class GoToCard extends Card {
 
     @Override
     public void action(Player player) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'action'");
+        int currentPlayerPosition = player.getPosition().getPosition();
+        if (targetSquare >= currentPlayerPosition) {
+            player.getPosition().add(targetSquare - currentPlayerPosition);
+            return;
+        }
+
+        int difference = 40 - currentPlayerPosition + targetSquare;
+
+        player.getPosition().add(difference);
     }
 
 }

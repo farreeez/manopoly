@@ -72,20 +72,6 @@ public class CardPile {
         cards.add(new GetMoneyCard("Your building and loan matures. Collect $150", 150, false));
     }
 
-    // gets a card at the top of the pile then puts it at the bottom
-    public Card getCard() {
-        if (chestIndex >= cards.size()) {
-            chestIndex = 0;
-        }
-
-        chestIndex = 0;
-
-        Card card = cards.get(chestIndex);
-
-        chestIndex++;
-
-        return card;
-    }
 
     public Card getChestCard() {
         if (chestIndex > 14) {
@@ -103,6 +89,8 @@ public class CardPile {
         if (chanceIndex >= cards.size()) {
             chanceIndex = 15;
         }
+
+        chanceIndex = 20;
 
         Card card = cards.get(chanceIndex);
 

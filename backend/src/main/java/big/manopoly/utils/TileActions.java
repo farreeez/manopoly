@@ -32,11 +32,11 @@ public class TileActions {
             return conductJailAction(player, board, diceRolls);
         } else if (square instanceof ChanceSquare) {
             CardPile cardPile = board.getCardPile();
-            Card card = cardPile.getCard();
+            Card card = cardPile.getChanceCard();
             return conductCardAction(player, board, card, diceRolls, boardRepository, playerRepository);
         } else if (square instanceof ChestSquare) {
             CardPile cardPile = board.getCardPile();
-            Card card = cardPile.getCard();
+            Card card = cardPile.getChestCard();
             return conductCardAction(player, board, card, diceRolls, boardRepository, playerRepository);
         } else if (square instanceof NotProperty) {
             NotProperty notProperty = (NotProperty) square;
@@ -49,13 +49,13 @@ public class TileActions {
     }
 
     private static TileActionDTO conductCardAction(Player player, Board board, Card card, int[] diceRolls,
-            BoardRepository boardRepository, PlayerRepository playerRepository) {
+            BoardRepository boardRepository, PlayerRepository playerRepository) throws Exception {
         card.action(player);
 
         // do something with message
         System.out.println(card.getCardMessage());
 
-        return new TileActionDTO(diceRolls);
+        return conductTileAction(player, board, diceRolls, boardRepository, playerRepository);
     }
 
     public static TileActionDTO conductPropertyAction(Player player, Board board, Property property, int[] diceRolls)

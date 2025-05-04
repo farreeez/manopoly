@@ -8,8 +8,6 @@ import org.hibernate.Hibernate;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import big.manopoly.data.BoardRepository;
-import big.manopoly.data.PlayerRepository;
 import big.manopoly.models.Card;
 import big.manopoly.models.City;
 import big.manopoly.models.Player;

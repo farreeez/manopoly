@@ -248,11 +248,11 @@ public class Board {
         Player player = players.get(currentTurn);
 
         if (player.isFree()) {
-            player.getPosition().add(squaresMoved);
+            // player.getPosition().add(squaresMoved);
 
-            // if(!(player.getPosition().getPosition() == 2)) {
-            //     player.getPosition().add(2);
-            // }
+            if(!(player.getPosition().getPosition() == 7)) {
+                player.getPosition().add(7);
+            }
 
             // allows player to keep rolling if there is a double
             // TODO: handle triple doubles.

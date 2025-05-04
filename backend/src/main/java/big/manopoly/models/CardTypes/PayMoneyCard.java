@@ -5,8 +5,6 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import big.manopoly.data.BoardRepository;
-import big.manopoly.data.PlayerRepository;
 import big.manopoly.models.Board;
 import big.manopoly.models.Card;
 import big.manopoly.models.Player;
