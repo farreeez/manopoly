@@ -74,7 +74,5 @@ The game follows standard Monopoly rules:
 
 The game currently implements core Monopoly functionality with the following features in development:
 
-- [ ] Chance and Community Chest cards
 - [ ] Property trading between players
-- [ ] Jail mechanics
 - [ ] Bankruptcy handling
